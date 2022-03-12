@@ -10,9 +10,11 @@
   "author": "TSAKANIAN Aroutioun",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "mysql": "^2.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
     "path": "^0.12.7"
   },
   "devDependencies": {
