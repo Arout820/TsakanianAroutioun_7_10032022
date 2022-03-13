@@ -20,8 +20,6 @@ exports.signup = (req, res) => {
           console.log(error);
           return res.status(400).json({ error });
         }
-        console.log('-----RESULTS-----');
-        console.log(results);
         res.status(201).json({ message: 'Utilisateur enregistré !' });
       });
     })
@@ -29,7 +27,7 @@ exports.signup = (req, res) => {
 };
 
 // -------------------------- Se connecter -------------------------- //
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
   const { email, password } = req.body;
   database.query('SELECT * FROM user WHERE email = ?', email, (error, results) => {
     if (error) {
@@ -54,5 +52,28 @@ exports.login = (req, res, next) => {
         console.log('Utilisateur connecté !');
       })
       .catch((error) => res.status(500).json({ error }));
+  });
+};
+
+// -------------------------- Récuper tout les comptes -------------------------- //
+exports.getAllAccount = (req, res) => {
+  database.query('SELECT * FROM user', (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error });
+    }
+    res.status(200).json(results);
+  });
+};
+
+// -------------------------- Récuperer un compte -------------------------- //
+
+exports.getAccount = (req, res) => {
+  database.query('SELECT * FROM user WHERE user_id = ?', req.url.split('/')[2], (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error });
+    }
+    res.status(200).json(results);
   });
 };

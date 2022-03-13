@@ -5,5 +5,7 @@ const password = require('../middleware/password.validation');
 
 router.post('/signup', password, userController.signup);
 router.post('/login', userController.login);
+router.get('/account', userController.getAllAccount);
+router.get('/account/:id', userController.getAccount);
 
 module.exports = router;
