@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
   } else {
     console.log(passwordSchema.validate(req.body.password, { list: true }));
     return res
-      .status(400)
+      .status(401)
       .json({ error: `Le mot de passe n'est pas valide : ${passwordSchema.validate(req.body.password, { list: true })}` });
   }
 };

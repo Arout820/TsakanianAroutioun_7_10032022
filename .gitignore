@@ -1,3 +1,5 @@
-config/.env
+/config/.env
 /backend/node_modules
+/frontend-test
 /frontend
+/frontend2
