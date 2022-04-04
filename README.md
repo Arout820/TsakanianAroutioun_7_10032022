@@ -2,16 +2,16 @@
 
 ## BACK END
 
-Authentification OK
-Routes users et controllers , il reste à finaliser la route pour le changement d'image
-Routes posts et controllers EN COURS
-Routes commentaires et controllers PAS COMMENCE
+Authentification OK  
+Routes users et controllers , il reste à finaliser la route pour le changement d'image  
+Routes posts et controllers EN COURS  
+Routes commentaires et controllers PAS COMMENCE  
 
 ## FRONT END
 
-Projet React OK
+Projet React OK  
 
-Page connection OK , mais connexion ne marche pas comme il faut
-Page profil , il reste à gérer le changement d'image
-Page wall, PAS COMMENCE
+Page connection OK , mais connexion ne marche pas comme il faut  
+Page profil , il reste à gérer le changement d'image  
+Page wall, PAS COMMENCE  
 
