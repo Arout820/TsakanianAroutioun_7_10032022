@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: 'Quicksand500', sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+
+body {
+  background-color: #F0F2F5;
+}
+
+:root {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+h1, h2, h3{
+  font-family: Nevis500;
+}

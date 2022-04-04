@@ -1,5 +1,25 @@
+#### BACKEND ###
+
 /config/.env
 /backend/node_modules
-/frontend-test
-/frontend
-/frontend2
+
+#### FRONTEND ###
+# dependencies
+/frontend/node_modules
+
+# testing
+/frontend/coverage
+
+# production
+/frontend/build
+
+# misc
+/frontend/.DS_Store
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

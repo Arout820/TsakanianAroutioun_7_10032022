@@ -1,0 +1,49 @@
+.header-connected{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: white;
+    box-shadow: 0 0 5px grey;
+    border-top: 7px solid #202934;
+    a {
+    display: flex;
+    }
+
+    img{
+    width: 320px;
+    padding: 10px;
+    }
+}
+
+.navigation {
+    display: flex;
+    button {
+        border: none;
+        background: none;
+    }
+
+    align-self: center;
+    margin-right: 50px;
+    i {
+        background: #cacaca;
+        padding: 15px;
+        margin: 10px;
+        border-radius: 10px;
+        
+        transition: 500ms ease-in-out;
+    }
+
+    i:hover{
+        color: white;
+        background: #202934;
+        cursor: pointer;
+    }
+}
+
+.active i {
+    background-color: #202934;
+    color: white;
+}
+
+
+
