@@ -11,7 +11,7 @@ Routes commentaires et controllers PAS COMMENCE
 
 Projet React OK  
 
-Page connection OK , mais connexion ne marche pas comme il faut  
+Page connection OK , connexion marche
 Page profil , il reste à gérer le changement d'image  
-Page wall, PAS COMMENCE  
+Page wall, EN COURS
 
