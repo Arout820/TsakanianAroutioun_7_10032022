@@ -5,7 +5,9 @@
 @import './connect/Connections';
 @import './connect/Auth';
 @import './header/HeaderConnected';
-@import './profil/ProfilDatas';
+@import './profil/ProfilContainer';
+@import './profil/ProfilDataModal';
 @import './profil/ProfilModifyModal';
 @import './profil/PopupImage';
-@import './footer/Footer'
+@import './wall/WallContainer';
+@import './footer/Footer';

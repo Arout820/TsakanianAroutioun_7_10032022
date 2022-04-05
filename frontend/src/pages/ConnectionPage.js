@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Presentation from '../components/header/HeaderDisconnected';
 import Signup from '../components/connect/Signup';
 import Login from '../components/connect/Login';
 
 import entreprise from '../assets/entreprise.jpg';
 
-const ConnectionPage = () => {
+const ConnectionPage = ({ setIsConnected }) => {
   const [signupModal, setsignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(true);
+
+  useEffect(() => {
+    localStorage.removeItem('token');
+  }, []);
 
   const handleModals = (event) => {
     if (event.target.id === 'signup') {
@@ -36,7 +40,7 @@ const ConnectionPage = () => {
             </li>
           </ul>
           {signupModal && <Signup />}
-          {loginModal && <Login />}
+          {loginModal && <Login setIsConnected={setIsConnected} />}
         </div>
         <div className="entreprise">
           <img src={entreprise} alt="L'entreprise groupomania" />

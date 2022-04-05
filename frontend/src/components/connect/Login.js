@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsConnected }) => {
   // Création des variables affichés modifiables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,10 +74,8 @@ const Login = () => {
           }
 
           const contenu = await res.json();
-          console.log('Contenu de connexion');
-          console.log(contenu);
           localStorage.setItem('token', JSON.stringify(contenu));
-          //auth pesistente => setAuth
+          setIsConnected((e) => !e);
           navigate('/profil');
         } catch (err) {
           console.log(err);

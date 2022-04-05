@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import FooterConnected from '../components/footer/FooterConnected';
 
 import Header from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
@@ -59,7 +58,6 @@ const ProfilPage = () => {
         error={error}
         setModification={setModification}
       />
-      <FooterConnected/>
     </>
   );
 };
