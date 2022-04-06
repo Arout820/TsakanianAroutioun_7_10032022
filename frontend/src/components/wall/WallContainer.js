@@ -1,61 +1,71 @@
-import profilVide from '../../assets/profil_vide.jpg';
+import WallCardPost from './WallCardPost';
+import { useState } from 'react';
 
-const WallContainer = () => {
-  const handleDelete = (event) => {
+const WallContainer = ({ postInfos, isLoading, error, setModification }) => {
+  // infos Local Storage
+  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
+  const id = userConnectionInfos.userId;
+  const token = userConnectionInfos.token;
+
+  const [content, setContent] = useState(undefined);
+  const [attachment, setAttachment] = useState(undefined);
+  const user_id = id;
+
+  // fonction pour la logique du bouton inscription
+  const HandleCreatePost = async (event) => {
     event.preventDefault();
-    console.log('deleted');
-    let item = event.target;
-    let card = item.closest('#card-post');
-    console.log(card);
-    card.remove();
+
+    // données à envoyer
+    const createPostInfos = { content, user_id, attachment };
+    console.log(createPostInfos);
+
+    // créer un post
+    const sendCreatePost = fetch('http://localhost:5000/api/post', {
+      method: 'POST',
+      body: JSON.stringify(createPostInfos),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    sendCreatePost.then(async (res) => {
+      try {
+        console.log('res');
+        console.log(res);
+        const contenu = await res.json();
+        console.log('contenu');
+        console.log(contenu);
+        setModification((e) => !e);
+      } catch (err) {
+        console.log('err');
+        console.log(err);
+      }
+    });
   };
 
   return (
-    <main className="wall-container">
-      <form className="create-post">
-        <label className='create-post__label' htmlFor="create-post__content">Publiez</label>
-        <textarea
-          type="text"
-          id="create-post__content"
-          className="create-post__content"
-          placeholder="Ajoutez votre contenu"
-        />
-        <button className="create-post__button"> Ajouter un nouveau post</button>
-      </form>
-
-      <div className="card-post" id="card-post">
-        <div className="card-post__infos">
-          <img className="card-post__infos__photo" src={profilVide} alt="" />
-          <div className="card-post__infos__profil">
-            <p className="card-post__infos__profil__username">John Smith</p>
-            <p className="card-post__infos__profil__time">Crée le 10/01/2022</p>
-          </div>
-          <i onClick={handleDelete} className="card-post__infos__delete fa-2x fa-solid fa-trash-can"></i>
-        </div>
-        <p className="card-post__content">Ici se trouve le post que je vais mettre en ligne</p>
-        <div className="card-post__reputation">
-          <i className="card-post__reputation__element fa-2x fa-solid fa-thumbs-up"></i>
-          <p className="card-post__reputation__element ">Commenter</p>
-        </div>
-        <div className="card-comments">
-          <h1>Commentaires</h1>
-          <div className="card-comment">
-            <img className="card-comment__photo" src={profilVide} alt="" />
-            <div className="card-comment__infos">
-              <div className="card-comment__infos__profil">
-                <p className="card-comment__infos__profil__username">John Smith</p>
-                <p className="card-comment__infos__profil__time">le 10/01/2022 à 15h05</p>
-              </div>
-              <p className="card-comment__infos__content">J'aime beaucoup votre sens de pensée</p>
-            </div>
-          </div>
-        </div>
-        <div className="card-new-comment">
-          <img className="card-new-comment__photo" src={profilVide} alt="" />
-          <input type="text" className="card-new-comment__content" placeholder="Envoyez votre commentaire" />
-        </div>
-      </div>
-    </main>
+    <>
+      <main className="wall-container">
+        <form onSubmit={HandleCreatePost} className="create-post">
+          <label className="create-post__label" htmlFor="create-post__content">
+            Publiez
+          </label>
+          <textarea
+            type="text"
+            id="create-post__content"
+            className="create-post__content"
+            placeholder="Ajoutez votre contenu"
+            onChange={(event) => setContent(event.target.value)}
+          />
+          <button className="create-post__button"> Ajouter un nouveau post</button>
+        </form>
+        {isLoading && <div>En cours de traitement...</div>}
+        {error && <div>Une erreur vient de se produire - {error}</div>}
+        {postInfos && <WallCardPost postInfos={postInfos} setModification={setModification} />}
+      </main>
+    </>
   );
 };
 

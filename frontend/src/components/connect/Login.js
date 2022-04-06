@@ -76,7 +76,7 @@ const Login = ({ setIsConnected }) => {
           const contenu = await res.json();
           localStorage.setItem('token', JSON.stringify(contenu));
           setIsConnected((e) => !e);
-          navigate('/profil');
+          navigate('/wall');
         } catch (err) {
           console.log(err);
         }

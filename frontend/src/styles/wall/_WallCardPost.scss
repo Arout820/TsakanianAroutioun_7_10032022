@@ -1,0 +1,182 @@
+// POST
+.card-post{
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    box-shadow: 0px 0px 8px grey;
+    margin: 50px 0 50px 0 ;
+    background-color: rgb(200, 202, 214);
+    border-radius: 30px;
+    animation: apparition 400ms ease-in-out;
+    &__infos{
+        display: flex;
+        width: 100%;
+        position: relative;
+        border-bottom: 2px solid #202934;
+        &__photo{
+            width: 75px;
+            height: 75px;
+            border-radius: 100px;
+            margin: 10px;
+        }
+        &__profil{
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            margin-left: 20px;
+            &__username{
+                margin: 0;
+                margin-bottom: 5px;
+                font-weight: 700;
+            }
+            &__time{
+                color: rgb(54, 54, 54);
+                font-size: 0.8rem;
+                margin: 0;
+            }
+        }
+        &__delete{
+            position: absolute;
+            right: 30px;
+            align-self: center;
+            color: #202934;
+            transition: 400ms ease-in-out;
+            &:hover{
+                cursor: pointer;
+                transform: scale(1.3);
+                color: rgb(124, 18, 18);
+            }
+           
+        }
+    }
+    &__content{
+        padding: 50px;
+    }
+    &__reputation{
+        display: flex;
+        &__element:nth-child(1){
+            position: relative;
+        }
+        &__element:nth-child(2){
+            align-items: center;
+        }
+        &__element{
+            display: flex;
+            width: 50%;
+            box-shadow: 0px 0px 2px #202934;
+            justify-content: center;
+            background-color: white;
+            padding: 10px;
+            margin: 0;
+            &:hover{
+                cursor: pointer;
+                background-color: #202934;
+                color: white;
+            }
+
+        }
+    }
+}
+
+.like-counter{
+    font-size: 1.5rem;
+    align-self: center;
+    position: absolute;
+    right: 130px;
+}
+
+
+//COMMENTS
+.card-comments{
+    display: flex;
+    flex-direction: column;
+    h1{
+        align-self: center;
+        margin-bottom: 0;
+    }
+}
+
+.card-comment{
+    display: flex;
+    &__photo{
+        width: 40px;
+        height: 40px;
+        border-radius: 100px;
+        margin: 15px;
+    } 
+    &__infos{
+        display: flex;
+        width: 80%;
+        flex-direction: column;  
+        margin: 0;
+        padding: 5px;
+        background-color: white;
+        align-self: center;
+        border-radius: 13px;
+        &__profil{
+            display: flex;
+            
+            &__username{
+                margin: 0;
+                font-weight: 700;
+                font-size: 0.96rem;
+            }
+            &__time{
+                margin: 0;
+                margin-left: 5px;
+                color: rgb(54, 54, 54);
+                font-size: 0.8rem;
+                align-self: flex-end;
+            }
+        }
+        &__content{
+            margin: 0;
+            margin-top: 5px;
+        }
+    }
+}
+
+//NEW COMMENT
+
+.card-new-comment{
+    display: flex;
+    position: relative;
+    &::before{
+        content: '';
+        width: 800px;
+        height: 1px;
+        position: absolute;
+        background: rgb(151, 151, 151);
+        top: 5px;
+    }
+    &__photo{
+        width: 40px;
+        height: 40px;
+        border-radius: 100px;
+        margin: 15px;
+    } 
+    &__content{
+        width: 80%;
+        height: 30px;
+        align-self: center;
+        border: none;
+        border-radius: 50px;
+        padding-left: 10px;
+        &:focus-visible{
+            outline: none;
+        }
+    }
+}
+
+
+@keyframes apparition {
+    0% {
+        opacity: 0;
+        transform: translateX(-500px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
