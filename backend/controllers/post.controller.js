@@ -1,4 +1,7 @@
 const database = require('../config/db');
+const jwt = require('jsonwebtoken');
+
+require('dotenv').config();
 
 // Class post pour données à envoyer à la BDD
 class Post {
@@ -53,24 +56,44 @@ exports.getOnePost = (req, res) => {
 
 // ---------------------- Modifier un post ---------------------- //
 exports.modifyPost = (req, res) => {
-  database.query('UPDATE post SET ? WHERE post_id = ?', [req.body, req.params.id], (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, process.env.TOKEN);
+  const userId = decodedToken.userId;
+  database.query(
+    'UPDATE post SET ? WHERE post_id = ? AND user_id = ?',
+    [req.body, req.params.id, userId],
+    (error, results) => {
+      if (results.affectedRows === 0) {
+        return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre" });
+      }
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      console.log(results);
+      res.status(200).json({ message: 'Post modifié !' });
     }
-    console.log(results);
-    res.status(200).json({ message: 'Post modifié !' });
-  });
+  );
 };
 
 // ---------------------- Supprimer un post ---------------------- //
 exports.deletePost = (req, res) => {
-  database.query('DELETE FROM post WHERE post_id = ?', req.params.id, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
+  const token = req.headers.authorization.split(' ')[1];
+  const decodedToken = jwt.verify(token, process.env.TOKEN);
+  const userId = decodedToken.userId;
+  database.query(
+    'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
+    [req.params.id, userId],
+    (error, results) => {
+      if (results.affectedRows === 0) {
+        return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre" });
+      }
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      console.log(results);
+      res.status(200).json({ message: 'Post supprimé !' });
     }
-    console.log(results);
-    res.status(200).json({ message: 'Post supprimé !' });
-  });
+  );
 };
