@@ -1,0 +1,15 @@
+.card-delete{
+    animation: disparition 400ms ease-in-out;
+}
+
+@keyframes disparition {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(500px);
+    }
+}

@@ -1,0 +1,31 @@
+//NEW COMMENT
+
+.card-new-comment{
+    display: flex;
+    position: relative;
+    &::before{
+        content: '';
+        width: 800px;
+        height: 1px;
+        position: absolute;
+        background: rgb(151, 151, 151);
+        top: 5px;
+    }
+    &__photo{
+        width: 40px;
+        height: 40px;
+        border-radius: 100px;
+        margin: 15px;
+    } 
+    &__content{
+        width: 80%;
+        height: 30px;
+        align-self: center;
+        border: none;
+        border-radius: 50px;
+        padding-left: 10px;
+        &:focus-visible{
+            outline: none;
+        }
+    }
+}

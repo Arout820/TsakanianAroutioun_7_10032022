@@ -49,6 +49,7 @@ const WallPage = () => {
     return () => abortCtrl.abort();
   }, [id, token, modification]);
 
+
   return (
     <>
       <Header />

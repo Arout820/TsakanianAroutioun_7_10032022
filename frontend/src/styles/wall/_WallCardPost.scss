@@ -68,6 +68,7 @@
             background-color: white;
             padding: 10px;
             margin: 0;
+            transition: 300ms ease-in-out;
             &:hover{
                 cursor: pointer;
                 background-color: #202934;
@@ -84,90 +85,6 @@
     position: absolute;
     right: 130px;
 }
-
-
-//COMMENTS
-.card-comments{
-    display: flex;
-    flex-direction: column;
-    h1{
-        align-self: center;
-        margin-bottom: 0;
-    }
-}
-
-.card-comment{
-    display: flex;
-    &__photo{
-        width: 40px;
-        height: 40px;
-        border-radius: 100px;
-        margin: 15px;
-    } 
-    &__infos{
-        display: flex;
-        width: 80%;
-        flex-direction: column;  
-        margin: 0;
-        padding: 5px;
-        background-color: white;
-        align-self: center;
-        border-radius: 13px;
-        &__profil{
-            display: flex;
-            
-            &__username{
-                margin: 0;
-                font-weight: 700;
-                font-size: 0.96rem;
-            }
-            &__time{
-                margin: 0;
-                margin-left: 5px;
-                color: rgb(54, 54, 54);
-                font-size: 0.8rem;
-                align-self: flex-end;
-            }
-        }
-        &__content{
-            margin: 0;
-            margin-top: 5px;
-        }
-    }
-}
-
-//NEW COMMENT
-
-.card-new-comment{
-    display: flex;
-    position: relative;
-    &::before{
-        content: '';
-        width: 800px;
-        height: 1px;
-        position: absolute;
-        background: rgb(151, 151, 151);
-        top: 5px;
-    }
-    &__photo{
-        width: 40px;
-        height: 40px;
-        border-radius: 100px;
-        margin: 15px;
-    } 
-    &__content{
-        width: 80%;
-        height: 30px;
-        align-self: center;
-        border: none;
-        border-radius: 50px;
-        padding-left: 10px;
-        &:focus-visible{
-            outline: none;
-        }
-    }
-}
-
 
 @keyframes apparition {
     0% {
