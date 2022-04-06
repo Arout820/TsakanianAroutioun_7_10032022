@@ -5,18 +5,42 @@
     align-items: center;
 }
 
-.new-post{
+.create-post{
+    display: flex;
+    flex-direction: column;
     margin-top: 50px;
-    padding: 25px;
-    border-radius: 40px 15px ;
-    border: none;
-    background: #202934;
-    color: white;
-    transition: 400ms ease-in-out;
-    &:hover{
-        cursor: pointer;
-        transform: scale(1.2);
-        background: lighten(#202934, 30);
+    background-color: white;
+    box-shadow: 0 0 8px grey;
+    padding: 25px 50px 25px 50px;
+    border-radius: 30px;
+    &__label{
+        font-size: 1.8rem;
+        font-weight: 700;
+        align-self: center;
+        margin-bottom: 10px;
+    }
+    &__content{
+        width: 450px;
+        min-height: 150px;
+        max-height: 500px  ;
+        resize: vertical;
+        border: 1px solid rgb(179, 179, 179);
+    }
+    &__button{
+        margin-top: 25px;
+        padding: 25px;
+        border-radius: 40px 15px ;
+        border: none;
+        background: #202934;
+        color: white;
+        transition: 400ms ease-in-out;
+        width: 250px;
+        align-self: center;
+        &:hover{
+            cursor: pointer;
+            transform: scale(1.1);
+            background: lighten(#202934, 30);
+        }
     }
 }
 
@@ -26,7 +50,7 @@
     flex-direction: column;
     width: 800px;
     box-shadow: 0px 0px 8px grey;
-    margin-top: 50px;
+    margin: 50px 0 50px 0 ;
     background-color: rgb(200, 202, 214);
     border-radius: 30px;
     animation: apparition 400ms ease-in-out;
@@ -49,6 +73,7 @@
             &__username{
                 margin: 0;
                 margin-bottom: 5px;
+                font-weight: 700;
             }
             &__time{
                 color: rgb(54, 54, 54);

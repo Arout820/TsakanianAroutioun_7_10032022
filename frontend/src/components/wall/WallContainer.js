@@ -12,7 +12,16 @@ const WallContainer = () => {
 
   return (
     <main className="wall-container">
-      <button className="new-post"> Ajouter un nouveau post</button>
+      <form className="create-post">
+        <label className='create-post__label' htmlFor="create-post__content">Publiez</label>
+        <textarea
+          type="text"
+          id="create-post__content"
+          className="create-post__content"
+          placeholder="Ajoutez votre contenu"
+        />
+        <button className="create-post__button"> Ajouter un nouveau post</button>
+      </form>
 
       <div className="card-post" id="card-post">
         <div className="card-post__infos">
@@ -43,7 +52,7 @@ const WallContainer = () => {
         </div>
         <div className="card-new-comment">
           <img className="card-new-comment__photo" src={profilVide} alt="" />
-          <input type="text" className="card-new-comment__content" placeholder='Envoyez votre commentaire' />
+          <input type="text" className="card-new-comment__content" placeholder="Envoyez votre commentaire" />
         </div>
       </div>
     </main>
