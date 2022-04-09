@@ -21,14 +21,14 @@ exports.createPost = (req, res) => {
       console.log(error);
       return res.status(400).json({ error });
     }
-    res.status(201).json({ error: 'Post crée !' });
+    res.status(201).json({ message: 'Post crée !' });
   });
 };
 
 // ------------------ Récuperer tous les posts ------------------ //
 exports.getAllPost = (req, res) => {
   database.query(
-    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, isAdmin FROM post JOIN user ON post.user_id = user.user_id',
+    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
     (error, results) => {
       if (error) {
         console.log(error);
@@ -64,7 +64,7 @@ exports.modifyPost = (req, res) => {
     [req.body, req.params.id, userId],
     (error, results) => {
       if (results.affectedRows === 0) {
-        return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre" });
+        return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre !" });
       }
       if (error) {
         console.log(error);
@@ -86,7 +86,7 @@ exports.deletePost = (req, res) => {
     [req.params.id, userId],
     (error, results) => {
       if (results.affectedRows === 0) {
-        return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre" });
+        return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
       }
       if (error) {
         console.log(error);

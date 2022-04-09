@@ -1,14 +1,13 @@
 .wall-container{
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
 }
 
 .create-post{
     display: flex;
     flex-direction: column;
-    order: 1;
     margin-top: 50px;
     background-color: white;
     box-shadow: 0 0 8px grey;
