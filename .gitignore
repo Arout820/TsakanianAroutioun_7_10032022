@@ -2,6 +2,7 @@
 
 /config/.env
 /backend/node_modules
+/backend/images
 
 #### FRONTEND ###
 # dependencies

@@ -54,6 +54,7 @@ const Login = ({ setIsConnected }) => {
       });
       // action lorsque on envoie les données
       sendLogin.then(async (res) => {
+        console.log(res);
         try {
           if (!res.ok && res.status === 404) {
             emailID.classList.add('error');

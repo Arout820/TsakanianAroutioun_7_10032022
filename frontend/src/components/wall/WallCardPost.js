@@ -12,7 +12,11 @@ const WallCardPost = ({ postInfos, setModification }) => {
   return postInfos.map((post) => (
     <div key={post.post_id} className="card-post" id={`card-post__${post.post_id}`}>
       <div className="card-post__infos">
-        <img className="card-post__infos__photo" src={profilVide} alt="" />
+        <img
+          className="card-post__infos__photo"
+          src={post.user_photo ? post.user_photo : profilVide}
+          alt={`Logo de ${post.firstname} ${post.lastname}`}
+        />
         <div className="card-post__infos__profil">
           <p className="card-post__infos__profil__username">
             {post.firstname} {post.lastname}

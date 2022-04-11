@@ -15,7 +15,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const send = fetch('http://localhost:5000/api/user/' + id, {
+    const send = fetch(`http://localhost:5000/api/user/${id}`, {
       method: 'PUT',
       body: JSON.stringify(newInfos),
       headers: {
@@ -27,8 +27,6 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
 
     send.then(async (res) => {
       try {
-        const contenu = await res.json();
-        console.log('Modifié avec succés!');
         off(false);
         on(true);
         setModification((e) => !e);

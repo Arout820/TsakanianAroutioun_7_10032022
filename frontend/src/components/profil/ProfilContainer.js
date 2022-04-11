@@ -36,13 +36,17 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
             <div className="profil-datas__photo">
               <img
                 className="profil-datas__photo__img"
-                src={emptyPhoto}
-                alt="Logo de profil standard"
+                src={userInfos[0].user_photo ? userInfos[0].user_photo : emptyPhoto}
+                alt={`Logo de profil de ${userInfos[0].firstname} ${userInfos[0].lastname}`}
                 onClick={() => setButtonPopup(true)}
               />
             </div>
             <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-              <PopupImage />
+              <PopupImage
+                setTrigger={setButtonPopup}
+                setModification={setModification}
+                userInfos={userInfos}
+              />
             </Popup>
             <div className="container-infos">
               <button onClick={handleModals} className="container-infos__modify-account">
