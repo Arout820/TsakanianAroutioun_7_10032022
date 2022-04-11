@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const database = require('../config/db');
 
 require('dotenv').config();
@@ -93,17 +94,29 @@ exports.getOneUser = (req, res) => {
 
 // ----------------------- Mettre à jour un utilisateur ----------------------- //
 exports.modifyUser = (req, res) => {
-  
-  const { firstname, lastname, email, password, bio, user_photo } = req.body;
-  console.log('reqqqq');
-  console.log(req.body);
-  database.query('UPDATE user SET ? WHERE user_id = ?', [req.body, req.params.id], (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    res.status(200).json(results);
-  });
+  if (!req.file) {
+    database.query('UPDATE user SET ? WHERE user_id = ?', [req.body, req.params.id], (error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.status(200).json(results);
+    });
+  } else if (req.file) {
+    const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;g
+    const oldImageName = req.body.oldImage.split('/images/')[1];
+    fs.unlink(`images/${oldImageName}`, () => {
+      database.query(
+        'UPDATE user SET user_photo = ? WHERE user_id = ?',
+        [userPhoto, req.params.id],
+        (error, results) => {
+          if (error) {
+            return res.status(400).json({ error });
+          }
+          res.status(200).json(results);
+        }
+      );
+    });
+  }
 };
 
 // ----------------------- Supprimer un utilisateur ----------------------- //

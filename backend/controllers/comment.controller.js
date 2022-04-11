@@ -3,32 +3,32 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
-// Class post pour données à envoyer à la BDD
-class Post {
-  constructor(content, user_id, attachment) {
+// Class commentaire pour données à envoyer à la BDD
+class Comment {
+  constructor(content, user_id, post_id) {
     this.content = content;
     this.user_id = user_id;
-    this.attachment = attachment;
+    this.post_id = post_id;
   }
 }
 
-// ----------------------- Créer un post ----------------------- //
-exports.createPost = (req, res) => {
-  const { content, user_id, attachment } = req.body;
-  const post = new Post(content, user_id, attachment);
+// ----------------------- Créer un commentaire ----------------------- //
+exports.createComment = (req, res) => {
+  const { content, user_id, post_id } = req.body;
+  const comment = new Comment(content, user_id, attachment);
   database.query('INSERT INTO post SET ?', post, (error, results) => {
     if (error) {
       console.log(error);
       return res.status(400).json({ error });
     }
-    res.status(201).json({ message: 'Post crée !' });
+    res.status(201).json({ message: 'Commentaire crée !' });
   });
 };
 
-// ------------------ Récuperer tous les posts ------------------ //
-exports.getAllPost = (req, res) => {
+// ------------------ Récuperer tous les commentaires ------------------ //
+exports.getAllComment = (req, res) => {
   database.query(
-    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
+    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, isAdmin FROM post JOIN user ON post.user_id = user.user_id',
     (error, results) => {
       if (error) {
         console.log(error);
@@ -39,10 +39,10 @@ exports.getAllPost = (req, res) => {
   );
 };
 
-// ---------------------- Récuperer un post ---------------------- //
-exports.getOnePost = (req, res) => {
+// ---------------------- Récuperer un commentaire ---------------------- //
+exports.getOneComment = (req, res) => {
   database.query(
-    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id WHERE post_id = ?',
+    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, isAdmin FROM post JOIN user ON post.user_id = user.user_id WHERE post_id = ?',
     req.params.id,
     (error, results) => {
       if (error) {
@@ -54,8 +54,8 @@ exports.getOnePost = (req, res) => {
   );
 };
 
-// ---------------------- Modifier un post ---------------------- //
-exports.modifyPost = (req, res) => {
+// ---------------------- Modifier un commentaire ---------------------- //
+exports.modifyCommentaire = (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, process.env.TOKEN);
   const userId = decodedToken.userId;
@@ -64,20 +64,20 @@ exports.modifyPost = (req, res) => {
     [req.body, req.params.id, userId],
     (error, results) => {
       if (results.affectedRows === 0) {
-        return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre !" });
+        return res.status(400).json({ message: "Impossible de modifier le commentaire de quelqu'un d'autre !" });
       }
       if (error) {
         console.log(error);
         return res.status(400).json({ error });
       }
       console.log(results);
-      res.status(200).json({ message: 'Post modifié !' });
+      res.status(200).json({ message: 'Commentaire modifié !' });
     }
   );
 };
 
-// ---------------------- Supprimer un post ---------------------- //
-exports.deletePost = (req, res) => {
+// ---------------------- Supprimer un commentaire ---------------------- //
+exports.deleteComment = (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
   const decodedToken = jwt.verify(token, process.env.TOKEN);
   const userId = decodedToken.userId;
@@ -86,14 +86,14 @@ exports.deletePost = (req, res) => {
     [req.params.id, userId],
     (error, results) => {
       if (results.affectedRows === 0) {
-        return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
+        return res.status(400).json({ message: "Impossible de supprimer le commentaire de quelqu'un d'autre !" });
       }
       if (error) {
         console.log(error);
         return res.status(400).json({ error });
       }
       console.log(results);
-      res.status(200).json({ message: 'Post supprimé !' });
+      res.status(200).json({ message: 'Commentaire supprimé !' });
     }
   );
 };

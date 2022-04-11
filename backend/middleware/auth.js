@@ -10,11 +10,9 @@ module.exports = (req, res, next) => {
     if (req.body.userId && req.body.userId !== userId) {
       throw 'UserId non valable !';
     } else {
-      console.log(decodedToken.id);
       next();
     }
   } catch (error) {
-    console.log(error);
     res.status(403).json({ error: 'Requête non authentifiée !' });
   }
 };
