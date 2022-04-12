@@ -56,12 +56,9 @@ exports.getOneComment = (req, res) => {
 
 // ---------------------- Supprimer un commentaire ---------------------- //
 exports.deleteComment = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, process.env.TOKEN);
-  const userId = decodedToken.userId;
   database.query(
     'DELETE FROM comment WHERE comment_id = ? AND user_id = ? ',
-    [req.params.id, userId],
+    [req.params.id, req.token.userId],
     (error, results) => {
       console.log(results);
       if (results.affectedRows === 0) {
@@ -81,12 +78,9 @@ exports.deleteComment = (req, res) => {
 
 // // ---------------------- Modifier un commentaire ---------------------- //
 // exports.modifyCommentaire = (req, res) => {
-//   const token = req.headers.authorization.split(' ')[1];
-//   const decodedToken = jwt.verify(token, process.env.TOKEN);
-//   const userId = decodedToken.userId;
 //   database.query(
 //     'UPDATE post SET ? WHERE post_id = ? AND user_id = ?',
-//     [req.body, req.params.id, userId],
+//     [req.body, req.params.id, req.token.userId],
 //     (error, results) => {
 //       if (results.affectedRows === 0) {
 //         return res

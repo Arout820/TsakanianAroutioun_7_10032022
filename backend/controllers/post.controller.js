@@ -56,12 +56,9 @@ exports.getOnePost = (req, res) => {
 
 // ---------------------- Modifier un post ---------------------- //
 exports.modifyPost = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, process.env.TOKEN);
-  const userId = decodedToken.userId;
   database.query(
     'UPDATE post SET ? WHERE post_id = ? AND user_id = ?',
-    [req.body, req.params.id, userId],
+    [req.body, req.params.id, req.token.userId],
     (error, results) => {
       if (results.affectedRows === 0) {
         return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre !" });
@@ -78,12 +75,9 @@ exports.modifyPost = (req, res) => {
 
 // ---------------------- Supprimer un post ---------------------- //
 exports.deletePost = (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, process.env.TOKEN);
-  const userId = decodedToken.userId;
   database.query(
     'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
-    [req.params.id, userId],
+    [req.params.id, req.token.userId],
     (error, results) => {
       if (results.affectedRows === 0) {
         return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
