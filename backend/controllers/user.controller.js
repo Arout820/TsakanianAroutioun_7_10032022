@@ -102,7 +102,7 @@ exports.modifyUser = (req, res) => {
       res.status(200).json(results);
     });
   } else if (req.file) {
-    const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;g
+    const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     const oldImageName = req.body.oldImage.split('/images/')[1];
     fs.unlink(`images/${oldImageName}`, () => {
       database.query(
