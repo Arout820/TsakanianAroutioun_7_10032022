@@ -1,4 +1,4 @@
-const WallCardDelete = ({ setModification, post }) => {
+const DeletePostCard = ({ setModification, post }) => {
   // infos Local Storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const token = userConnectionInfos.token;
@@ -6,24 +6,18 @@ const WallCardDelete = ({ setModification, post }) => {
   // fonction pour la logique du bouton supprimer
   const HandleDelete = (id) => {
     // // supprimer un post
-    const sendDelete = fetch(`http://localhost:5000/api/post/${id}`, {
-      method: 'Delete',
+    const sendDeletePost = fetch(`http://localhost:5000/api/post/${id}`, {
+      method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
-    sendDelete.then(async (res) => {
+    sendDeletePost.then(async (res) => {
       try {
-        console.log('res');
-        console.log(res);
-        const contenu = await res.json();
-        console.log('contenu');
-        console.log(contenu);
         setModification((e) => !e);
       } catch (err) {
-        console.log('err');
         console.log(err);
       }
     });
@@ -36,4 +30,4 @@ const WallCardDelete = ({ setModification, post }) => {
   );
 };
 
-export default WallCardDelete;
+export default DeletePostCard;

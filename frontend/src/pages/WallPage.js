@@ -1,5 +1,6 @@
 import Header from '../components/header/HeaderConnected';
-import WallContainer from '../components/wall/WallContainer';
+import WallCardPost from '../components/wall/PostCard';
+import WallNewPost from '../components/wall/NewPost';
 
 import { useState, useEffect } from 'react';
 
@@ -49,16 +50,15 @@ const WallPage = () => {
     return () => abortCtrl.abort();
   }, [id, token, modification]);
 
-
   return (
     <>
       <Header />
-      <WallContainer
-        postInfos={postInfos}
-        isLoading={isLoading}
-        error={error}
-        setModification={setModification}
-      />
+      <main className="wall-container">
+        <WallNewPost setModification={setModification} />
+        {isLoading && <div>En cours de traitement...</div>}
+        {error && <div>Une erreur vient de se produire - {error}</div>}
+        {postInfos && <WallCardPost postInfos={postInfos} setModification={setModification} />}
+      </main>
     </>
   );
 };

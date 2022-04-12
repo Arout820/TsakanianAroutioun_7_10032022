@@ -28,7 +28,7 @@ exports.createComment = (req, res) => {
 // ------------------ Récuperer tous les commentaires ------------------ //
 exports.getAllComment = (req, res) => {
   database.query(
-    'SELECT comment_id, post.post_id, comment.content, comment.user_id, firstname, lastname, user_photo FROM comment JOIN user ON comment.user_id = user.user_id JOIN post ON comment.post_id = post.post_id',
+    'SELECT comment_id, post.post_id, comment.content, comment.user_id, comment_create_time, firstname, lastname, user_photo FROM comment JOIN user ON comment.user_id = user.user_id JOIN post ON comment.post_id = post.post_id ORDER BY comment_create_time ASC',
     (error, results) => {
       if (error) {
         console.log(error);
@@ -63,6 +63,7 @@ exports.deleteComment = (req, res) => {
     'DELETE FROM comment WHERE comment_id = ? AND user_id = ? ',
     [req.params.id, userId],
     (error, results) => {
+      console.log(results);
       if (results.affectedRows === 0) {
         return res
           .status(400)
@@ -101,4 +102,3 @@ exports.deleteComment = (req, res) => {
 //     }
 //   );
 // };
-

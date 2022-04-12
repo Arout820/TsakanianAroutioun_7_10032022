@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-
   const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
@@ -21,7 +20,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Authorization: `Bearer${token}`,
       },
     });
 
