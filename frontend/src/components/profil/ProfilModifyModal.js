@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DeleteAccount from './DeleteAccount';
 
 const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
@@ -20,7 +21,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -76,6 +77,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
           Valider la modification
         </button>
       </form>
+      <DeleteAccount />
     </div>
   );
 };

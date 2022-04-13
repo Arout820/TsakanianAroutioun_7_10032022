@@ -6,7 +6,7 @@ import Login from '../components/connect/Login';
 import entreprise from '../assets/entreprise.jpg';
 
 const ConnectionPage = ({ setIsConnected }) => {
-  const [signupModal, setsignupModal] = useState(false);
+  const [signupModal, setSignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(true);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ const ConnectionPage = ({ setIsConnected }) => {
   const handleModals = (event) => {
     if (event.target.id === 'signup') {
       setLoginModal(false);
-      setsignupModal(true);
+      setSignupModal(true);
     } else if (event.target.id === 'login') {
-      setsignupModal(false);
+      setSignupModal(false);
       setLoginModal(true);
     }
   };
@@ -39,7 +39,7 @@ const ConnectionPage = ({ setIsConnected }) => {
               Connexion
             </li>
           </ul>
-          {signupModal && <Signup />}
+          {signupModal && <Signup setLoginModal={setLoginModal} setSignupModal={setSignupModal} />}
           {loginModal && <Login setIsConnected={setIsConnected} />}
         </div>
         <div className="entreprise">

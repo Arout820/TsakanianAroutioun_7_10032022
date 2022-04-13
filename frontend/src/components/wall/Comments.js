@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { dateCorrection } from '../../utils/Utils';
+import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
   // infos Local Storage
@@ -34,7 +34,11 @@ const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
           (comment) =>
             comment.post_id === post.post_id && (
               <div key={comment.comment_id} className="card-comment">
-                <img className="card-comment__photo" src={comment.user_photo} alt="" />
+                <img
+                  className="card-comment__photo"
+                  src={comment.user_photo ? comment.user_photo : emptyPhoto}
+                  alt=""
+                />
                 <div className="card-comment__infos">
                   <div className="card-comment__infos__profil">
                     <p className="card-comment__infos__profil__username">

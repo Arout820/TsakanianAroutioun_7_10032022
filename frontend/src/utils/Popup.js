@@ -1,12 +1,12 @@
-const popup = (props) => {
+const popup = ({ trigger, setTrigger, children }) => {
   return (
-    props.trigger && (
+    trigger && (
       <div className="popup">
         <div className="popup-inner">
-          <button className="close-btn" onClick={() => props.setTrigger(false)}>
+          <button className="close-btn" onClick={(event) => setTrigger(false)}>
             X
           </button>
-          {props.children}
+          {children}
         </div>
       </div>
     )

@@ -11,9 +11,11 @@ const WallNewPost = ({ setModification }) => {
   const user_id = id;
 
   useEffect(() => {
-    console.log(attachment.name);
+    if (attachment) {
+      console.log(attachment.name);
+    }
   }, [attachment]);
-  
+
   // fonction pour la logique du bouton inscription
   const HandleCreatePost = async (event) => {
     event.preventDefault();
@@ -35,14 +37,8 @@ const WallNewPost = ({ setModification }) => {
 
     sendCreatePost.then(async (res) => {
       try {
-        console.log('res');
-        console.log(res);
-        const contenu = await res.json();
-        console.log('contenu');
-        console.log(contenu);
         setModification((e) => !e);
       } catch (err) {
-        console.log('err');
         console.log(err);
       }
     });
@@ -72,9 +68,8 @@ const WallNewPost = ({ setModification }) => {
             id="image"
             onChange={(event) => setAttachment(event.target.files[0])}
           />
-          {/* {attachment.name && <i className="delete-selected-image fas fa-trash-alt"></i>} */}
         </div>
-        <button className="create-post__buttons__add"> Ajouter un nouveau post</button>
+        <button className="create-post__buttons__add">Ajouter un nouveau post</button>
       </div>
     </form>
   );

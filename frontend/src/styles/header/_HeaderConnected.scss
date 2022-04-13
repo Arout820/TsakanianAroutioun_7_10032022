@@ -5,6 +5,25 @@
     background-color: white;
     box-shadow: 0 0 5px grey;
     border-top: 7px solid #202934;
+    &__infos{
+        display: flex;
+    }
+    &__welcome{
+        align-self: center;
+        padding: 10px;
+        background-color: #202934;
+        color: white;
+        border-radius: 15px;
+        font-size: 25px;
+        font-family: constantia;
+        font-weight: 200;
+        &__intro{
+            
+        }
+        &__name{
+          
+        }
+    }
     a {
     display: flex;
     }

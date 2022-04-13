@@ -1,0 +1,38 @@
+.delete-account{
+    display: flex;
+    background-color: transparent;
+    border: none;
+    transition: 400ms ease-in-out;
+    position: absolute;
+    border-radius: 5px;
+    bottom: 10px;
+    right: 220px;
+    &__question{
+        &:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+    &__confirmate{
+        padding: 10px;
+        background: #202934;
+        border: none;
+        border-radius: 10px;
+        transition: background-color 200ms ease-in-out;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        font-weight: 300;
+        width: 400px;
+        transition: 400ms ease-in-out;
+        &:hover{
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+    }
+    &__infos{
+        color:rgb(102, 102, 102);
+        font-weight: 200;
+        margin-top: 10px;
+    }
+}

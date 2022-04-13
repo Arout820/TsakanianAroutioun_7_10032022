@@ -5,7 +5,7 @@ import { dateCorrection } from '../../utils/Utils';
 import NewComment from './NewComment';
 import Comments from './Comments';
 
-const WallCardPost = ({ postInfos, setModification }) => {
+const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
@@ -65,7 +65,7 @@ const WallCardPost = ({ postInfos, setModification }) => {
         <h1>Commentaires</h1>
         <Comments post={post} commentInfos={commentInfos} error={error} setUpdateComment={setUpdateComment} />
       </div>
-      <NewComment setUpdateComment={setUpdateComment} post={post} />
+      <NewComment setUpdateComment={setUpdateComment} post={post} userInfos={userInfos} />
     </div>
   ));
 };

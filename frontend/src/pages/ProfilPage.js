@@ -11,7 +11,6 @@ const ProfilPage = () => {
 
   // variables selon état du fetch
   const [userInfos, setUserInfos] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // toogle pour relancer récupération de données
@@ -32,17 +31,14 @@ const ProfilPage = () => {
         } else {
           const contenu = await res.json();
           setUserInfos(contenu);
-          console.log('Contenu infos profil');
           console.log(contenu);
           setError(null);
-          setIsLoading(false);
         }
       } catch (err) {
         if (err.name === 'AbortError') {
           setError('Fetch a été stoppé');
         } else {
           setError(err.message);
-          setIsLoading(false);
         }
       }
     });
@@ -52,12 +48,7 @@ const ProfilPage = () => {
   return (
     <>
       <Header />
-      <ProfilContainer
-        userInfos={userInfos}
-        isLoading={isLoading}
-        error={error}
-        setModification={setModification}
-      />
+      <ProfilContainer userInfos={userInfos} error={error} setModification={setModification} />
     </>
   );
 };

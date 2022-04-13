@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Signup = () => {
+const Signup = ({ setLoginModal, setSignupModal }) => {
   // Création des variables affichés modifiables
   const [firstname, setFirstname] = useState(undefined);
   const [lastname, setLastname] = useState(undefined);
@@ -54,13 +54,10 @@ const Signup = () => {
 
       sendSignup.then(async (res) => {
         try {
-          console.log('res');
           console.log(res);
-          const contenu = await res.json();
-          console.log('contenu');
-          console.log(contenu);
+          setSignupModal(false);
+          setLoginModal(true);
         } catch (err) {
-          console.log('err');
           console.log(err);
         }
       });

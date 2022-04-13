@@ -54,7 +54,6 @@ const Login = ({ setIsConnected }) => {
       });
       // action lorsque on envoie les données
       sendLogin.then(async (res) => {
-        console.log(res);
         try {
           if (!res.ok && res.status === 404) {
             emailID.classList.add('error');
@@ -116,7 +115,7 @@ const Login = ({ setIsConnected }) => {
         Se connecter
       </button>
       <div className="forgot-password" id="forgot-password">
-        <Link to="/profil">Mot de passe oublié ?</Link>
+        <Link to="/">Mot de passe oublié ?</Link>
       </div>
     </form>
   );

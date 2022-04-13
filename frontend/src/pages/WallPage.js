@@ -1,4 +1,4 @@
-import Header from '../components/header/HeaderConnected';
+import HeaderConnected from '../components/header/HeaderConnected';
 import WallCardPost from '../components/wall/PostCard';
 import WallNewPost from '../components/wall/NewPost';
 
@@ -12,13 +12,13 @@ const WallPage = () => {
 
   // variables selon état du fetch
   const [postInfos, setPostInfos] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userInfos, setUserInfos] = useState(null);
 
   // toogle pour relancer récupération de données
   const [modification, setModification] = useState(false);
 
-  // récupération des éléments de la base de données avec l'api
+  // récupération des éléments de posts de la base de données avec l'api
   useEffect(() => {
     const abortCtrl = new AbortController();
     fetch('http://localhost:5000/api/post/', {
@@ -29,21 +29,47 @@ const WallPage = () => {
     }).then(async (res) => {
       try {
         if (!res.ok) {
-          throw Error('Erreur survenue');
+          throw Error(`${res.status}  ${res.statusText}`);
         } else {
           const contenu = await res.json();
           setPostInfos(contenu);
-          console.log('Contenu infos post');
           console.log(contenu);
           setError(null);
-          setIsLoading(false);
         }
       } catch (err) {
         if (err.name === 'AbortError') {
           setError('Fetch a été stoppé');
         } else {
           setError(err.message);
-          setIsLoading(false);
+        }
+      }
+    });
+    return () => abortCtrl.abort();
+  }, [id, token, modification]);
+
+  // récupération des éléments de l'utilisateur connecté de la base de données avec l'api
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    fetch(`http://localhost:5000/api/user/${id}`, {
+      signal: abortCtrl.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(async (res) => {
+      try {
+        if (!res.ok) {
+          throw Error('Erreur survenue');
+        } else {
+          const contenu = await res.json();
+          setUserInfos(contenu);
+          console.log(contenu);
+          // setError(null);
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          // setError('Fetch a été stoppé');
+        } else {
+          // setError(err.message);
         }
       }
     });
@@ -52,13 +78,16 @@ const WallPage = () => {
 
   return (
     <>
-      <Header />
-      <main className="wall-container">
-        <WallNewPost setModification={setModification} />
-        {isLoading && <div>En cours de traitement...</div>}
-        {error && <div>Une erreur vient de se produire - {error}</div>}
-        {postInfos && <WallCardPost postInfos={postInfos} setModification={setModification} />}
-      </main>
+      {error && <div>Une erreur vient de se produire - {error}</div>}
+      {postInfos && userInfos && (
+        <>
+          <HeaderConnected userInfos={userInfos} />
+          <main className="wall-container">
+            <WallNewPost setModification={setModification} />
+            <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
+          </main>
+        </>
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import profilVide from '../../assets/profil_vide.jpg';
 
-const NewComment = ({ setUpdateComment, post }) => {
+const NewComment = ({ setUpdateComment, post, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
@@ -13,7 +13,6 @@ const NewComment = ({ setUpdateComment, post }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const createCommentInfos = { content, user_id, post_id };
-    console.log('ddd');
 
     const send = fetch(`http://localhost:5000/api/comment`, {
       method: 'POST',
@@ -36,7 +35,11 @@ const NewComment = ({ setUpdateComment, post }) => {
   };
   return (
     <form onSubmit={handleSubmit} className="card-new-comment">
-      <img className="card-new-comment__photo" src={profilVide} alt={`${post.firstname} ${post.lastname}`} />
+      <img
+        className="card-new-comment__photo"
+        src={userInfos[0].user_photo}
+        alt={`${userInfos[0].firstname} ${userInfos[0].lastname}`}
+      />
       <input
         type="text"
         className="card-new-comment__content"

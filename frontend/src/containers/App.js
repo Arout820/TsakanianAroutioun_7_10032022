@@ -11,15 +11,6 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
   const token = JSON.parse(localStorage.getItem('token'));
 
-  useEffect(() => {
-    if (token) {
-      console.log('Connecté: ');
-      console.log(token);
-    } else {
-      console.log('Déconnecté');
-    }
-  }, [token, isConnected]);
-
   return (
     <Router>
       <Routes>
