@@ -83,7 +83,7 @@ const WallPage = () => {
         <>
           <HeaderConnected userInfos={userInfos} />
           <main className="wall-container">
-            <WallNewPost setModification={setModification} />
+            <WallNewPost setModification={setModification} userInfos={userInfos} />
             <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
           </main>
         </>

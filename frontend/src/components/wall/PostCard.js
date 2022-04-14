@@ -56,7 +56,12 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
         </div>
         {post.user_id === id && <DeletePostCard setModification={setModification} post={post} />}
       </div>
-      <p className="card-post__content">{post.content}</p>
+      {post.content && <p className="card-post__content">{post.content}</p>}
+      {post.attachment && (
+        <div className="card-post__image-preview">
+          <img src={post.attachment} alt={'Photo posté par ' + post.firstname + ' ' + post.lastname} />
+        </div>
+      )}
       <div className="card-post__reputation">
         <i className="card-post__reputation__element fa-2x fa-solid fa-thumbs-up"></i>
         <p className="card-post__reputation__element ">Commenter</p>

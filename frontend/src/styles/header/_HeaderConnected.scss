@@ -5,29 +5,9 @@
     background-color: white;
     box-shadow: 0 0 5px grey;
     border-top: 7px solid #202934;
-    &__infos{
-        display: flex;
-    }
-    &__welcome{
-        align-self: center;
-        padding: 10px;
-        background-color: #202934;
-        color: white;
-        border-radius: 15px;
-        font-size: 25px;
-        font-family: constantia;
-        font-weight: 200;
-        &__intro{
-            
-        }
-        &__name{
-          
-        }
-    }
     a {
     display: flex;
     }
-
     img{
     width: 320px;
     padding: 10px;
@@ -36,11 +16,6 @@
 
 .navigation {
     display: flex;
-    button {
-        border: none;
-        background: none;
-    }
-
     align-self: center;
     margin-right: 50px;
     i {
@@ -48,20 +23,45 @@
         padding: 15px;
         margin: 10px;
         border-radius: 10px;
-        
-        transition: 500ms ease-in-out;
-    }
-
-    i:hover{
-        color: white;
-        background: #202934;
-        cursor: pointer;
+        transition: background 500ms ease-in-out;
+        &:hover{
+            color: white;
+            background: #202934;
+            cursor: pointer;
+        }
     }
 }
 
 .active i {
     background-color: #202934;
     color: white;
+}
+
+// MEDIA QUERIES
+
+@media all AND (max-width: 850px){
+    .header-connected{
+        flex-direction: column;
+    }
+    .navigation {
+        align-self: initial;
+        margin-right: 0;
+        a{
+            display: flex;
+            flex: 1;
+        }
+        .disconnect{
+            display: flex;
+            flex: 1;
+            
+        }
+        i {
+            width: 100%;
+            text-align: center;
+            margin: 0;
+            border-radius: 0;
+        }
+    }
 }
 
 
