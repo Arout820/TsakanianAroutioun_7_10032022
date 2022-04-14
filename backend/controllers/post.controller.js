@@ -1,5 +1,4 @@
 const database = require('../config/db');
-const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
@@ -14,15 +13,26 @@ class Post {
 
 // ----------------------- Créer un post ----------------------- //
 exports.createPost = (req, res) => {
-  const { content, user_id, attachment } = req.body;
-  const post = new Post(content, user_id, attachment);
-  database.query('INSERT INTO post SET ?', post, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    res.status(201).json({ message: 'Post crée !' });
-  });
+  const { content, user_id } = req.body;
+  if (!req.file) {
+    console.log(req);
+    database.query('INSERT INTO post (content, user_id) VALUES (?, ?)', [content, user_id], (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      res.status(201).json({ message: 'Post crée !' });
+    });
+  } else if (req.file) {
+    console.log(req);
+    const attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    database.query('INSERT INTO post (content, user_id, attachment) VALUES (?, ?, ?)', [content, user_id, attachment], (error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.status(200).json(results);
+    });
+  }
 };
 
 // ------------------ Récuperer tous les posts ------------------ //

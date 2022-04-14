@@ -7,32 +7,29 @@ require('dotenv').config();
 
 // Class user pour données à envoyer à la BDD
 class User {
-  constructor(firstname, lastname, email, password, bio, user_photo) {
+  constructor(firstname, lastname, email, password) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
     this.password = password;
-    this.bio = bio;
-    this.user_photo = user_photo;
   }
 }
 
 // -------------------------- S'inscrire -------------------------- //
 exports.signup = (req, res) => {
-  const { firstname, lastname, email, password, bio, user_photo } = req.body;
+  const { firstname, lastname, email, password } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) => {
-      const user = new User(firstname, lastname, email, hash, bio, user_photo);
-
+      const user = new User(firstname, lastname, email, hash);
       console.log(user);
 
-      database.query('INSERT INTO user  SET ?', user, (error, results) => {
+      database.query('INSERT INTO user  SET ?', user , (error, results) => {
         if (error) {
           console.log(error);
           return res.status(400).json({ error });
         }
-        res.status(201).json({ message: user.user_id });
+        res.status(201).json({ Inscription: user });
       });
     })
     .catch((error) => res.status(500).json({ error }));
