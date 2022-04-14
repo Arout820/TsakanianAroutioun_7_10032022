@@ -1,37 +1,37 @@
 const database = require('../config/db');
+const fs = require('fs');
 
 require('dotenv').config();
-
-// Class post pour données à envoyer à la BDD
-class Post {
-  constructor(content, user_id, attachment) {
-    this.content = content;
-    this.user_id = user_id;
-    this.attachment = attachment;
-  }
-}
 
 // ----------------------- Créer un post ----------------------- //
 exports.createPost = (req, res) => {
   const { content, user_id } = req.body;
   if (!req.file) {
     console.log(req);
-    database.query('INSERT INTO post (content, user_id) VALUES (?, ?)', [content, user_id], (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.status(400).json({ error });
+    database.query(
+      'INSERT INTO post (content, user_id) VALUES (?, ?)',
+      [content, user_id],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          return res.status(400).json({ error });
+        }
+        res.status(201).json({ message: 'Post crée !' });
       }
-      res.status(201).json({ message: 'Post crée !' });
-    });
+    );
   } else if (req.file) {
     console.log(req);
     const attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-    database.query('INSERT INTO post (content, user_id, attachment) VALUES (?, ?, ?)', [content, user_id, attachment], (error, results) => {
-      if (error) {
-        return res.status(400).json({ error });
+    database.query(
+      'INSERT INTO post (content, user_id, attachment) VALUES (?, ?, ?)',
+      [content, user_id, attachment],
+      (error, results) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json(results);
       }
-      res.status(200).json(results);
-    });
+    );
   }
 };
 
@@ -86,18 +86,33 @@ exports.modifyPost = (req, res) => {
 // ---------------------- Supprimer un post ---------------------- //
 exports.deletePost = (req, res) => {
   database.query(
-    'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
+    'SELECT attachment FROM post WHERE post_id = ? AND user_id = ?',
     [req.params.id, req.token.userId],
     (error, results) => {
-      if (results.affectedRows === 0) {
-        return res.status(400).json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
-      }
       if (error) {
         console.log(error);
         return res.status(400).json({ error });
       }
-      console.log(results);
-      res.status(200).json({ message: 'Post supprimé !' });
+      const attachmentFilename = results[0].attachment.split('/images/')[1];
+      fs.unlink(`images/${attachmentFilename}`, () => {
+        database.query(
+          'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
+          [req.params.id, req.token.userId],
+          (error, results) => {
+            if (results.affectedRows === 0) {
+              return res
+                .status(400)
+                .json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
+            }
+            if (error) {
+              console.log(error);
+              return res.status(400).json({ error });
+            }
+            console.log(results);
+            res.status(200).json({ message: 'Post supprimé !' });
+          }
+        );
+      });
     }
   );
 };
