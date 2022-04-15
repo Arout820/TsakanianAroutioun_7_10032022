@@ -93,7 +93,8 @@ exports.deletePost = (req, res) => {
         console.log(error);
         return res.status(400).json({ error });
       }
-      const attachmentFilename = results[0].attachment.split('/images/')[1];
+
+      const attachmentFilename = results[0].attachment ? results[0].attachment.split('/images/')[1] : null;
       fs.unlink(`images/${attachmentFilename}`, () => {
         database.query(
           'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
