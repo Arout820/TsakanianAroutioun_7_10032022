@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
-const HeaderConnected = ({ userInfos }) => {
+const HeaderConnected = () => {
   const navigate = useNavigate();
 
   // Bouton se deconnecter

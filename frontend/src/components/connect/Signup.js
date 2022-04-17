@@ -1,48 +1,133 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import nonValideImage from '../../assets/non_valide.png';
 
 const Signup = ({ setLoginModal, setSignupModal }) => {
   // Création des variables affichés modifiables
-  const [firstname, setFirstname] = useState(undefined);
-  const [lastname, setLastname] = useState(undefined);
-  const [email, setEmail] = useState(undefined);
-  const [password, setPassword] = useState(undefined);
-  const [passwordRepeat, setPasswordReapeat] = useState(undefined);
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordReapeat] = useState('');
 
-  // Création des variables erros saffichés modifiables
+  // Création des variables d'erreurs affichés modifiables
   const [firstnameError, setFirstnameError] = useState('');
   const [lastnameError, setLastnameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordRepeatError, setPasswordReapeatError] = useState('');
+  const [duplicateEmail, setDuplicateEmail] = useState();
 
-  // fonction pour la logique du bouton inscription
-  const HandleSignup = async (event) => {
+  // --------------------------VALIDATION ----------------------------- //
+
+  // Déclaration de test
+  const [firstnameValid, setFirstnameValid] = useState(false);
+  const [lastnameValid, setLastnameValid] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+
+  const [passwordMinMaxValid, setPasswordMinMaxValid] = useState(false);
+  const [passwordUppercaseValid, setPasswordUppercaseValid] = useState(false);
+  const [passwordLowercaseValid, setPasswordLowercaseValid] = useState(false);
+  const [passwordDigitsValid, setPasswordDigitsValid] = useState(false);
+
+  const regexFirstname = /^[a-zA-Zà-œÀ-Ÿ]{0,200}[a-zA-Zà-œÀ-Ÿ]$/g;
+  const regexLastname = /^[a-zA-Zà-œÀ-Ÿ]{0,200}[a-zA-Zà-œÀ-Ÿ]$/g;
+  const regexEmail = /^[a-zA-z][a-zA-z0-9.-]{2,85}@[a-zA-z0-9]{2,84}\.[a-zA-z]{2,84}$/g;
+
+  const regexPasswordMinMax = /[a-zA-Z0-9]{5,50}/g;
+  const regexPasswordUppercase = /[A-Z]/g;
+  const regexPasswordLowercase = /[a-z]/g;
+  const regexPasswordDigits = /[0-9]{2,}/g;
+
+  useEffect(() => {
+    console.log('testeeeee');
+    console.log(duplicateEmail);
+  }, [duplicateEmail]);
+
+  // validation fonction pour prénom, nom, mail
+  const validation = (regex, string, validity) => {
+    if (!regex.test(string)) {
+      validity(false);
+    } else {
+      validity(true);
+    }
+  };
+
+  const validationPassword = (string) => {
+    if (!regexPasswordMinMax.test(string)) {
+      setPasswordMinMaxValid(false);
+    } else {
+      setPasswordMinMaxValid(true);
+    }
+    if (!regexPasswordUppercase.test(string)) {
+      setPasswordUppercaseValid(false);
+    } else {
+      setPasswordUppercaseValid(true);
+    }
+    if (!regexPasswordLowercase.test(string)) {
+      setPasswordLowercaseValid(false);
+    } else {
+      setPasswordLowercaseValid(true);
+    }
+    if (!regexPasswordDigits.test(string)) {
+      setPasswordDigitsValid(false);
+    } else {
+      setPasswordDigitsValid(true);
+    }
+    if (passwordMinMaxValid && passwordUppercaseValid && passwordLowercaseValid && passwordDigitsValid) {
+      setPasswordValid(true);
+    }
+  };
+
+  const HandleChangeFirstname = (event) => {
+    setFirstname(event.target.value);
+    validation(regexFirstname, event.target.value, setFirstnameValid);
+  };
+
+  const HandleChangeLastname = (event) => {
+    setLastname(event.target.value);
+    validation(regexLastname, event.target.value, setLastnameValid);
+  };
+
+  const HandleChangeEmail = (event) => {
+    setEmail(event.target.value);
+    validation(regexEmail, event.target.value, setEmailValid);
+  };
+
+  const HandleChangePassword = (event) => {
+    setPassword(event.target.value);
+    validationPassword(event.target.value);
+  };
+
+  // ------------------------- INSCRIPTION --------------------------- //
+  const HandleSignup = (event) => {
     event.preventDefault();
 
-    // selection des inputs pour du CSS
-    const firstnameID = document.querySelector('#firstname');
-    const lastnameID = document.querySelector('#lastname');
-    const emailID = document.querySelector('#email');
-    const passwordID = document.querySelector('#password');
-    const passwordRepeatID = document.querySelector('#password-repeat');
+    // test regex et si ok on envoie
+    if (!firstnameValid) {
+      setFirstnameError("Le prénom n'est pas valide");
+    }
 
-    // séléction des div errors
-    const firstnameErrorStyle = document.querySelector('#firstname-error');
-    const lastnameErrorStyle = document.querySelector('#lastname-error');
-    const emailErrorStyle = document.querySelector('#email-error');
-    const passwordErrorStyle = document.querySelector('#password-error');
-    const passwordRepeatErrorStyle = document.querySelector('#password-repeat-error');
+    if (!lastnameValid) {
+      setLastnameError("Le nom de famille n'est pas valide");
+    }
 
-    // données à envoyer
-    const signupInfos = { firstname, lastname, email, password };
-    console.log(signupInfos);
+    if (!emailValid) {
+      setEmailError("L'email n'est pas valide");
+    }
 
-    // test mot de passe et si ok on envoie
+    if (!passwordValid) {
+      setPasswordError("Le mot de passe n'est pas valide");
+    }
+
     if (password !== passwordRepeat) {
-      setPasswordReapeatError('Les mots de passe ne correspondent pas.');
-      passwordRepeatErrorStyle.classList.add('input-message-error');
-    } else {
-      // On envoie les données au backend par l'API
+      setPasswordReapeatError('Les mots de passe ne correspondent pas');
+    }
+
+    if (firstnameValid && lastnameValid && emailValid && passwordValid && password === passwordRepeat) {
+      const signupInfos = { firstname, lastname, email, password };
+      console.log(signupInfos);
+
       const sendSignup = fetch('http://localhost:5000/api/user/signup', {
         method: 'POST',
         body: JSON.stringify(signupInfos),
@@ -54,7 +139,13 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
 
       sendSignup.then(async (res) => {
         try {
-          console.log(res);
+          const contenu = await res.json();
+          console.log(contenu);
+          if (contenu.error) {
+            setDuplicateEmail(
+              'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci'
+            );
+          }
           setSignupModal(false);
           setLoginModal(true);
         } catch (err) {
@@ -71,61 +162,120 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
         <input
           type="text"
           id="firstname"
+          className={firstnameError && !firstnameValid ? 'error-border' : undefined}
           placeholder="Prénom"
-          onChange={(event) => setFirstname(event.target.value)}
+          onChange={HandleChangeFirstname}
           value={firstname}
+          maxLength="50"
+          autoComplete="off"
         />
-        <div id="firstname-error">{firstnameError}</div>
+        {firstnameError && !firstnameValid && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{firstnameError}</div>
+          </div>
+        )}
       </div>
 
       <div className="form-auth__element">
         <input
           type="text"
           id="lastname"
+          className={lastnameError && !lastnameValid ? 'error-border' : undefined}
           placeholder="Nom de famille"
-          onChange={(event) => setLastname(event.target.value)}
+          onChange={HandleChangeLastname}
           value={lastname}
+          maxLength="50"
+          autoComplete="off"
         />
-        <div id="lastname-error">{lastnameError}</div>
+        {lastnameError && !lastnameValid && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{lastnameError}</div>
+          </div>
+        )}
       </div>
 
       <div className="form-auth__element">
         <input
           type="text"
           id="email"
+          className={emailError && !emailValid ? 'error-border' : undefined}
           placeholder="Email"
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={HandleChangeEmail}
           value={email}
+          maxLength="255"
+          autoComplete="email"
         />
-        <div id="email-error">{emailError}</div>
+        {emailError && !emailValid && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{emailError}</div>
+          </div>
+        )}
       </div>
 
       <div className="form-auth__element">
         <input
           type="password"
           id="password"
-          autoComplete="on"
+          className={passwordError && !passwordValid ? 'error-border' : undefined}
           placeholder="Mot de passe"
-          onChange={(event) => setPassword(event.target.value)}
+          onChange={HandleChangePassword}
           value={password}
+          maxLength="50"
+          autoComplete="new-password"
+          title="Le mot de passe doit contenir entre 5 et 50 caractères maximum, une majuscule, une minuscule, et
+          deux chiffres."
         />
-        <div id="password-error">{passwordError}</div>
+        {passwordError && !passwordValid && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{passwordError}</div>
+          </div>
+        )}
       </div>
 
       <div className="form-auth__element">
         <input
           type="password"
           id="password-reapeat"
+          className={passwordRepeatError && passwordRepeat !== password ? 'error-border' : undefined}
           autoComplete="on"
           placeholder="Répétez le mot de passe"
           onChange={(event) => setPasswordReapeat(event.target.value)}
           value={passwordRepeat}
+          maxLength="50"
         />
-        <div id="password-repeat-error">{passwordRepeatError}</div>
+        {passwordRepeatError && passwordRepeat !== password && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{passwordRepeatError}</div>
+          </div>
+        )}
       </div>
+      {password && (
+        <div className="form-auth__password-check">
+          <p className={passwordMinMaxValid ? 'checked-regex' : undefined}>5 caractères minimum </p>
+          <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>1 caractère majuscule</p>
+          <p className={passwordLowercaseValid ? 'checked-regex' : undefined}>1 caractère minuscule</p>
+          <p className={passwordDigitsValid ? 'checked-regex' : undefined}>2 caractères numériques</p>
+        </div>
+      )}
       <button type="submit" id="signup" className="form-auth__button">
         Créer un compte
       </button>
+      <div className="form-auth__duplicate">{duplicateEmail}</div>
     </form>
   );
 };

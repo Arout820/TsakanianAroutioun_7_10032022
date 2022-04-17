@@ -1,46 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import nonValideImage from '../../assets/non_valide.png';
+
 const Login = ({ setIsConnected }) => {
-  // Création des variables affichés modifiables
+  // Création des variables modifiables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const emailRef = useRef();
 
   const navigate = useNavigate();
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   useEffect(() => {
     emailRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    setEmailError('');
-    setPasswordError('');
-  }, [email, password]);
-
   // fonction pour la logique du bouton connexion
   const handleLogin = (event) => {
     event.preventDefault();
-    const emailID = document.querySelector('#email');
-    const passwordID = document.querySelector('#password');
 
-    const emailErrorStyle = document.querySelector('#email-error');
-    const passwordErrorStyle = document.querySelector('#password-error');
-
-    // données à envoyer
     const loginInfos = { email, password };
 
     // mise à jour des erreurs
     setEmailError('');
     setPasswordError('');
-    passwordErrorStyle.classList.remove('input-message-error');
-    passwordID.classList.remove('error');
 
     if (email === '') {
-      emailID.classList.add('error');
-      emailErrorStyle.classList.add('input-message-error');
       setEmailError('Veuillez inscrire votre email de connexion');
     } else {
       // fetch pour travailler sur les données de la base de données
@@ -56,20 +45,12 @@ const Login = ({ setIsConnected }) => {
       sendLogin.then(async (res) => {
         try {
           if (!res.ok && res.status === 404) {
-            emailID.classList.add('error');
-            emailErrorStyle.classList.add('input-message-error');
             setEmailError('Email incorrecte');
-
             throw new Error('Email incorrecte');
-          } else if (res.status !== 404) {
-            emailErrorStyle.classList.remove('input-message-error');
-            emailID.classList.remove('error');
           }
           if (!res.ok && res.status === 401) {
-            passwordID.classList.add('error');
-            passwordErrorStyle.classList.add('input-message-error');
+            passwordRef.current.focus();
             setPasswordError('Mot de passe incorrect');
-
             throw new Error('Mot de passe incorrect');
           }
 
@@ -89,14 +70,22 @@ const Login = ({ setIsConnected }) => {
       <div className="form-auth__element">
         <input
           type="text"
-          ref={emailRef}
           name="email"
           id="email"
+          className={emailError && 'error-border'}
           placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
           value={email}
+          ref={emailRef}
         />
-        <div id="email-error">{emailError}</div>
+        {emailError && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{emailError}</div>
+          </div>
+        )}
       </div>
 
       <div className="form-auth__element">
@@ -104,12 +93,21 @@ const Login = ({ setIsConnected }) => {
           type="password"
           name="password"
           id="password"
+          className={passwordError && 'error-border'}
           autoComplete="on"
           placeholder="Mot de passe"
           onChange={(event) => setPassword(event.target.value)}
           value={password}
+          ref={passwordRef}
         />
-        <div id="password-error">{passwordError}</div>
+        {passwordError && (
+          <div className="error">
+            <div className="error__image">
+              <img src={nonValideImage} alt="" />
+            </div>
+            <div className="error__message">{passwordError}</div>
+          </div>
+        )}
       </div>
       <button type="submit" id="login" className="form-auth__button">
         Se connecter
