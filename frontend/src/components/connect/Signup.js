@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import nonValideImage from '../../assets/non_valide.png';
 
 const Signup = ({ setLoginModal, setSignupModal }) => {
@@ -15,7 +15,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordRepeatError, setPasswordReapeatError] = useState('');
-  const [duplicateEmail, setDuplicateEmail] = useState();
+  const [duplicateEmail, setDuplicateEmail] = useState('');
 
   // --------------------------VALIDATION ----------------------------- //
 
@@ -23,7 +23,6 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   const [firstnameValid, setFirstnameValid] = useState(false);
   const [lastnameValid, setLastnameValid] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
-  const [passwordValid, setPasswordValid] = useState(false);
 
   const [passwordMinMaxValid, setPasswordMinMaxValid] = useState(false);
   const [passwordUppercaseValid, setPasswordUppercaseValid] = useState(false);
@@ -38,11 +37,6 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   const regexPasswordUppercase = /[A-Z]/g;
   const regexPasswordLowercase = /[a-z]/g;
   const regexPasswordDigits = /[0-9]{2,}/g;
-
-  useEffect(() => {
-    console.log('testeeeee');
-    console.log(duplicateEmail);
-  }, [duplicateEmail]);
 
   // validation fonction pour prénom, nom, mail
   const validation = (regex, string, validity) => {
@@ -73,9 +67,6 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       setPasswordDigitsValid(false);
     } else {
       setPasswordDigitsValid(true);
-    }
-    if (passwordMinMaxValid && passwordUppercaseValid && passwordLowercaseValid && passwordDigitsValid) {
-      setPasswordValid(true);
     }
   };
 
@@ -116,7 +107,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       setEmailError("L'email n'est pas valide");
     }
 
-    if (!passwordValid) {
+    if (!passwordDigitsValid || !passwordLowercaseValid || !passwordMinMaxValid || !passwordUppercaseValid) {
       setPasswordError("Le mot de passe n'est pas valide");
     }
 
@@ -124,7 +115,16 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       setPasswordReapeatError('Les mots de passe ne correspondent pas');
     }
 
-    if (firstnameValid && lastnameValid && emailValid && passwordValid && password === passwordRepeat) {
+    if (
+      firstnameValid &&
+      lastnameValid &&
+      emailValid &&
+      passwordDigitsValid &&
+      passwordLowercaseValid &&
+      passwordMinMaxValid &&
+      passwordUppercaseValid &&
+      password === passwordRepeat
+    ) {
       const signupInfos = { firstname, lastname, email, password };
       console.log(signupInfos);
 
@@ -145,9 +145,10 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
             setDuplicateEmail(
               'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci'
             );
+          } else {
+            setSignupModal(false);
+            setLoginModal(true);
           }
-          setSignupModal(false);
-          setLoginModal(true);
         } catch (err) {
           console.log(err);
         }
@@ -225,7 +226,15 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
         <input
           type="password"
           id="password"
-          className={passwordError && !passwordValid ? 'error-border' : undefined}
+          className={
+            passwordError &&
+            (!passwordDigitsValid ||
+              !passwordLowercaseValid ||
+              !passwordMinMaxValid ||
+              !passwordUppercaseValid)
+              ? 'error-border'
+              : undefined
+          }
           placeholder="Mot de passe"
           onChange={HandleChangePassword}
           value={password}
@@ -234,14 +243,18 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
           title="Le mot de passe doit contenir entre 5 et 50 caractères maximum, une majuscule, une minuscule, et
           deux chiffres."
         />
-        {passwordError && !passwordValid && (
-          <div className="error">
-            <div className="error__image">
-              <img src={nonValideImage} alt="" />
+        {passwordError &&
+          (!passwordDigitsValid ||
+            !passwordLowercaseValid ||
+            !passwordMinMaxValid ||
+            !passwordUppercaseValid) && (
+            <div className="error">
+              <div className="error__image">
+                <img src={nonValideImage} alt="" />
+              </div>
+              <div className="error__message">{passwordError}</div>
             </div>
-            <div className="error__message">{passwordError}</div>
-          </div>
-        )}
+          )}
       </div>
 
       <div className="form-auth__element">
@@ -264,7 +277,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
           </div>
         )}
       </div>
-      {password && (
+      {(password || passwordError) && (
         <div className="form-auth__password-check">
           <p className={passwordMinMaxValid ? 'checked-regex' : undefined}>5 caractères minimum </p>
           <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>1 caractère majuscule</p>
