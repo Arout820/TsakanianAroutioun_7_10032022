@@ -38,5 +38,11 @@
         background-color: lighten(#202934, 30);
         cursor: pointer;
     }
-    
+}
+
+// --------------------------- MEDIA QUERIES IPAD 500PX --------------------------------------//
+@media all AND (max-width: 500px){
+    .popup-inner{
+        width: 300px;
+    }
 }

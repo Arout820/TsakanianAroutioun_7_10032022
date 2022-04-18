@@ -37,7 +37,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   };
 
   return (
-    <div className="description">
+    <div className="container-infos__description">
       <form onSubmit={handleSubmit} className="form-modify">
         <div className="form-modify-container">
           <div className="form-modify__element">

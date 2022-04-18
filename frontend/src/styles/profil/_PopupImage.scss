@@ -7,13 +7,77 @@
     &__change{
         display: flex;
         flex-direction: column;
+        input{
+            display: none;
+        }
         &__label{
-            font-size: 20px;
-            margin-bottom: 10px;
-            font-weight: 700;
+            display: flex;
+            padding: 10px;
+            background: #202934;
+            border: 2px solid rgb(255, 255, 255);
+            border-radius: 10px;
+            transition: background-color 200ms ease-in-out;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            font-weight: 300;
+            width: 400px;
+            align-self: center;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+            &__icon{
+                margin-left: 5px;
+            }
+            &:hover{
+                background-color: lighten(#202934, 30);
+                cursor: pointer;
+            }
+        }
+        
+    }
+    &__photo{
+        border-radius: 230px;
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        align-self: center;
+        margin-bottom: 10px;
+        position: relative;
+        &__img{
+            
+            display: flex;
+            border-radius: 250px;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            transition: 300ms;
+        }
+        &__delete{
+            background: rgba(192, 192, 192, 0.5);
+            border-radius: 50px;
+            box-shadow: 0 0 4 rgb(131, 131, 131);
+            padding: 6px;
+            position: absolute;
+            right: 5px;
+            bottom: 20px;
+            &__icon{
+                font-size: 35px;
+                transition: transform 200ms ease-in-out;
+                &:hover{
+                    cursor: pointer;
+                    transform: scale(1.1);
+                }
+            }
         }
     }
+    &__send:nth-child(1){
+        margin-top: 10px;
+    }
     &__send{
+        display: flex;
+        justify-content: center;
         padding: 10px;
         background: #202934;
         border: 2px solid rgb(255, 255, 255);
@@ -23,11 +87,21 @@
         font-weight: bold;
         color: white;
         font-weight: 300;
-        margin-top: 30px;
         width: 400px;
+        align-items: center;
         &:hover{
             background-color: lighten(#202934, 30);
             cursor: pointer;
         }
+    }
+}
+
+// --------------------------- MEDIA QUERIES IPAD 500PX --------------------------------------//
+@media all AND (max-width: 500px){
+    .form-image__change__label{
+        width: 100%;
+    }
+    .form-image__send{
+        width: 100%;
     }
 }

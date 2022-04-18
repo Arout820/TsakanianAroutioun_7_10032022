@@ -127,3 +127,15 @@
     color:white;
     background-color: #202934;
 }
+
+// --------------------------- MEDIA QUERIES IPAD 920PX --------------------------------------//
+@media all AND (max-width: 920px){
+  .form-auth{
+      width: 100%;
+      border-radius: 0;
+  }
+  .forgot-password {
+    position: initial;
+    margin-top: 50px;
+    }
+}

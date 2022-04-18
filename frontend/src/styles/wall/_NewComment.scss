@@ -1,5 +1,4 @@
 //NEW COMMENT
-
 .card-new-comment{
     display: flex;
     position: relative;
@@ -19,12 +18,13 @@
         margin: 15px;
     } 
     &__content{
-        width: 85%;
+        flex: 1;
         height: 30px;
         align-self: center;
         border: none;
         border-radius: 50px;
         padding-left: 10px;
+        margin-right: 30px;
         &:focus-visible{
             outline: none;
         }

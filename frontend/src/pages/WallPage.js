@@ -1,4 +1,5 @@
 import HeaderConnected from '../components/header/HeaderConnected';
+import FooterConnected from '../components/footer/FooterConnected';
 import WallCardPost from '../components/wall/PostCard';
 import WallNewPost from '../components/wall/NewPost';
 
@@ -81,11 +82,12 @@ const WallPage = () => {
       {error && <div>Une erreur vient de se produire - {error}</div>}
       {postInfos && userInfos && (
         <>
-          <HeaderConnected userInfos={userInfos} />
+          <HeaderConnected />
           <main className="wall-container">
             <WallNewPost setModification={setModification} userInfos={userInfos} />
             <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
           </main>
+          <FooterConnected />
         </>
       )}
     </>

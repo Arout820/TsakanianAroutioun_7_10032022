@@ -1,4 +1,10 @@
 // Formulaire de modification
+.form-modify-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
 .form-modify{
     display: flex;
     flex-direction: column;
@@ -42,15 +48,25 @@
     }
 }
 
-.form-modify-container{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
 .form-modify__element__biography{
     min-height: 150px;
     resize: vertical;
     padding: 10px;
     font-size: 19px;
 }
+
+// --------------------------- MEDIA QUERIES IPAD 620PX --------------------------------------//
+@media all AND (max-width: 720px){
+    .form-modify-container{
+        flex-direction: column;
+        margin: 0;
+    }
+    .form-modify{
+        &__element{
+            margin-top: 25px;
+        }
+        &__element input{
+            width: 100%;
+        }
+    }
+  }

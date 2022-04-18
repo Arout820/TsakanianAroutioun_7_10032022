@@ -3,7 +3,7 @@ import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
 const HeaderDisconnected = () => {
   return (
-    <header className="header-disconnected">
+    <header className="header-disconnected" id="header-connected">
       <div className="header-disconnected__logo">
         <Link to="/profil" className="header-disconnected__logo__link">
           <img src={logo} alt="Logo de groupomania" />

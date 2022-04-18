@@ -37,11 +37,13 @@
     color: white;
 }
 
-// MEDIA QUERIES
-
-@media all AND (max-width: 850px){
+// --------------------------- MEDIA QUERIES IPAD 720PX --------------------------------------//
+@media all AND (max-width: 720px){
     .header-connected{
         flex-direction: column;
+        a{
+            align-self: center;
+        }
     }
     .navigation {
         align-self: initial;
@@ -64,5 +66,29 @@
     }
 }
 
+// --------------------------- MEDIA QUERIES MOBILE 320PX --------------------------------------//
 
+@media all AND (max-width: 320px){
+    .header-connected img {
+        width: 100%;
+    }
+    .navigation {
+        align-self: initial;
+        margin-right: 0;
+        a{
+            display: flex;
+            flex: 1;
+        }
+        .disconnect{
+            display: flex;
+            flex: 1;
+        }
+        i {
+            width: 100%;
+            text-align: center;
+            margin: 0;
+            border-radius: 0;
+        }
+    }
+}
 

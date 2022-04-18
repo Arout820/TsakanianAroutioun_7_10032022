@@ -1,8 +1,8 @@
 //COMMENTS
-.card-comments{
+.comments{
     display: flex;
     flex-direction: column;
-    h1{
+    h2{
         align-self: center;
         margin-bottom: 0;
     }
@@ -30,7 +30,6 @@
         position: relative;
         &__profil{
             display: flex;
-            
             &__username{
                 margin: 0;
                 font-weight: 700;
