@@ -2,18 +2,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const database = require('../config/db');
+const User = require('../models/User')
 
 require('dotenv').config();
-
-// Class user pour données à envoyer à la BDD
-class User {
-  constructor(firstname, lastname, email, password) {
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.email = email;
-    this.password = password;
-  }
-}
 
 // -------------------------- S'inscrire -------------------------- //
 exports.signup = (req, res) => {
@@ -117,6 +108,18 @@ exports.modifyUser = (req, res) => {
 };
 
 // ----------------------- Supprimer un utilisateur ----------------------- //
+exports.deleteUser = (req, res) => {
+  database.query('DELETE FROM user WHERE user_id = ?', req.params.id, (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.status(400).json({ error });
+    }
+    console.log(results);
+    res.status(200).json({ message: 'Utilisateur supprimé' });
+  });
+};
+
+// ----------------------- Supprimer la photo d'un utilisateur ----------------------- //
 exports.deleteUser = (req, res) => {
   database.query('DELETE FROM user WHERE user_id = ?', req.params.id, (error, results) => {
     if (error) {

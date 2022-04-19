@@ -38,11 +38,12 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
   };
   return (
     <form onSubmit={handleSubmit} className="card-new-comment">
-      <img
-        className="card-new-comment__photo"
-        src={userInfos[0].user_photo ? userInfos[0].user_photo : emptyPhoto}
-        alt={`${userInfos[0].firstname} ${userInfos[0].lastname}`}
-      />
+      <div className="card-new-comment__photo">
+        <img
+          src={userInfos[0].user_photo ? userInfos[0].user_photo : emptyPhoto}
+          alt={`${userInfos[0].firstname} ${userInfos[0].lastname}`}
+        />
+      </div>
       <input
         type="text"
         className="card-new-comment__content"
