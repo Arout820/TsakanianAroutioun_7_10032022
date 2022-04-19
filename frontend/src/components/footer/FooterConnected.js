@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 const FooterConnected = () => {
   return (
     <footer className="footer-connected">
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12 col-md-6">
-            <h6>A propos</h6>
-            <p className="text-justify">
+      <div className="container-footer__description">
+        <div className="row__description">
+          <div className="">
+            <h2>A propos</h2>
+            <p className="">
               Notre entreprise, spécialisée dans la grande distribution, est en pleine expansion. Nous avons
               actuellement plus de 600 collaborateurs et avons beaucoup recruté depuis quelques années. Nous
               étions uniquement 300 il y a 3 ans.
@@ -16,16 +16,17 @@ const FooterConnected = () => {
         </div>
       </div>
       <hr />
-      <div className="container">
-        <div className="row">
-          <div className="col-md-8 col-sm-6 col-xs-12">
+
+      <div className="container-footer__bottom">
+        <div className="row__bottom">
+          <div className="container-copy">
             <p className="copyright-text">
               Copyright &copy; 2022 All Rights Reserved by
               <Link to="#"> Groupomania</Link>.
             </p>
           </div>
 
-          <div className="col-md-4 col-sm-6 col-xs-12">
+          <div className="container-socials-icons">
             <ul className="social-icons">
               <li>
                 <Link className="facebook" to="#header-connected">
