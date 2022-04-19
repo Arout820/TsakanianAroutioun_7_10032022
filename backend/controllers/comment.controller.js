@@ -42,7 +42,7 @@ exports.getAllComment = (req, res) => {
 exports.getOneComment = (req, res) => {
   database.query(
     'SELECT comment_id, post.post_id, comment.content, comment.user_id, firstname, lastname, user_photo FROM comment JOIN user ON comment.user_id = user.user_id JOIN post ON comment.post_id = post.post_id WHERE comment_id = ?',
-    req.params.id,
+    req.params.commentId,
     (error, results) => {
       if (error) {
         console.log(error);
@@ -55,15 +55,13 @@ exports.getOneComment = (req, res) => {
 
 // ---------------------- Supprimer un commentaire ---------------------- //
 exports.deleteComment = (req, res) => {
-  database.query(
-    'DELETE FROM comment WHERE comment_id = ? AND user_id = ? ',
-    [req.params.id, req.token.userId],
-    (error, results) => {
+  if (req.token.isAdmin === 1) {
+    database.query('DELETE FROM comment WHERE comment_id = ?', [req.params.commentId], (error, results) => {
       console.log(results);
       if (results.affectedRows === 0) {
         return res
           .status(400)
-          .json({ message: "Impossible de supprimer le commentaire de quelqu'un d'autre !" });
+          .json({ message: 'Aucun commentaire correspondant a ce numéro de commentaire !' });
       }
       if (error) {
         console.log(error);
@@ -71,27 +69,25 @@ exports.deleteComment = (req, res) => {
       }
       console.log(results);
       res.status(200).json({ message: 'Commentaire supprimé !' });
-    }
-  );
+    });
+  } else if (req.token.isAdmin === 0) {
+    database.query(
+      'DELETE FROM comment WHERE comment_id = ? AND user_id = ? ',
+      [req.params.commentId, req.token.userId],
+      (error, results) => {
+        console.log(results);
+        if (results.affectedRows === 0) {
+          return res
+            .status(400)
+            .json({ message: "Impossible de supprimer le commentaire de quelqu'un d'autre !" });
+        }
+        if (error) {
+          console.log(error);
+          return res.status(400).json({ error });
+        }
+        console.log(results);
+        res.status(200).json({ message: 'Commentaire supprimé !' });
+      }
+    );
+  }
 };
-
-// // ---------------------- Modifier un commentaire ---------------------- //
-// exports.modifyCommentaire = (req, res) => {
-//   database.query(
-//     'UPDATE post SET ? WHERE post_id = ? AND user_id = ?',
-//     [req.body, req.params.id, req.token.userId],
-//     (error, results) => {
-//       if (results.affectedRows === 0) {
-//         return res
-//           .status(400)
-//           .json({ message: "Impossible de modifier le commentaire de quelqu'un d'autre !" });
-//       }
-//       if (error) {
-//         console.log(error);
-//         return res.status(400).json({ error });
-//       }
-//       console.log(results);
-//       res.status(200).json({ message: 'Commentaire modifié !' });
-//     }
-//   );
-// };

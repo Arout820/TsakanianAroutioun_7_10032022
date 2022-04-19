@@ -83,7 +83,7 @@ const WallPage = () => {
       {postInfos && userInfos && (
         <>
           <HeaderConnected />
-          <main className="wall-container">
+          <main className={userInfos[0].isAdmin ? 'wall-container admin' : 'wall-container'}>
             <WallNewPost setModification={setModification} userInfos={userInfos} />
             <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
           </main>

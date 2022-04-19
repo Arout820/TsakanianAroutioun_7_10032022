@@ -33,7 +33,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
       {error && <div>Une erreur vient de se produire - {error}</div>}
       {userInfos && (
         <>
-          <main className="main-profil">
+          <main className="main-profil" >
             <div className="profil-datas">
               <div className="profil-datas__photo">
                 <img

@@ -11,6 +11,10 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
+  useEffect(() => {
+    console.log(userConnectionInfos);
+  });
+
   // variables selon état du fetch
   const [commentInfos, setCommentInfos] = useState(null);
   const [error, setError] = useState(null);
@@ -55,11 +59,13 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
           </p>
           <p className="card-post__infos__profil__time">{dateCorrection(post.post_create_time)}</p>
         </div>
-        {post.user_id === id && <DeletePostCard setModification={setModification} post={post} />}
+        {(post.user_id === id || userInfos[0].isAdmin === 1) && (
+          <DeletePostCard setModification={setModification} post={post} />
+        )}
       </div>
       {post.content && <p className="card-post__content">{post.content}</p>}
       {post.video && (
-        <div className='card-post__video'>
+        <div className="card-post__video">
           <iframe
             src={post.video}
             title={post.video}
@@ -81,7 +87,13 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
           <p className="card-post__reputation__element__number">12 commentaires</p>
         </div>
       </div>
-      <Comments post={post} commentInfos={commentInfos} error={error} setUpdateComment={setUpdateComment} />
+      <Comments
+        post={post}
+        userInfos={userInfos}
+        commentInfos={commentInfos}
+        error={error}
+        setUpdateComment={setUpdateComment}
+      />
       <NewComment setUpdateComment={setUpdateComment} post={post} userInfos={userInfos} />
     </div>
   ));

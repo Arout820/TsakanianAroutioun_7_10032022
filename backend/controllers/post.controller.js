@@ -84,33 +84,56 @@ exports.modifyPost = (req, res) => {
 // ---------------------- Supprimer un post ---------------------- //
 exports.deletePost = (req, res) => {
   database.query(
-    'SELECT attachment FROM post WHERE post_id = ? AND user_id = ?',
-    [req.params.id, req.token.userId],
+    'SELECT attachment FROM post WHERE post_id = ?',
+    [req.params.postId, req.token.userId],
     (error, results) => {
       if (error) {
         console.log(error);
         return res.status(400).json({ error });
       }
+      let attachmentFilename;
+      if (results[0]) {
+        attachmentFilename = results[0].attachment ? results[0].attachment.split('/images/')[1] : null;
+      } else if (!results[0]) {
+        return res.status(404).json({ error: 'Accès interdit !' });
+      }
 
-      const attachmentFilename = results[0].attachment ? results[0].attachment.split('/images/')[1] : null;
       fs.unlink(`images/${attachmentFilename}`, () => {
-        database.query(
-          'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
-          [req.params.id, req.token.userId],
-          (error, results) => {
-            if (results.affectedRows === 0) {
-              return res
-                .status(400)
-                .json({ message: "Impossible de supprimer le post de quelqu'un d'autre !" });
+        if (req.token.isAdmin === 1) {
+          database.query(
+            'DELETE FROM post WHERE post_id = ?',
+            [req.params.postId, req.token.userId],
+            (error, results) => {
+              if (results.affectedRows === 0) {
+                return res.status(400).json({ message: 'Aucun post correspondant a ce numéro de post !' });
+              }
+              if (error) {
+                console.log(error);
+                return res.status(400).json({ error });
+              }
+              console.log(results);
+              res.status(200).json({ message: 'Post supprimé !' });
             }
-            if (error) {
-              console.log(error);
-              return res.status(400).json({ error });
+          );
+        } else if (req.token.isAdmin === 0) {
+          database.query(
+            'DELETE FROM post WHERE post_id = ? AND user_id = ? ',
+            [req.params.postId, req.token.userId],
+            (error, results) => {
+              if (results.affectedRows === 0) {
+                return res
+                  .status(400)
+                  .json({ error: "Impossible de supprimer le post de quelqu'un d'autre !" });
+              }
+              if (error) {
+                console.log(error);
+                return res.status(400).json({ error });
+              }
+              console.log(results);
+              res.status(200).json({ message: 'Post supprimé !' });
             }
-            console.log(results);
-            res.status(200).json({ message: 'Post supprimé !' });
-          }
-        );
+          );
+        }
       });
     }
   );

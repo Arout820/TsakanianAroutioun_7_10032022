@@ -2,7 +2,7 @@ import { dateCorrection } from '../../utils/Utils';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 import { useEffect } from 'react';
 
-const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
+const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) => {
   // infos Local Storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const id = userConnectionInfos.userId;
@@ -53,7 +53,7 @@ const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
                     </p>
                   </div>
                   <p className="card-comment__infos__content">{comment.content}</p>
-                  {comment.user_id === id && (
+                  {(comment.user_id === id || userInfos[0].isAdmin === 1) && (
                     <div className="card-comment__infos__delete">
                       <i
                         onClick={() => HandleDelete(comment.comment_id)}

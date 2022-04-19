@@ -6,7 +6,10 @@ module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     req.token = jwt.verify(token, process.env.TOKEN);
+
     const userId = req.token.userId;
+    const isAdmin = req.token.isAdmin;
+
     if (req.body.user_id && req.body.user_id != userId) {
       throw new Error();
     } else {

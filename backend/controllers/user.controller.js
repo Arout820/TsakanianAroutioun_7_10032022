@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const database = require('../config/db');
-const User = require('../models/User')
+const User = require('../models/User');
 
 require('dotenv').config();
 
@@ -15,7 +15,7 @@ exports.signup = (req, res) => {
       const user = new User(firstname, lastname, email, hash);
       console.log(user);
 
-      database.query('INSERT INTO user  SET ?', user , (error, results) => {
+      database.query('INSERT INTO user  SET ?', user, (error, results) => {
         if (error) {
           console.log(error);
           return res.status(400).json({ error });
@@ -45,7 +45,8 @@ exports.login = (req, res) => {
         }
         res.status(200).json({
           userId: results[0].user_id,
-          token: jwt.sign({ userId: results[0].user_id }, process.env.TOKEN, {
+          isAdmin: results[0].isAdmin,
+          token: jwt.sign({ userId: results[0].user_id, isAdmin: results[0].isAdmin }, process.env.TOKEN, {
             expiresIn: '24h',
           }),
         });
