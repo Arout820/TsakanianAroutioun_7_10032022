@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteAccount from './DeleteAccount';
 
 const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
@@ -10,30 +10,51 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   const [lastname, setLastname] = useState(userInfos[0].lastname);
   const [bio, setBio] = useState(userInfos[0].bio);
 
+  const [errorFirstname, setErrorFirstname] = useState(false);
+  const [errorLastname, setErrorLastname] = useState(false);
+  const [errorBio, setErrorBio] = useState(false);
+
+  useEffect(() => {
+    if (!firstname) {
+      setErrorFirstname(true);
+    }
+
+    if (!lastname) {
+      setErrorLastname(true);
+    }
+
+    if (!bio) {
+      setErrorBio(true);
+    }
+  }, [firstname, lastname, bio]);
+
   const newInfos = { firstname, lastname, bio };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const send = fetch(`http://localhost:5000/api/user/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(newInfos),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if (firstname && lastname) {
+      const send = fetch(`http://localhost:5000/api/user/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(newInfos),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    send.then(async (res) => {
-      try {
-        off(false);
-        on(true);
-        setModification((e) => !e);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+      send.then(async (res) => {
+        try {
+          console.log(res);
+          off(false);
+          on(true);
+          setModification((e) => !e);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
   };
 
   return (
@@ -46,9 +67,13 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
               name="test"
               type="text"
               id="firstname"
-              onChange={(event) => setFirstName(event.target.value)}
+              onChange={(event) => {
+                event.target.value && setErrorFirstname(false);
+                setFirstName(event.target.value);
+              }}
               defaultValue={firstname}
             />
+            {errorFirstname && <div className="error-input">Le prénom est vide</div>}
           </div>
 
           <div className="form-modify__element">
@@ -56,9 +81,13 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
             <input
               type="text"
               id="lastname"
-              onChange={(event) => setLastname(event.target.value)}
+              onChange={(event) => {
+                event.target.value && setErrorLastname(false);
+                setLastname(event.target.value);
+              }}
               defaultValue={lastname}
             />
+            {errorLastname && <div className='error-input'>Le nom de famille est vide </div>}
           </div>
         </div>
 
@@ -68,7 +97,10 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
             type="text"
             id="biography"
             className="form-modify__element__biography"
-            onChange={(event) => setBio(event.target.value)}
+            onChange={(event) => {
+              event.target.value && setErrorBio(false);
+              setBio(event.target.value);
+            }}
             defaultValue={bio}
           />
         </div>

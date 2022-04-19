@@ -139,3 +139,10 @@
     margin-top: 50px;
     }
 }
+
+// --------------------------- MEDIA QUERIES MOBILE 467PX --------------------------------------//
+@media all AND (max-width: 467px){
+    .form-auth__element {
+        width: 100%;
+    }
+}

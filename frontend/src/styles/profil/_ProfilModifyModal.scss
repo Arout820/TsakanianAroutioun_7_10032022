@@ -55,6 +55,14 @@
     font-size: 19px;
 }
 
+.error-input{
+    display: flex;
+    color: rgb(255, 255, 255);
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
 // --------------------------- MEDIA QUERIES IPAD 620PX --------------------------------------//
 @media all AND (max-width: 720px){
     .form-modify-container{

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import profilVide from '../../assets/profil_vide.jpg';
+import emptyPhoto from '../../assets/profil_vide.jpg';
 import DeletePostCard from './DeletePostCard';
 import { dateCorrection } from '../../utils/Utils';
 import NewComment from './NewComment';
 import Comments from './Comments';
+import LikePostCard from './LikePostCard';
 
 const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
@@ -45,7 +46,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
       <div className="card-post__infos">
         <img
           className="card-post__infos__photo"
-          src={post.user_photo}
+          src={post.user_photo ? post.user_photo : emptyPhoto}
           alt={`Logo de ${post.firstname} ${post.lastname}`}
         />
         <div className="card-post__infos__profil">
@@ -57,19 +58,30 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
         {post.user_id === id && <DeletePostCard setModification={setModification} post={post} />}
       </div>
       {post.content && <p className="card-post__content">{post.content}</p>}
+      {post.video && (
+        <div className='card-post__video'>
+          <iframe
+            src={post.video}
+            title={post.video}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
       {post.attachment && (
-        <div className="card-post__image-preview">
+        <div className="card-post__image">
           <img src={post.attachment} alt={'Photo posté par ' + post.firstname + ' ' + post.lastname} />
         </div>
       )}
       <div className="card-post__reputation">
-        <i className="card-post__reputation__element fa-2x fa-solid fa-thumbs-up"></i>
-        <p className="card-post__reputation__element ">Commenter</p>
+        <LikePostCard post={post} userInfos={userInfos} setModification={setModification} />
+        <div className="card-post__reputation__element">
+          <i className="fa-2x fa-solid fa-comment"></i>
+          <p className="card-post__reputation__element__number">12 commentaires</p>
+        </div>
       </div>
-      <div className="card-comments">
-        <h1>Commentaires</h1>
-        <Comments post={post} commentInfos={commentInfos} error={error} setUpdateComment={setUpdateComment} />
-      </div>
+      <Comments post={post} commentInfos={commentInfos} error={error} setUpdateComment={setUpdateComment} />
       <NewComment setUpdateComment={setUpdateComment} post={post} userInfos={userInfos} />
     </div>
   ));

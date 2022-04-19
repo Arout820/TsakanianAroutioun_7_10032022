@@ -1,5 +1,6 @@
 import { dateCorrection } from '../../utils/Utils';
 import emptyPhoto from '../../assets/profil_vide.jpg';
+import { useEffect } from 'react';
 
 const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
   // infos Local Storage
@@ -26,8 +27,11 @@ const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
       }
     });
   };
+
   return (
-    <>
+    <div className="comments">
+      <h2 className="comments__title">Commentaires</h2>
+
       {error && <div>Une erreur vient de se produire - {error}</div>}
       {commentInfos &&
         commentInfos.map(
@@ -61,7 +65,7 @@ const Comments = ({ post, commentInfos, error, setUpdateComment }) => {
               </div>
             )
         )}
-    </>
+    </div>
   );
 };
 

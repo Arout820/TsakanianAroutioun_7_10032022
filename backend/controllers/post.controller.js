@@ -5,12 +5,11 @@ require('dotenv').config();
 
 // ----------------------- Créer un post ----------------------- //
 exports.createPost = (req, res) => {
-  const { content, user_id } = req.body;
+  const { content, user_id, video } = req.body;
   if (!req.file) {
-    console.log(req);
     database.query(
-      'INSERT INTO post (content, user_id) VALUES (?, ?)',
-      [content, user_id],
+      'INSERT INTO post (content, user_id, video) VALUES (?, ?, ?)',
+      [content, user_id, video],
       (error, results) => {
         if (error) {
           console.log(error);
@@ -20,7 +19,6 @@ exports.createPost = (req, res) => {
       }
     );
   } else if (req.file) {
-    console.log(req);
     const attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     database.query(
       'INSERT INTO post (content, user_id, attachment) VALUES (?, ?, ?)',
@@ -29,7 +27,7 @@ exports.createPost = (req, res) => {
         if (error) {
           return res.status(400).json({ error });
         }
-        res.status(200).json(results);
+        res.status(200).json({ message: 'Post avec image crée' });
       }
     );
   }
@@ -38,7 +36,7 @@ exports.createPost = (req, res) => {
 // ------------------ Récuperer tous les posts ------------------ //
 exports.getAllPost = (req, res) => {
   database.query(
-    'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
+    'SELECT post_id, content, attachment, video, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
     (error, results) => {
       if (error) {
         console.log(error);

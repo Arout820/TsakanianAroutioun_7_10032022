@@ -2,6 +2,8 @@ import { useState } from 'react';
 import ProfilModifyModal from './ProfilModifyModal';
 import ProfilDataModal from './ProfilDataModal';
 
+import FooterConnected from '../../components/footer/FooterConnected';
+
 import emptyPhoto from '../../assets/profil_vide.jpg';
 import Popup from '../../utils/Popup';
 import PopupImage from './PopupImage';
@@ -32,7 +34,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
       {userInfos && (
         <>
           <main className="main-profil">
-            <div className='profil-datas'>
+            <div className="profil-datas">
               <div className="profil-datas__photo">
                 <img
                   className="profil-datas__photo__img"
@@ -65,6 +67,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
               </div>
             </div>
           </main>
+          <FooterConnected />
         </>
       )}
     </>
