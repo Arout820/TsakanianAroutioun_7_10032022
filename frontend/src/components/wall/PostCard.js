@@ -2,18 +2,17 @@ import { useEffect, useState } from 'react';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 import DeletePostCard from './DeletePostCard';
 import { dateCorrection } from '../../utils/Utils';
+
 import NewComment from './NewComment';
 import Comments from './Comments';
 import LikePostCard from './LikePostCard';
+import CommentsOfPost from './CommentsOfPost';
 
 const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
-
-  useEffect(() => {
-    console.log(userConnectionInfos);
-  });
+  const isAdmin = userConnectionInfos.isAdmin;
 
   // variables selon état du fetch
   const [commentInfos, setCommentInfos] = useState(null);
@@ -43,7 +42,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
       }
     });
     return () => abortCtrl.abort();
-  }, [token, updateComment, updateComment]);
+  }, [token, updateComment]);
 
   return postInfos.map((post) => (
     <div key={post.post_id} className="card-post" id={`card-post__${post.post_id}`}>
@@ -59,7 +58,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
           </p>
           <p className="card-post__infos__profil__time">{dateCorrection(post.post_create_time)}</p>
         </div>
-        {(post.user_id === id || userInfos[0].isAdmin === 1) && (
+        {(post.user_id === id || isAdmin === 1) && (
           <DeletePostCard setModification={setModification} post={post} />
         )}
       </div>
@@ -82,10 +81,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
       )}
       <div className="card-post__reputation">
         <LikePostCard post={post} userInfos={userInfos} setModification={setModification} />
-        <div className="card-post__reputation__element">
-          <i className="fa-2x fa-solid fa-comment"></i>
-          <p className="card-post__reputation__element__number">12 commentaires</p>
-        </div>
+        <CommentsOfPost post={post} updateComment={updateComment} />
       </div>
       <Comments
         post={post}

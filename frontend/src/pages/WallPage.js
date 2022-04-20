@@ -34,7 +34,7 @@ const WallPage = () => {
         } else {
           const contenu = await res.json();
           setPostInfos(contenu);
-          console.log(contenu);
+          // console.log(contenu);
           setError(null);
         }
       } catch (err) {
@@ -63,14 +63,14 @@ const WallPage = () => {
         } else {
           const contenu = await res.json();
           setUserInfos(contenu);
-          console.log(contenu);
-          // setError(null);
+          // console.log(contenu);
+          setError(null);
         }
       } catch (err) {
         if (err.name === 'AbortError') {
-          // setError('Fetch a été stoppé');
+          setError('Fetch a été stoppé');
         } else {
-          // setError(err.message);
+          setError(err.message);
         }
       }
     });

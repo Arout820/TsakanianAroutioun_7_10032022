@@ -33,6 +33,21 @@ exports.createPost = (req, res) => {
   }
 };
 
+// ------------------ Récuperer nombres commentaires d'un post ------------------ //
+exports.getCommentsFromPost = (req, res) => {
+  database.query(
+    'SELECT COUNT(*) as post_comments, post.post_id FROM post JOIN comment ON post.post_id = comment.post_id WHERE post.post_id = ?',
+    req.params.postId,
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      res.status(200).json(results);
+    }
+  );
+};
+
 // ------------------ Récuperer tous les posts ------------------ //
 exports.getAllPost = (req, res) => {
   database.query(
@@ -51,7 +66,7 @@ exports.getAllPost = (req, res) => {
 exports.getOnePost = (req, res) => {
   database.query(
     'SELECT post_id, content, attachment, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id WHERE post_id = ?',
-    req.params.id,
+    req.params.postId,
     (error, results) => {
       if (error) {
         console.log(error);
@@ -66,7 +81,7 @@ exports.getOnePost = (req, res) => {
 exports.modifyPost = (req, res) => {
   database.query(
     'UPDATE post SET ? WHERE post_id = ? AND user_id = ?',
-    [req.body, req.params.id, req.token.userId],
+    [req.body, req.params.postId, req.token.userId],
     (error, results) => {
       if (results.affectedRows === 0) {
         return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre !" });

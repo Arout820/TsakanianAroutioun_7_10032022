@@ -105,7 +105,8 @@ const NewPost = ({ setModification, userInfos }) => {
     setContent('');
     setIsImage('');
     setVideo('');
-    fileStockInInput('');
+    setErrorContent('');
+    fileStockInInput.value = '';
   };
 
   useEffect(() => {
