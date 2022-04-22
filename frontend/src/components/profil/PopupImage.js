@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const PopupImage = ({ setTrigger, setModification, userInfos }) => {
@@ -9,7 +9,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   const [user_photo, setUserPhoto] = useState('');
   const [isImage, setIsImage] = useState('');
 
-  const fileStockInInput = document.querySelector('#imageProfil');
+  const imagePostRef = useRef();
 
   // changement de photo de profil
   const handleSubmit = (event) => {
@@ -62,7 +62,6 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
     }
   };
 
-  
   const imageHandler = (event) => {
     setUserPhoto(event.target.files[0]);
     console.log('userphoto from IMAGE HANDLER');
@@ -77,9 +76,10 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   };
 
   const handleDeletePreview = (event) => {
-    fileStockInInput.value = '';
+    setUserPhoto('');
     setIsImage('');
     setUserPhoto('');
+    imagePostRef.current.value = '';
   };
 
   return (
@@ -105,11 +105,8 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
             <>
               <div htmlFor="imageProfil" className="form-image__photo">
                 <img className="form-image__photo__img" src={isImage} alt="" />
-                <div className='form-image__photo__delete'>
-                  <i
-                    onClick={() => setUserPhoto('')}
-                    className="form-image__photo__delete__icon material-icons"
-                  >
+                <div className="form-image__photo__delete">
+                  <i onClick={handleDeletePreview} className="form-image__photo__delete__icon material-icons">
                     delete
                   </i>
                 </div>
@@ -123,9 +120,10 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
           <input
             className="form-image__change__input"
             type="file"
-            name="image"
+            name="imagePost"
             id="imageProfil"
             onChange={imageHandler}
+            ref={imagePostRef}
           />
         </div>
       </form>

@@ -51,7 +51,7 @@ exports.getCommentsFromPost = (req, res) => {
 // ------------------ Récuperer tous les posts ------------------ //
 exports.getAllPost = (req, res) => {
   database.query(
-    'SELECT post_id, content, attachment, video, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
+    'SELECT (SELECT COUNT(*) FROM likes WHERE likes.post_id = post.post_id) as post_likes_number, post_id, content, attachment, video, post_create_time, post.user_id, firstname, lastname, user_photo, isAdmin FROM post JOIN user ON post.user_id = user.user_id ORDER BY post_create_time DESC',
     (error, results) => {
       if (error) {
         console.log(error);

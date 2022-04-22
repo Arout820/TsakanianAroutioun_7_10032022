@@ -4,7 +4,7 @@ const likesController = require('../controllers/likes.controller');
 const auth = require('../middleware/auth');
 
 router.post('/', auth, likesController.createLikes);
-router.delete('/:likesId', auth, likesController.deleteLikes);
-// router.get('/', auth, likesController.getLikes);
+router.delete('/:userId/:postId/:isLiked', auth, likesController.deleteLikes);
+router.get('/:userId/:postId', auth, likesController.getLikesFromUser);
 
 module.exports = router;

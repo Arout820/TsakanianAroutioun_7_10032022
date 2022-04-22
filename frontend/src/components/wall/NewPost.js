@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const NewPost = ({ setModification, userInfos }) => {
   // infos Local Storage
@@ -14,7 +14,7 @@ const NewPost = ({ setModification, userInfos }) => {
   const [isImage, setIsImage] = useState('');
 
   const user_id = id;
-  const fileStockInInput = document.querySelector('#image');
+  const imagePreviewRef = useRef();
 
   // fonction pour la logique du bouton inscription
   const HandleCreatePost = async (event) => {
@@ -51,7 +51,7 @@ const NewPost = ({ setModification, userInfos }) => {
           setAttachment('');
           setContent('');
           setVideo('');
-          fileStockInInput.value = '';
+          imagePreviewRef.current.value = '';
         } catch (err) {
           console.log(err);
         }
@@ -73,7 +73,7 @@ const NewPost = ({ setModification, userInfos }) => {
   };
 
   const HandleDelete = (event) => {
-    fileStockInInput.value = '';
+    imagePreviewRef.current.value = '';
     setIsImage('');
     setAttachment('');
   };
@@ -89,7 +89,7 @@ const NewPost = ({ setModification, userInfos }) => {
         setContent(findLink.join(' '));
         setAttachment('');
         setIsImage('');
-        fileStockInInput.value = '';
+        imagePreviewRef.current.value = '';
       }
     }
   };
@@ -106,7 +106,7 @@ const NewPost = ({ setModification, userInfos }) => {
     setIsImage('');
     setVideo('');
     setErrorContent('');
-    fileStockInInput.value = '';
+    imagePreviewRef.current.value = '';
   };
 
   useEffect(() => {
@@ -156,6 +156,7 @@ const NewPost = ({ setModification, userInfos }) => {
             accept=".png, .jpg, .jpeg"
             onChange={imageHandler}
             width="500px"
+            ref={imagePreviewRef}
           />
         </div>
       </div>

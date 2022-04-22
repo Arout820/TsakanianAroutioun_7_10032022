@@ -119,15 +119,3 @@ exports.deleteUser = (req, res) => {
     res.status(200).json({ message: 'Utilisateur supprimé' });
   });
 };
-
-// ----------------------- Supprimer la photo d'un utilisateur ----------------------- //
-exports.deleteUser = (req, res) => {
-  database.query('DELETE FROM user WHERE user_id = ?', req.params.id, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    console.log(results);
-    res.status(200).json({ message: 'Utilisateur supprimé' });
-  });
-};

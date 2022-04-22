@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import emptyPhoto from '../../assets/profil_vide.jpg';
-import DeletePostCard from './DeletePostCard';
 import { dateCorrection } from '../../utils/Utils';
+import emptyPhoto from '../../assets/profil_vide.jpg';
 
-import NewComment from './NewComment';
-import Comments from './Comments';
+import DeletePostCard from './DeletePostCard';
 import LikePostCard from './LikePostCard';
 import CommentsOfPost from './CommentsOfPost';
+import Comments from './Comments';
+import NewComment from './NewComment';
 
 const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
@@ -45,7 +45,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   }, [token, updateComment]);
 
   return postInfos.map((post) => (
-    <div key={post.post_id} className="card-post" id={`card-post__${post.post_id}`}>
+    <div key={post.post_id} className="card-post" id={`cardPost${post.post_id}`}>
       <div className="card-post__infos">
         <img
           className="card-post__infos__photo"
@@ -80,7 +80,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
         </div>
       )}
       <div className="card-post__reputation">
-        <LikePostCard post={post} userInfos={userInfos} setModification={setModification} />
+        <LikePostCard post={post} setModification={setModification} />
         <CommentsOfPost post={post} updateComment={updateComment} />
       </div>
       <Comments

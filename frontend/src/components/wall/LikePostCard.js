@@ -1,107 +1,108 @@
 import { useEffect, useState } from 'react';
 
-const LikePostCard = ({ post, setModification, userInfos }) => {
+const LikePostCard = ({ post, setModification }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userIdConnected = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
-  const user_id = id;
-  const post_id = post.post_id;
-
   // variables selon état du fetch
-  const [likeInfos, setlikeInfos] = useState('');
+  const [userLikesInfos, setUserLikesInfos] = useState('');
   const [error, setError] = useState(null);
 
-  // toogle pour relancer récupération de données
+  // toogle pour relancer récupération de données de likes
   const [updateLike, setUpdateLike] = useState(false);
 
+  // Infos à envoyer lors d'un like
+  const user_id = userIdConnected;
+  const post_id = post.post_id;
   const isLiked = 1;
   const sendlikesInfos = { user_id, post_id, isLiked };
 
   useEffect(() => {
-    if (likeInfos) {
-      console.log('--- like infos---');
-      console.log(likeInfos);
+    if (userLikesInfos) {
+      console.log(userLikesInfos[0]);
     }
-  }, [likeInfos]);
+  }, [userLikesInfos]);
 
   // -------------- récupération des éléments de posts de la base de données avec l'api -----------------------------
-  // useEffect(() => {
-  //   const abortCtrl = new AbortController();
-  //   fetch(`http://localhost:5000/api/likes/`, {
-  //     signal: abortCtrl.signal,
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   }).then(async (res) => {
-  //     try {
-  //       if (!res.ok) {
-  //         throw Error(`${res.status}  ${res.statusText}`);
-  //       } else {
-  //         const contenu = await res.json();
-  //         setlikeInfos(contenu);
-  //         setError(null);
-  //       }
-  //     } catch (err) {
-  //       if (err.name === 'AbortError') {
-  //         setError('Fetch a été stoppé');
-  //       } else {
-  //         setError(err.message);
-  //       }
-  //     }
-  //   });
-  //   return () => abortCtrl.abort();
-  // }, [id, token, error, updateLike, post_id]);
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    fetch(`http://localhost:5000/api/likes/${userIdConnected}/${post.post_id}`, {
+      signal: abortCtrl.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(async (res) => {
+      try {
+        if (!res.ok) {
+          throw Error(`${res.status}  ${res.statusText}`);
+        } else {
+          const contenu = await res.json();
+          setUserLikesInfos(contenu);
+          setError(null);
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          setError('Fetch a été stoppé');
+        } else {
+          setError(err.message);
+        }
+      }
+    });
+    return () => abortCtrl.abort();
+  }, [userIdConnected, token, error, updateLike, post.post_id]);
 
   // --------------- fonction like enlever like ------------------------ //
   const handleLike = (event) => {
     event.preventDefault();
-    likeInfos.map((like) => {
-      if (!like.isLiked) {
-        const sendLike = fetch('http://localhost:5000/api/likes', {
-          method: 'POST',
-          body: JSON.stringify(sendlikesInfos),
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
 
-        sendLike.then(async (res) => {
-          try {
-            setUpdateLike((e) => !e);
-          } catch (err) {
-            console.log(err);
-          }
-        });
-      } else if (like.isLiked === 1) {
-        // Enlever un like
-        const sendRemoveLike = fetch(
-          `http://localhost:5000/api/likes/${userInfos[0].user_id}/${post.post_id}/0`,
-          {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    if (userLikesInfos[0] === undefined) {
+      const sendLike = fetch(`http://localhost:5000/api/likes/`, {
+        method: 'POST',
+        body: JSON.stringify(sendlikesInfos),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        sendRemoveLike.then(async (res) => {
-          try {
-            setUpdateLike((e) => !e);
-          } catch (err) {
-            console.log(err);
-          }
-        });
-      }
-    });
+      sendLike.then(async (res) => {
+        try {
+          setModification((e) => !e);
+          setUpdateLike((e) => !e);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    } else {
+      const sendRemoveLike = fetch(`http://localhost:5000/api/likes/${userIdConnected}/${post.post_id}/0`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      sendRemoveLike.then(async (res) => {
+        try {
+          setModification((e) => !e);
+          setUpdateLike((e) => !e);
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
   };
 
   return (
-    <div onClick={handleLike} className={'card-post__reputation__element'}>
+    <div
+      onClick={handleLike}
+      className={
+        !userLikesInfos[0] ? 'card-post__reputation__element' : 'card-post__reputation__element liked'
+      }
+    >
       <i className="fa-2x fa-solid fa-thumbs-up"></i>
-      <p className="card-post__reputation__element__number">J'aime (Number)</p>
+      <p className="card-post__reputation__element__number">{post.post_likes_number} j'aime</p>
     </div>
   );
 };

@@ -24,15 +24,15 @@ exports.createLikes = (req, res) => {
 
 // ---------------------- Supprimer un like ---------------------- //
 exports.deleteLikes = (req, res) => {
-  const isLiked = parseInt(req.params.isLiked);
-  if (isLiked === 0) {
+  const { userId, postId, isLiked } = req.params;
+  if (isLiked == 0) {
     database.query(
-      'DELETE FROM likes WHERE likes_id = ?',
-      [req.params.likesID],
+      'DELETE FROM likes WHERE user_id = ? AND post_id = ? AND user_id = ?',
+      [userId, postId, req.token.userId],
       (error, results) => {
         console.log(results);
         if (results.affectedRows === 0) {
-          return res.status(401).json({ message: 'Erreur like indisponible' });
+          return res.status(401).json({ error: 'Erreur like indisponible' });
         }
         if (error) {
           console.log(error);
@@ -48,29 +48,17 @@ exports.deleteLikes = (req, res) => {
   }
 };
 
-// // ---------------------- Récupérer les likes ---------------------- //
-// exports.getLikesForPost = (req, res) => {
-//   database.query(
-//     'SELECT count(likes.user_id) FROM likes WHERE likes.post_id = ' + postId,
-//     (error, results) => {
-//       if (error) {
-//         console.log(error);
-//         return res.status(400).json({ error });
-//       }
-//       res.status(201).json(results);
-//     }
-//   );
-// };
-
-// exports.getLikesFromUser = (req, res) => {
-//   database.query(
-//     'SELECT likes.post_id post.post_id FROM likes WHERE likes.user_id' + userId,
-//     (error, results) => {
-//       if (error) {
-//         console.log(error);
-//         return res.status(400).json({ error });
-//       }
-//       res.status(201).json(results);
-//     }
-//   );
-// };
+// Récupérer likes pour utilisateur
+exports.getLikesFromUser = (req, res) => {
+  database.query(
+    'SELECT * FROM likes WHERE likes.user_id = ? AND likes.post_id = ?',
+    [req.params.userId, req.params.postId],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      res.status(201).json(results);
+    }
+  );
+};

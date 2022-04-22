@@ -1,15 +1,7 @@
 const database = require('../config/db');
+const Comment = require('../models/Comment');
 
 require('dotenv').config();
-
-// Class commentaire pour données à envoyer à la BDD
-class Comment {
-  constructor(content, user_id, post_id) {
-    this.content = content;
-    this.user_id = user_id;
-    this.post_id = post_id;
-  }
-}
 
 // ----------------------- Créer un commentaire ----------------------- //
 exports.createComment = (req, res) => {
