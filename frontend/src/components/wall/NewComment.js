@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import emptyPhoto from '../../assets/profil_vide.jpg';
-import profilVide from '../../assets/profil_vide.jpg';
 
 const NewComment = ({ setUpdateComment, post, userInfos }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
@@ -11,12 +10,12 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
   const user_id = id;
   const post_id = post.post_id;
 
-  const handleSubmit = (event) => {
+  const HandleSubmit = (event) => {
     event.preventDefault();
     const createCommentInfos = { content, user_id, post_id };
 
     if (content) {
-      const send = fetch(`http://localhost:5000/api/comment`, {
+      fetch(`http://localhost:5000/api/comment`, {
         method: 'POST',
         body: JSON.stringify(createCommentInfos),
         headers: {
@@ -24,9 +23,7 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      send.then(async (res) => {
+      }).then(async (res) => {
         try {
           setUpdateComment((e) => !e);
           setContent('');
@@ -37,7 +34,7 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="card-new-comment">
+    <form onSubmit={HandleSubmit} className="card-new-comment">
       <div className="card-new-comment__photo">
         <img
           src={userInfos[0].user_photo ? userInfos[0].user_photo : emptyPhoto}
@@ -49,7 +46,7 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
         className="card-new-comment__content"
         placeholder="Envoyez votre commentaire"
         onChange={(event) => setContent(event.target.value)}
-        onKeyPress={(event) => event.key === 'Enter' && handleSubmit}
+        onKeyPress={(event) => event.key === 'Enter' && HandleSubmit}
         value={content}
       />
     </form>

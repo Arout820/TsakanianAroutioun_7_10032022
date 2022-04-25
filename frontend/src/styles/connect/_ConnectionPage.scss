@@ -1,128 +1,127 @@
-.main{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.connection{
-    display: flex;
-    flex-direction: row;
-    margin-top: 120px;
-    margin-bottom: 50px;
-    text-align: center;
-    position: relative;
+.connection {
+  display: flex;
+  flex-direction: row;
+  margin-top: 120px;
+  margin-bottom: 50px;
+  text-align: center;
+  position: relative;
 }
 
 /* NAV CONNECTION */
-.signupAndLogin{
+.signup-and-login {
+  display: flex;
+  &__list {
     display: flex;
-    &__list {
-        display: flex;
-        padding: 0;
-        margin: 0; 
-        width: 400px;
-        background-color: #FFFFFF;
-        border-radius: 15px 15px 0 0;
-        box-shadow:  0px 0px 3px rgb(192, 192, 192);
-        position: absolute;
-        left: 0;
-        top: -68px;
+    padding: 0;
+    margin: 0;
+    width: 400px;
+    background-color: #ffffff;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0px 0px 3px rgb(192, 192, 192);
+    position: absolute;
+    left: 0;
+    top: -68px;
+  }
+  &__list li {
+    font-size: 22px;
+    transition: color 200ms ease-in-out;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    padding: 20px 10px;
+    justify-content: center;
+    width: 50%;
+    transition: width 600ms ease-in-out;
+    &:nth-child(1) {
+      border-radius: 15px 0 0 0;
     }
-    &__list li {
-        font-size: 22px;
-        transition: color 200ms ease-in-out;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        padding: 20px 10px;
-        justify-content: center;
-        width: 50%;
-        transition: width 600ms ease-in-out;
-        &:nth-child(1){
-            border-radius: 15px 0 0 0;
-        }
-        &:nth-child(2){
-            border-radius: 0 15px 0 0;
-        }
-        &:hover {
-            cursor: pointer;
-            width: 400px;
-        }
+    &:nth-child(2) {
+      border-radius: 0 15px 0 0;
     }
+    &:hover {
+      cursor: pointer;
+      width: 400px;
+    }
+  }
 }
 
-.active-btn{
-    background-color: #202934;
-    color: white;
+.active-btn {
+  background-color: #202934;
+  color: white;
 }
 
 /* Image entreprise */
-.entreprise img{
-    display: flex;
-    width: 500px;
-    min-height: 580px;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0 15px 15px 0;
-    border-radius: 0 15px 15px 0;
-    box-shadow:  0px 0px 3px rgb(192, 192, 192);
-    clip-path: inset(-5px -5px -5px 0);
-    background-color: white;
+.entreprise img {
+  display: flex;
+  width: 500px;
+  min-height: 580px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 15px 15px 0;
+  border-radius: 0 15px 15px 0;
+  box-shadow: 0px 0px 3px rgb(192, 192, 192);
+  clip-path: inset(-5px -5px -5px 0);
+  background-color: white;
 }
-    
 
 // --------------------------- MEDIA QUERIES IPAD 920PX --------------------------------------//
-@media all AND (max-width: 920px){
-    .connection{
-        flex-direction: column;
-        width: 100%;
+@media all AND (max-width: 920px) {
+  .connection {
+    flex-direction: column;
+    width: 100%;
+  }
+  .signupAndLogin {
+    order: 1;
+    width: 100%;
+    &__list {
+      width: 100%;
+      top: -65px;
+      border-radius: 0;
     }
-    .signupAndLogin{
-        order: 1;
-        width: 100%;
-        &__list{
-            width: 100%;
-            top: -65px;
-            border-radius: 0;
-        }
-        &__list li{
-            width: 100%;
-            &:hover{
-                width: 1200px;
-            }
-            &:nth-child(1){
-                border-radius: 0;
-            }
-            &:nth-child(2){
-                border-radius: 0;
-            }
-        }
-    }
-    .entreprise{
-        order: 0;
-    }
-    .entreprise img{
+    &__list li {
+      width: 100%;
+      &:hover {
+        width: 1200px;
+      }
+      &:nth-child(1) {
         border-radius: 0;
-        width: 100%;
-        min-height: 100px;
-        height: 200px;
+      }
+      &:nth-child(2) {
+        border-radius: 0;
+      }
     }
+  }
+  .entreprise {
+    order: 0;
+  }
+  .entreprise img {
+    border-radius: 0;
+    width: 100%;
+    min-height: 100px;
+    height: 200px;
+  }
 }
 
 // --------------------------- MEDIA QUERIES MOBILE 467PX --------------------------------------//
-@media all AND (max-width: 467px){
-    .signupAndLogin{
-        border: 1px solid #000;
-        &__list{
-            top: -59px;
-        }
-        &__list li{
-            width: 100%;
-            font-size: 17px;
-            &:hover{
-                width: 600px;
-            }
-        }
+@media all AND (max-width: 467px) {
+  .signupAndLogin {
+    border: 1px solid #000;
+    &__list {
+      top: -59px;
     }
+    &__list li {
+      width: 100%;
+      font-size: 17px;
+      &:hover {
+        width: 600px;
+      }
+    }
+  }
 }

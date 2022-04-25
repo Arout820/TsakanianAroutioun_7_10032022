@@ -35,7 +35,7 @@ const LikePostCard = ({ post, setModification }) => {
     }).then(async (res) => {
       try {
         if (!res.ok) {
-          throw Error(`${res.status}  ${res.statusText}`);
+          throw Error(`${res.status} ${res.statusText}`);
         } else {
           const contenu = await res.json();
           setUserLikesInfos(contenu);
@@ -43,7 +43,7 @@ const LikePostCard = ({ post, setModification }) => {
         }
       } catch (err) {
         if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
+          setError("Le chargement des éléments n'a pas abouti");
         } else {
           setError(err.message);
         }
@@ -53,11 +53,11 @@ const LikePostCard = ({ post, setModification }) => {
   }, [userIdConnected, token, error, updateLike, post.post_id]);
 
   // --------------- fonction like enlever like ------------------------ //
-  const handleLike = (event) => {
+  const HandleLike = (event) => {
     event.preventDefault();
 
     if (userLikesInfos[0] === undefined) {
-      const sendLike = fetch(`http://localhost:5000/api/likes/`, {
+      fetch(`http://localhost:5000/api/likes/`, {
         method: 'POST',
         body: JSON.stringify(sendlikesInfos),
         headers: {
@@ -65,9 +65,7 @@ const LikePostCard = ({ post, setModification }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      sendLike.then(async (res) => {
+      }).then(async (res) => {
         try {
           setModification((e) => !e);
           setUpdateLike((e) => !e);
@@ -76,14 +74,12 @@ const LikePostCard = ({ post, setModification }) => {
         }
       });
     } else {
-      const sendRemoveLike = fetch(`http://localhost:5000/api/likes/${userIdConnected}/${post.post_id}/0`, {
+      fetch(`http://localhost:5000/api/likes/${userIdConnected}/${post.post_id}/0`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      sendRemoveLike.then(async (res) => {
+      }).then(async (res) => {
         try {
           setModification((e) => !e);
           setUpdateLike((e) => !e);
@@ -95,13 +91,12 @@ const LikePostCard = ({ post, setModification }) => {
   };
 
   return (
-    <div
-      onClick={handleLike}
-      className={
-        !userLikesInfos[0] ? 'card-post__reputation__element' : 'card-post__reputation__element liked'
-      }
-    >
-      <i className="fa-2x fa-solid fa-thumbs-up"></i>
+    <div onClick={HandleLike} className="card-post__reputation__element">
+      <i
+        className={
+          !userLikesInfos[0] ? 'fa-2x fa-solid fa-thumbs-up' : 'fa-2x fa-solid fa-thumbs-up liked'
+        }
+      ></i>
       <p className="card-post__reputation__element__number">{post.post_likes_number} j'aime</p>
     </div>
   );

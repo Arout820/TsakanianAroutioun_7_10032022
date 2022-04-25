@@ -30,11 +30,11 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
 
   const newInfos = { firstname, lastname, bio };
 
-  const handleSubmit = (event) => {
+  const HandleSubmit = (event) => {
     event.preventDefault();
 
     if (firstname && lastname) {
-      const send = fetch(`http://localhost:5000/api/user/${id}`, {
+      fetch(`http://localhost:5000/api/user/${id}`, {
         method: 'PUT',
         body: JSON.stringify(newInfos),
         headers: {
@@ -42,11 +42,8 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      send.then(async (res) => {
+      }).then(async (res) => {
         try {
-          console.log(res);
           off(false);
           on(true);
           setModification((e) => !e);
@@ -59,7 +56,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
 
   return (
     <div className="container-infos__description">
-      <form onSubmit={handleSubmit} className="form-modify">
+      <form onSubmit={HandleSubmit} className="form-modify">
         <div className="form-modify-container">
           <div className="form-modify__element">
             <label htmlFor="firstname">Prénom</label>
@@ -87,7 +84,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
               }}
               defaultValue={lastname}
             />
-            {errorLastname && <div className='error-input'>Le nom de famille est vide </div>}
+            {errorLastname && <div className="error-input">Le nom de famille est vide </div>}
           </div>
         </div>
 

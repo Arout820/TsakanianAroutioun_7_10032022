@@ -94,20 +94,25 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   const HandleSignup = (event) => {
     event.preventDefault();
 
-    // test regex et si ok on envoie
+    // test regex et si tout ok on envoie l'inscription
     if (!firstnameValid) {
-      setFirstnameError("Le prénom n'est pas valide");
+      setFirstnameError("Le prénom n'est pas valide !");
     }
 
     if (!lastnameValid) {
-      setLastnameError("Le nom de famille n'est pas valide");
+      setLastnameError("Le nom de famille n'est pas valide !");
     }
 
     if (!emailValid) {
-      setEmailError("L'email n'est pas valide");
+      setEmailError("L'email n'est pas valide !");
     }
 
-    if (!passwordDigitsValid || !passwordLowercaseValid || !passwordMinMaxValid || !passwordUppercaseValid) {
+    if (
+      !passwordDigitsValid ||
+      !passwordLowercaseValid ||
+      !passwordMinMaxValid ||
+      !passwordUppercaseValid
+    ) {
       setPasswordError("Le mot de passe n'est pas valide");
     }
 
@@ -126,24 +131,20 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       password === passwordRepeat
     ) {
       const signupInfos = { firstname, lastname, email, password };
-      console.log(signupInfos);
 
-      const sendSignup = fetch('http://localhost:5000/api/user/signup', {
+      fetch('http://localhost:5000/api/user/signup', {
         method: 'POST',
         body: JSON.stringify(signupInfos),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-      });
-
-      sendSignup.then(async (res) => {
+      }).then(async (res) => {
         try {
           const contenu = await res.json();
-          console.log(contenu);
           if (contenu.error) {
             setDuplicateEmail(
-              'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci'
+              'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci !'
             );
           } else {
             setSignupModal(false);
@@ -261,7 +262,9 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
         <input
           type="password"
           id="password-reapeat"
-          className={passwordRepeatError && passwordRepeat !== password ? 'error-border' : undefined}
+          className={
+            passwordRepeatError && passwordRepeat !== password ? 'error-border' : undefined
+          }
           autoComplete="on"
           placeholder="Répétez le mot de passe"
           onChange={(event) => setPasswordReapeat(event.target.value)}
@@ -280,9 +283,15 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       {(password || passwordError) && (
         <div className="form-auth__password-check">
           <p className={passwordMinMaxValid ? 'checked-regex' : undefined}>5 caractères minimum </p>
-          <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>1 caractère majuscule</p>
-          <p className={passwordLowercaseValid ? 'checked-regex' : undefined}>1 caractère minuscule</p>
-          <p className={passwordDigitsValid ? 'checked-regex' : undefined}>2 caractères numériques</p>
+          <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>
+            1 caractère majuscule
+          </p>
+          <p className={passwordLowercaseValid ? 'checked-regex' : undefined}>
+            1 caractère minuscule
+          </p>
+          <p className={passwordDigitsValid ? 'checked-regex' : undefined}>
+            2 caractères numériques
+          </p>
         </div>
       )}
       <button type="submit" id="signup" className="form-auth__button">

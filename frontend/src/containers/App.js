@@ -14,10 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<ConnectionPage setIsConnected={setIsConnected} />} />
-        <Route
-          path="/profil"
-          element={authInfos ? <ProfilPage setIsConnected={setIsConnected} /> : <Navigate replace to="/" />}
-        />
+        <Route path="/profil" element={authInfos ? <ProfilPage /> : <Navigate replace to="/" />} />
         <Route path="/wall" element={authInfos ? <WallPage /> : <Navigate replace to="/" />} />
         <Route path="*" element={authInfos ? <ErrorPage /> : <Navigate replace to="/" />} />
       </Routes>

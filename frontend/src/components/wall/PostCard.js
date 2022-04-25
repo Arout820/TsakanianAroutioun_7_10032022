@@ -22,20 +22,19 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    const recupComment = fetch(`http://localhost:5000/api/comment`, {
+    fetch(`http://localhost:5000/api/comment`, {
       signal: abortCtrl.signal,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-    recupComment.then(async (res) => {
+    }).then(async (res) => {
       try {
         const contenu = await res.json();
         setCommentInfos(contenu);
         setError(null);
       } catch (err) {
         if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
+          setError("Le chargement des éléments n'a pas abouti");
         } else {
           setError(err.message);
         }
@@ -76,7 +75,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
       )}
       {post.attachment && (
         <div className="card-post__image">
-          <img src={post.attachment} alt={'Photo posté par ' + post.firstname + ' ' + post.lastname} />
+          <img src={post.attachment} alt={`Posté par ${post.firstname} ${post.lastname}`} />
         </div>
       )}
       <div className="card-post__reputation">

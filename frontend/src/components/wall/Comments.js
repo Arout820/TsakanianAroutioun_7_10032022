@@ -1,6 +1,5 @@
 import { dateCorrection } from '../../utils/Utils';
 import emptyPhoto from '../../assets/profil_vide.jpg';
-import { useEffect } from 'react';
 
 const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) => {
   // infos Local Storage
@@ -11,15 +10,14 @@ const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) =>
   // fonction pour la logique du bouton supprimer
   const HandleDelete = (id) => {
     // // supprimer un post
-    const sendDeleteComment = fetch(`http://localhost:5000/api/comment/${id}`, {
+    fetch(`http://localhost:5000/api/comment/${id}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    });
-    sendDeleteComment.then(async (res) => {
+    }).then(async (res) => {
       try {
         setUpdateComment((e) => !e);
       } catch (err) {
@@ -41,7 +39,7 @@ const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) =>
                 <img
                   className="card-comment__photo"
                   src={comment.user_photo ? comment.user_photo : emptyPhoto}
-                  alt=""
+                  alt={`${userInfos[0].firstname} ${userInfos[0].lastname}`}
                 />
                 <div className="card-comment__infos">
                   <div className="card-comment__infos__profil">

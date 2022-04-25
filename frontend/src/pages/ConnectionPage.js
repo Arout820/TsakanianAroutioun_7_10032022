@@ -28,8 +28,8 @@ const ConnectionPage = ({ setIsConnected }) => {
       <HeaderDisconnected />
       <main className="main">
         <div className="connection">
-          <div className="signupAndLogin">
-            <ul className="signupAndLogin__list">
+          <div className="signup-and-login">
+            <ul className="signup-and-login__list">
               <li onClick={handleModals} id="signup" className={signupModal ? 'active-btn' : null}>
                 Inscription
               </li>
@@ -37,7 +37,9 @@ const ConnectionPage = ({ setIsConnected }) => {
                 Connexion
               </li>
             </ul>
-            {signupModal && <Signup setLoginModal={setLoginModal} setSignupModal={setSignupModal} />}
+            {signupModal && (
+              <Signup setLoginModal={setLoginModal} setSignupModal={setSignupModal} />
+            )}
             {loginModal && <Login setIsConnected={setIsConnected} />}
           </div>
           <div className="entreprise">

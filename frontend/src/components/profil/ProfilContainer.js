@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import ProfilModifyModal from './ProfilModifyModal';
-import ProfilDataModal from './ProfilDataModal';
-
-import FooterConnected from '../../components/footer/FooterConnected';
 
 import emptyPhoto from '../../assets/profil_vide.jpg';
+
 import Popup from '../../utils/Popup';
 import PopupImage from './PopupImage';
+import ProfilDataModal from './ProfilDataModal';
+import ProfilModifyModal from './ProfilModifyModal';
+import FooterConnected from '../../components/footer/FooterConnected';
 
 const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
   // toogle entre modals use state
@@ -17,7 +17,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
   const [buttonPopup, setButtonPopup] = useState(false);
 
   // Toogle entre modals fonction
-  const handleModals = () => {
+  const HandleModals = () => {
     if (profilDataModal === true) {
       setProfilDataModal(false);
       setProfilModifyModal(true);
@@ -33,7 +33,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
       {error && <div>Une erreur vient de se produire - {error}</div>}
       {userInfos && (
         <>
-          <main className="main-profil" >
+          <main className="main-profil">
             <div className="profil-datas">
               <div className="profil-datas__photo">
                 <img
@@ -51,7 +51,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
                 />
               </Popup>
               <div className="container-infos">
-                <button onClick={handleModals} className="container-infos__modify-account">
+                <button onClick={HandleModals} className="container-infos__modify-account">
                   Modifier le profil
                 </button>
                 {profilDataModal && <ProfilDataModal userInfos={userInfos} />}

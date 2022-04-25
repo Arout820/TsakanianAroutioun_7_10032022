@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import Header from '../components/header/HeaderConnected';
+import HeaderConnected from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
 
 const ProfilPage = () => {
@@ -47,7 +47,7 @@ const ProfilPage = () => {
   }, [id, token, modification]);
   return (
     <>
-      <Header />
+      <HeaderConnected />
       <ProfilContainer userInfos={userInfos} error={error} setModification={setModification} />
     </>
   );

@@ -2,20 +2,18 @@ import { useEffect, useState } from 'react';
 
 const CommentsOfPost = ({ post, updateComment }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const [numberComments, setNumberComments] = useState('');
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    const recupComment = fetch(`http://localhost:5000/api/post/comments/${post.post_id}`, {
+    fetch(`http://localhost:5000/api/post/comments/${post.post_id}`, {
       signal: abortCtrl.signal,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-    recupComment.then(async (res) => {
+    }).then(async (res) => {
       try {
         const contenu = await res.json();
         setNumberComments(contenu);
@@ -30,7 +28,9 @@ const CommentsOfPost = ({ post, updateComment }) => {
     <div className="card-post__reputation__element">
       <i className="fa-2x fa-solid fa-comment"></i>
       <p className="card-post__reputation__element__number">
-        {numberComments && numberComments[0].post_id === post.post_id && numberComments[0].post_comments}{' '}
+        {numberComments &&
+          numberComments[0].post_id === post.post_id &&
+          numberComments[0].post_comments}{' '}
         commentaires
       </p>
     </div>

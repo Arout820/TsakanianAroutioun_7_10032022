@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import nonValideImage from '../../assets/non_valide.png';
+import errorImage from '../../assets/non_valide.png';
 
 const Login = ({ setIsConnected }) => {
   // Création des variables modifiables
@@ -30,28 +30,28 @@ const Login = ({ setIsConnected }) => {
     setPasswordError('');
 
     if (email === '') {
-      setEmailError('Veuillez inscrire votre email de connexion');
+      emailRef.current.focus();
+      setEmailError('Veuillez inscrire votre email de connexion !');
     } else {
       // fetch pour travailler sur les données de la base de données
-      const sendLogin = fetch('http://localhost:5000/api/user/login', {
+      fetch('http://localhost:5000/api/user/login', {
         method: 'POST',
         body: JSON.stringify(loginInfos),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-      });
-      // action lorsque on envoie les données
-      sendLogin.then(async (res) => {
+      }).then(async (res) => {
         try {
           if (!res.ok && res.status === 404) {
-            setEmailError('Email incorrecte');
-            throw new Error('Email incorrecte');
+            emailRef.current.focus();
+            setEmailError('Email incorrecte !');
+            throw new Error('Email incorrecte !');
           }
           if (!res.ok && res.status === 401) {
             passwordRef.current.focus();
-            setPasswordError('Mot de passe incorrect');
-            throw new Error('Mot de passe incorrect');
+            setPasswordError('Mot de passe incorrect !');
+            throw new Error('Mot de passe incorrect !');
           }
 
           const contenu = await res.json();
@@ -81,7 +81,7 @@ const Login = ({ setIsConnected }) => {
         {emailError && (
           <div className="error">
             <div className="error__image">
-              <img src={nonValideImage} alt="" />
+              <img src={errorImage} alt="Error" />
             </div>
             <div className="error__message">{emailError}</div>
           </div>
@@ -103,7 +103,7 @@ const Login = ({ setIsConnected }) => {
         {passwordError && (
           <div className="error">
             <div className="error__image">
-              <img src={nonValideImage} alt="" />
+              <img src={errorImage} alt="Error" />
             </div>
             <div className="error__message">{passwordError}</div>
           </div>

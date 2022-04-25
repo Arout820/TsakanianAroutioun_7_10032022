@@ -1,9 +1,9 @@
+import { useState, useEffect } from 'react';
+
 import HeaderConnected from '../components/header/HeaderConnected';
-import FooterConnected from '../components/footer/FooterConnected';
 import WallCardPost from '../components/wall/PostCard';
 import WallNewPost from '../components/wall/NewPost';
-
-import { useState, useEffect } from 'react';
+import FooterConnected from '../components/footer/FooterConnected';
 
 const WallPage = () => {
   // infos Local Storage
@@ -30,16 +30,15 @@ const WallPage = () => {
     }).then(async (res) => {
       try {
         if (!res.ok) {
-          throw Error(`${res.status}  ${res.statusText}`);
+          throw Error(`${res.status} ${res.statusText}`);
         } else {
           const contenu = await res.json();
           setPostInfos(contenu);
-          // console.log(contenu);
           setError(null);
         }
       } catch (err) {
         if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
+          setError('Le chargement des éléments a été stoppé !');
         } else {
           setError(err.message);
         }
@@ -59,16 +58,15 @@ const WallPage = () => {
     }).then(async (res) => {
       try {
         if (!res.ok) {
-          throw Error('Erreur survenue');
+          throw Error('Erreur survenue !');
         } else {
           const contenu = await res.json();
           setUserInfos(contenu);
-          // console.log(contenu);
           setError(null);
         }
       } catch (err) {
         if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
+          setError('Le chargement des éléments a été stoppé !');
         } else {
           setError(err.message);
         }
@@ -85,7 +83,11 @@ const WallPage = () => {
           <HeaderConnected />
           <main className={userInfos[0].isAdmin ? 'wall-container admin' : 'wall-container'}>
             <WallNewPost setModification={setModification} userInfos={userInfos} />
-            <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
+            <WallCardPost
+              postInfos={postInfos}
+              userInfos={userInfos}
+              setModification={setModification}
+            />
           </main>
           <FooterConnected />
         </>

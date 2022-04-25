@@ -20,12 +20,7 @@ const NewPost = ({ setModification, userInfos }) => {
   const HandleCreatePost = async (event) => {
     event.preventDefault();
 
-    // données à envoyer
-    const createPostInfos = { content, user_id, attachment };
-    console.log(createPostInfos);
-
     const formData = new FormData();
-    // formData.append('oldImage', userInfos[0].user_photo);
     formData.append('user_id', user_id);
     formData.append('content', content);
     formData.append('image', attachment);
@@ -36,15 +31,14 @@ const NewPost = ({ setModification, userInfos }) => {
       setErrorContent(true);
     } else {
       setErrorContent(false);
-      const sendCreatePost = fetch('http://localhost:5000/api/post', {
+
+      fetch('http://localhost:5000/api/post', {
         method: 'POST',
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      sendCreatePost.then(async (res) => {
+      }).then(async (res) => {
         try {
           setModification((e) => !e);
           setIsImage('');
@@ -60,7 +54,7 @@ const NewPost = ({ setModification, userInfos }) => {
   };
 
   // images handling
-  const imageHandler = (event) => {
+  const HandleImage = (event) => {
     setAttachment(event.target.files[0]);
     const reader = new FileReader();
     reader.onload = () => {
@@ -154,7 +148,7 @@ const NewPost = ({ setModification, userInfos }) => {
             name="image"
             id="image"
             accept=".png, .jpg, .jpeg"
-            onChange={imageHandler}
+            onChange={HandleImage}
             width="500px"
             ref={imagePreviewRef}
           />
@@ -170,7 +164,10 @@ const NewPost = ({ setModification, userInfos }) => {
         )}
         {isImage && (
           <div className="create-post__preview__image">
-            <img src={isImage} alt="" />
+            <img
+              src={isImage}
+              alt={`Preview du post qui va être publié par ${userInfos[0].firstname} ${userInfos[0].lastname}`}
+            />
           </div>
         )}
         {video && (
@@ -203,7 +200,10 @@ const NewPost = ({ setModification, userInfos }) => {
         {!video && (content || isImage) && <div className="noshow"></div>}
         <button className="create-post__buttons__add">Publiez</button>
         {(content || isImage || video) && (
-          <button onClick={HandleReset} className="create-post__buttons__element button-reset noselect">
+          <button
+            onClick={HandleReset}
+            className="create-post__buttons__element button-reset noselect"
+          >
             <span className="text">Annuler</span>
             <span className="icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

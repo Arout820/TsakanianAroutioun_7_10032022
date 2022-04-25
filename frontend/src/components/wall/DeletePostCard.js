@@ -6,15 +6,14 @@ const DeletePostCard = ({ setModification, post }) => {
   // fonction pour la logique du bouton supprimer
   const HandleDelete = (id) => {
     // // supprimer un post
-    const sendDeletePost = fetch(`http://localhost:5000/api/post/${id}`, {
+    fetch(`http://localhost:5000/api/post/${id}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    });
-    sendDeletePost.then(async (res) => {
+    }).then(async (res) => {
       try {
         setModification((e) => !e);
       } catch (err) {
