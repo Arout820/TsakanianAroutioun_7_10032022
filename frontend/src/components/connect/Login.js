@@ -43,7 +43,6 @@ const Login = ({ setIsConnected }) => {
         },
       }).then(async (res) => {
         const contenu = await res.json();
-        console.log(contenu);
         try {
           if (contenu.error && contenu.error.email) {
             emailRef.current.focus();
