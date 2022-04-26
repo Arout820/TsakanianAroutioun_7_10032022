@@ -42,19 +42,19 @@ const Login = ({ setIsConnected }) => {
           'Content-Type': 'application/json',
         },
       }).then(async (res) => {
+        const contenu = await res.json();
+        console.log(contenu);
         try {
-          if (!res.ok && res.status === 404) {
+          if (contenu.error && contenu.error.email) {
             emailRef.current.focus();
-            setEmailError('Email incorrecte !');
-            throw new Error('Email incorrecte !');
+            setEmailError(contenu.error.email);
+            throw new Error(contenu.error.email);
           }
-          if (!res.ok && res.status === 401) {
+          if (contenu.error && contenu.error.password) {
             passwordRef.current.focus();
-            setPasswordError('Mot de passe incorrect !');
-            throw new Error('Mot de passe incorrect !');
+            setPasswordError(contenu.error.password);
+            throw new Error(contenu.error.password);
           }
-
-          const contenu = await res.json();
           localStorage.setItem('token', JSON.stringify(contenu));
           setIsConnected((e) => !e);
           navigate('/wall');

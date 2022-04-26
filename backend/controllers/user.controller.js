@@ -34,21 +34,25 @@ exports.login = (req, res) => {
       return res.status(400).json({ error });
     }
     if (results == false) {
-      return res.status(404).json({ error: 'Utilisateur non présent !' });
+      return res.status(401).json({ error: { email: 'Utilisateur non présent !' } });
     }
 
     bcrypt
       .compare(password, results[0].password)
       .then((validPassword) => {
         if (!validPassword) {
-          return res.status(401).json({ error: 'Mot de passe incorrect !' });
+          return res.status(401).json({ error: { password: 'Mot de passe incorrect !' } });
         }
         res.status(200).json({
           userId: results[0].user_id,
           isAdmin: results[0].isAdmin,
-          token: jwt.sign({ userId: results[0].user_id, isAdmin: results[0].isAdmin }, process.env.TOKEN, {
-            expiresIn: '24h',
-          }),
+          token: jwt.sign(
+            { userId: results[0].user_id, isAdmin: results[0].isAdmin },
+            process.env.TOKEN,
+            {
+              expiresIn: '24h',
+            }
+          ),
         });
         console.log('Utilisateur connecté !');
       })
@@ -84,12 +88,16 @@ exports.getOneUser = (req, res) => {
 // ----------------------- Mettre à jour un utilisateur ----------------------- //
 exports.modifyUser = (req, res) => {
   if (!req.file) {
-    database.query('UPDATE user SET ? WHERE user_id = ?', [req.body, req.params.id], (error, results) => {
-      if (error) {
-        return res.status(400).json({ error });
+    database.query(
+      'UPDATE user SET ? WHERE user_id = ?',
+      [req.body, req.params.id],
+      (error, results) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json(results);
       }
-      res.status(200).json(results);
-    });
+    );
   } else if (req.file) {
     const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     const oldImageName = req.body.oldImage.split('/images/')[1];
