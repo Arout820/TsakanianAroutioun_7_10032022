@@ -2,28 +2,22 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const database = require('../config/db');
-const User = require('../models/User');
+const { User, addUser } = require('../models/User');
 
 require('dotenv').config();
 
 // -------------------------- S'inscrire -------------------------- //
-exports.signup = (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      const user = new User(firstname, lastname, email, hash);
-      console.log(user);
-
-      database.query('INSERT INTO user  SET ?', user, (error, results) => {
-        if (error) {
-          console.log(error);
-          return res.status(400).json({ error });
-        }
-        res.status(201).json({ Inscription: user });
-      });
-    })
-    .catch((error) => res.status(500).json({ error }));
+exports.signup = async (req, res) => {
+  try {
+    const { firstname, lastname, email, password } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const user = new User(firstname, lastname, email, hash);
+    console.log(user);
+    addUser(user);
+    res.status(201).json({ Inscription: user });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
 
 // -------------------------- Se connecter -------------------------- //
