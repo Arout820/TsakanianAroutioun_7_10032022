@@ -8,22 +8,39 @@ class User {
     this.email = email;
     this.password = password;
   }
+
+  save(user, result) {
+    database.query('INSERT INTO user SET ?', user, (error, results) => {
+      if (error) {
+        result(error);
+      } else {
+        result(null, results);
+      }
+    });
+  }
+
+  static connect(email, result) {
+    database.query(
+      'SELECT user_id, email, password, isAdmin FROM user WHERE email = ?',
+      email,
+      (error, results) => {
+        if (error) {
+          result(error);
+        } else {
+          result(null, results);
+        }
+      }
+    );
+  }
+  static getUser(userId, result) {
+    database.query('SELECT * FROM user WHERE user_id = ?', userId, (error, results) => {
+      if (error) {
+        result(error);
+      } else {
+        result(null, results);
+      }
+    });
+  }
 }
 
-module.exports = {
-  User,
-  addUser,
-};
-
-/**
- * add user in database
- * @param {User} user
- * @throws Error
- * @returns {Boolean} true if succeed
- */
-function addUser(user) {
-  database.query('INSERT INTO user  SET ?', user, (error, results) => {
-    if (error) throw error;
-    return true;
-  });
-}
+module.exports = User;

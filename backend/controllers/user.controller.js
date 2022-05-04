@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const database = require('../config/db');
-const { User, addUser } = require('../models/User');
+const User = require('../models/User');
 
 require('dotenv').config();
 
@@ -12,9 +12,12 @@ exports.signup = async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
     const user = new User(firstname, lastname, email, hash);
-    console.log(user);
-    addUser(user);
-    res.status(201).json({ Inscription: user });
+    user.save(user, (error, results) => {
+      if (error.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({ error: { duplicate: 'Utilisateur déjà présent dans la BDD !' } });
+      }
+      res.status(201).json({ Inscription: user });
+    });
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -22,83 +25,66 @@ exports.signup = async (req, res) => {
 
 // -------------------------- Se connecter -------------------------- //
 exports.login = (req, res) => {
-  const { email, password } = req.body;
-  database.query('SELECT * FROM user WHERE email = ?', email, (error, results) => {
-    if (error) {
-      return res.status(400).json({ error });
-    }
-    if (results == false) {
-      return res.status(401).json({ error: { email: 'Utilisateur non présent !' } });
-    }
-
-    bcrypt
-      .compare(password, results[0].password)
-      .then((validPassword) => {
-        if (!validPassword) {
-          return res.status(401).json({ error: { password: 'Mot de passe incorrect !' } });
-        }
-        res.status(200).json({
-          userId: results[0].user_id,
-          isAdmin: results[0].isAdmin,
-          token: jwt.sign(
-            { userId: results[0].user_id, isAdmin: results[0].isAdmin },
-            process.env.TOKEN,
-            {
-              expiresIn: '24h',
-            }
-          ),
-        });
-        console.log('Utilisateur connecté !');
-      })
-      .catch((error) => res.status(500).json({ error }));
-  });
-};
-
-// -------------------------- Récuperer tous les utilisateurs -------------------------- //
-exports.getAllUser = (req, res) => {
-  database.query('SELECT * FROM user', (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    res.status(200).json(results);
-  });
+  try {
+    const { email, password } = req.body;
+    User.connect(email, async (error, results) => {
+      console.log('iuzh_euzyh_uyhzuihds');
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      if (results == false) {
+        return res.status(401).json({ error: { email: 'Utilisateur non présent !' } });
+      }
+      const validPassword = await bcrypt.compare(password, results[0].password);
+      if (!validPassword) {
+        return res.status(401).json({ error: { password: 'Mot de passe incorrect !' } });
+      }
+      res.status(200).json({
+        userId: results[0].user_id,
+        isAdmin: results[0].isAdmin,
+        token: jwt.sign({ userId: results[0].user_id, isAdmin: results[0].isAdmin }, process.env.TOKEN, {
+          expiresIn: '24h',
+        }),
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
 
 // -------------------------- Récuperer un utilisateur -------------------------- //
 exports.getOneUser = (req, res) => {
-  database.query('SELECT * FROM user WHERE user_id = ?', req.params.id, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    if (results == false) {
-      return res.status(400).json({ error: `ID ${req.params.id} inconnu` });
-    }
-    res.status(200).json(results);
-  });
+  try {
+    User.getUser(req.params.userId, (error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      if (results == false) {
+        return res.status(400).json({ error: `ID ${req.params.userId} inconnu` });
+      }
+      res.status(200).json(results);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // ----------------------- Mettre à jour un utilisateur ----------------------- //
 exports.modifyUser = (req, res) => {
   if (!req.file) {
-    database.query(
-      'UPDATE user SET ? WHERE user_id = ?',
-      [req.body, req.params.id],
-      (error, results) => {
-        if (error) {
-          return res.status(400).json({ error });
-        }
-        res.status(200).json(results);
+    database.query('UPDATE user SET ? WHERE user_id = ?', [req.body, req.params.userId], (error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
       }
-    );
+      res.status(200).json(results);
+    });
   } else if (req.file) {
     const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     const oldImageName = req.body.oldImage.split('/images/')[1];
     fs.unlink(`images/${oldImageName}`, () => {
       database.query(
         'UPDATE user SET user_photo = ? WHERE user_id = ?',
-        [userPhoto, req.params.id],
+        [userPhoto, req.params.userId],
         (error, results) => {
           if (error) {
             return res.status(400).json({ error });
@@ -112,7 +98,7 @@ exports.modifyUser = (req, res) => {
 
 // ----------------------- Supprimer un utilisateur ----------------------- //
 exports.deleteUser = (req, res) => {
-  database.query('DELETE FROM user WHERE user_id = ?', req.params.id, (error, results) => {
+  database.query('DELETE FROM user WHERE user_id = ?', req.params.userId, (error, results) => {
     if (error) {
       console.log(error);
       return res.status(400).json({ error });

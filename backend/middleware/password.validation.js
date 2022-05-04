@@ -16,7 +16,6 @@ passwordSchema
 // Comparaison avec le password envoyé
 module.exports = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
-      console.log("Le mot de passe est valide !");
     next();
   } else {
     console.log('test');
