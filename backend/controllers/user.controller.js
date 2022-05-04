@@ -28,7 +28,6 @@ exports.login = (req, res) => {
   try {
     const { email, password } = req.body;
     User.connect(email, async (error, results) => {
-      console.log('iuzh_euzyh_uyhzuihds');
       if (error) {
         return res.status(400).json({ error });
       }
@@ -65,45 +64,48 @@ exports.getOneUser = (req, res) => {
       res.status(200).json(results);
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error });
   }
 };
 
 // ----------------------- Mettre à jour un utilisateur ----------------------- //
 exports.modifyUser = (req, res) => {
-  if (!req.file) {
-    database.query('UPDATE user SET ? WHERE user_id = ?', [req.body, req.params.userId], (error, results) => {
-      if (error) {
-        return res.status(400).json({ error });
-      }
-      res.status(200).json(results);
-    });
-  } else if (req.file) {
-    const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-    const oldImageName = req.body.oldImage.split('/images/')[1];
-    fs.unlink(`images/${oldImageName}`, () => {
-      database.query(
-        'UPDATE user SET user_photo = ? WHERE user_id = ?',
-        [userPhoto, req.params.userId],
-        (error, results) => {
+  try {
+    if (!req.file) {
+      User.updateInfos(req.body, req.params.userId, (error, results) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json(results);
+      });
+    } else if (req.file) {
+      const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      const oldImageName = req.body.oldImage.split('/images/')[1];
+      fs.unlink(`images/${oldImageName}`, () => {
+        User.updatePhoto(userPhoto, req.params.userId, (error, results) => {
           if (error) {
             return res.status(400).json({ error });
           }
           res.status(200).json(results);
-        }
-      );
-    });
+        });
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error });
   }
 };
 
 // ----------------------- Supprimer un utilisateur ----------------------- //
 exports.deleteUser = (req, res) => {
-  database.query('DELETE FROM user WHERE user_id = ?', req.params.userId, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    console.log(results);
-    res.status(200).json({ message: 'Utilisateur supprimé' });
-  });
+  try {
+    User.delete(req.params.userId, (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.status(400).json({ error });
+      }
+      res.status(200).json({ message: 'Utilisateur supprimé' });
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
