@@ -5,81 +5,73 @@ require('dotenv').config();
 
 // ----------------------- Créer un commentaire ----------------------- //
 exports.createComment = (req, res) => {
-  const { content, user_id, post_id } = req.body;
-  const comment = new Comment(content, user_id, post_id);
-  database.query('INSERT INTO comment SET ?', comment, (error, results) => {
-    if (error) {
-      console.log(error);
-      return res.status(400).json({ error });
-    }
-    res.status(201).json({ message: 'Commentaire crée !' });
-  });
+  try {
+    const { content, user_id, post_id } = req.body;
+    const comment = new Comment(content, user_id, post_id);
+    comment.save(comment, (error, results) => {
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.status(201).json({ message: 'Commentaire crée !' });
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
 
 // ------------------ Récuperer tous les commentaires ------------------ //
 exports.getAllComment = (req, res) => {
-  database.query(
-    'SELECT comment_id, post.post_id, comment.content, comment.user_id, comment_create_time, firstname, lastname, user_photo FROM comment JOIN user ON comment.user_id = user.user_id JOIN post ON comment.post_id = post.post_id ORDER BY comment_create_time ASC',
-    (error, results) => {
+  try {
+    Comment.getAll((error, results) => {
       if (error) {
-        console.log(error);
         return res.status(400).json({ error });
       }
       res.status(200).json(results);
-    }
-  );
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
 
 // ---------------------- Récuperer un commentaire ---------------------- //
 exports.getOneComment = (req, res) => {
-  database.query(
-    'SELECT comment_id, post.post_id, comment.content, comment.user_id, firstname, lastname, user_photo FROM comment JOIN user ON comment.user_id = user.user_id JOIN post ON comment.post_id = post.post_id WHERE comment_id = ?',
-    req.params.commentId,
-    (error, results) => {
+  try {
+    Comment.getOne(req.params.commentId, (error, results) => {
       if (error) {
-        console.log(error);
         return res.status(400).json({ error });
       }
       res.status(200).json(results);
-    }
-  );
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 };
 
 // ---------------------- Supprimer un commentaire ---------------------- //
 exports.deleteComment = (req, res) => {
-  if (req.token.isAdmin === 1) {
-    database.query('DELETE FROM comment WHERE comment_id = ?', [req.params.commentId], (error, results) => {
-      console.log(results);
+  try {
+    if (req.token.isAdmin === 1) {
+      Comment.deleteAdmin(req.params.commentId, (error, results) => {
       if (results.affectedRows === 0) {
-        return res
-          .status(400)
-          .json({ message: 'Aucun commentaire correspondant a ce numéro de commentaire !' });
-      }
-      if (error) {
-        console.log(error);
-        return res.status(400).json({ error });
-      }
-      console.log(results);
-      res.status(200).json({ message: 'Commentaire supprimé !' });
-    });
-  } else if (req.token.isAdmin === 0) {
-    database.query(
-      'DELETE FROM comment WHERE comment_id = ? AND user_id = ? ',
-      [req.params.commentId, req.token.userId],
-      (error, results) => {
-        console.log(results);
-        if (results.affectedRows === 0) {
-          return res
-            .status(400)
-            .json({ message: "Impossible de supprimer le commentaire de quelqu'un d'autre !" });
+          return res.status(400).json({ error: 'Aucun commentaire correspondant à ce numéro de commentaire !' });
         }
         if (error) {
-          console.log(error);
           return res.status(400).json({ error });
         }
-        console.log(results);
         res.status(200).json({ message: 'Commentaire supprimé !' });
-      }
-    );
+      });
+    } else if (req.token.isAdmin === 0) {
+      Comment.delete(req.params.commentId, req.token.userId, (error, results) => {
+        if (results.affectedRows === 0) {
+          return res.status(400).json({ error: "Impossible de supprimer le commentaire de quelqu'un d'autre !" });
+        }
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        res.status(200).json({ message: 'Commentaire supprimé !' });
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error });
   }
 };
