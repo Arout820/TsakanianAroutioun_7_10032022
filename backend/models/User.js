@@ -10,42 +10,48 @@ class User {
   }
 
   save(user, callback) {
-    database.query('INSERT INTO user SET ?', user, (error, results) => {
+    const sql = 'INSERT INTO user SET ?';
+    database.query(sql, user, (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
   }
 
   static connect(email, callback) {
-    database.query('SELECT user_id, email, password, isAdmin FROM user WHERE email = ?', email, (error, results) => {
+    const sql = 'SELECT user_id, email, password, isAdmin FROM user WHERE email = ?';
+    database.query(sql, email, (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
   }
 
   static getUser(userId, callback) {
-    database.query('SELECT * FROM user WHERE user_id = ?', userId, (error, results) => {
+    const sql = 'SELECT * FROM user WHERE user_id = ?';
+    database.query(sql, userId, (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
   }
 
   static updateInfos(body, userId, callback) {
-    database.query('UPDATE user SET ? WHERE user_id = ?', [body, userId], (error, results) => {
+    const sql = 'UPDATE user SET ? WHERE user_id = ?';
+    database.query(sql, [body, userId], (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
   }
 
   static updatePhoto(userPhoto, userId, callback) {
-    database.query('UPDATE user SET user_photo = ? WHERE user_id = ?', [userPhoto, userId], (error, results) => {
+    const sql = 'UPDATE user SET user_photo = ? WHERE user_id = ?';
+    database.query(sql, [userPhoto, userId], (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
   }
 
   static delete(userId, callback) {
-    database.query('DELETE FROM user WHERE user_id = ?', userId, (error, results) => {
+    const sql = 'DELETE FROM user WHERE user_id = ?';
+    database.query(sql, userId, (error, results) => {
       if (error) callback(error);
       else callback(null, results);
     });
