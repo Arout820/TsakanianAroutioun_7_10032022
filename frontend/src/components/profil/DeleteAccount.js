@@ -19,8 +19,6 @@ const DeleteAccount = () => {
     fetch(`http://localhost:5000/api/user/${id}`, {
       method: 'DELETE',
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     }).then(async (res) => {

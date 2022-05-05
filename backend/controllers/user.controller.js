@@ -97,11 +97,22 @@ exports.modifyUser = (req, res) => {
 // ----------------------- Supprimer un utilisateur ----------------------- //
 exports.deleteUser = (req, res) => {
   try {
-    User.delete(req.params.userId, (error, results) => {
+    User.getUser(req.params.userId, (error, results) => {
       if (error) {
         return res.status(400).json({ error });
       }
-      res.status(200).json({ message: 'Utilisateur supprimé' });
+      if (results == false) {
+        return res.status(400).json({ error: `ID ${req.params.userId} inconnu` });
+      }
+      const oldImageName = results[0].user_photo.split('/images/')[1];
+      fs.unlink(`images/${oldImageName}`, () => {
+        User.delete(req.params.userId, (error, results) => {
+          if (error) {
+            return res.status(400).json({ error });
+          }
+          res.status(200).json({ message: 'Utilisateur supprimé' });
+        });
+      });
     });
   } catch (error) {
     res.status(500).json({ error });
