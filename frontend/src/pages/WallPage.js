@@ -75,6 +75,13 @@ const WallPage = () => {
     return () => abortCtrl.abort();
   }, [id, token, modification]);
 
+  useEffect(() => {
+    if (postInfos && postInfos[0]) {
+      console.log('_______postinfos________');
+      console.log(postInfos);
+    }
+  }, [postInfos]);
+
   return (
     <>
       {error && <div>Une erreur vient de se produire - {error}</div>}
@@ -83,11 +90,8 @@ const WallPage = () => {
           <HeaderConnected />
           <main className={userInfos[0].isAdmin ? 'wall-container admin' : 'wall-container'}>
             <WallNewPost setModification={setModification} userInfos={userInfos} />
-            <WallCardPost
-              postInfos={postInfos}
-              userInfos={userInfos}
-              setModification={setModification}
-            />
+            {!postInfos[0] && <div className="no-card">Soyez le premier à poster!</div>}
+            <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
           </main>
           <FooterConnected />
         </>

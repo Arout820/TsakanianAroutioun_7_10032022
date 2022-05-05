@@ -18,12 +18,6 @@ const LikePostCard = ({ post, setModification }) => {
   const isLiked = 1;
   const sendlikesInfos = { user_id, post_id, isLiked };
 
-  useEffect(() => {
-    if (userLikesInfos) {
-      console.log(userLikesInfos[0]);
-    }
-  }, [userLikesInfos]);
-
   // -------------- récupération des éléments de posts de la base de données avec l'api -----------------------------
   useEffect(() => {
     const abortCtrl = new AbortController();
