@@ -1,4 +1,3 @@
-const database = require('../config/db');
 const Comment = require('../models/Comment');
 
 require('dotenv').config();
@@ -52,7 +51,7 @@ exports.deleteComment = (req, res) => {
   try {
     if (req.token.isAdmin === 1) {
       Comment.deleteAdmin(req.params.commentId, (error, results) => {
-      if (results.affectedRows === 0) {
+        if (results.affectedRows === 0) {
           return res.status(400).json({ error: 'Aucun commentaire correspondant à ce numéro de commentaire !' });
         }
         if (error) {
