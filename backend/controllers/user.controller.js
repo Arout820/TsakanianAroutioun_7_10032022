@@ -97,16 +97,27 @@ exports.modifyUser = (req, res) => {
 // ----------------------- Supprimer un utilisateur ----------------------- //
 exports.deleteUser = (req, res) => {
   try {
-    User.getUser(req.params.userId, (error, results) => {
+    const { userId } = req.params;
+    let imagesToDeleteFromFolder = [];
+    User.getAllImagesPosted(userId, (error, results) => {
       if (error) {
         return res.status(400).json({ error });
       }
-      if (results == false) {
-        return res.status(400).json({ error: `ID ${req.params.userId} inconnu` });
+      for (let image in results) {
+        imagesToDeleteFromFolder.push(results[image].attachment.split('/images/')[1]);
       }
-      const oldImageName = results[0].userPhoto && results[0].user_photo.split('/images/')[1];
-      fs.unlink(`images/${oldImageName}`, () => {
-        User.delete(req.params.userId, (error, results) => {
+      User.getUserPhoto(userId, (error, results) => {
+        if (error) {
+          return res.status(400).json({ error });
+        }
+        const oldImageName = results[0].user_photo && results[0].user_photo.split('/images/')[1];
+        imagesToDeleteFromFolder.push(results[0].user_photo && oldImageName);
+        if (imagesToDeleteFromFolder) {
+          for (let image of imagesToDeleteFromFolder) {
+            fs.unlink(`images/${image}`, () => {});
+          }
+        }
+        User.delete(userId, (error, results) => {
           if (error) {
             return res.status(400).json({ error });
           }

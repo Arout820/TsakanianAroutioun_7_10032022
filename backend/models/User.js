@@ -49,6 +49,22 @@ class User {
     });
   }
 
+  static getAllImagesPosted(userId, callback) {
+    const sql = 'SELECT attachment FROM post WHERE user_id = ?;';
+    database.query(sql, userId, (error, results) => {
+      if (error) callback(error);
+      else callback(null, results);
+    });
+  }
+
+  static getUserPhoto(userId, callback) {
+    const sql = 'SELECT user_photo FROM user WHERE user_id = ?';
+    database.query(sql, userId, (error, results) => {
+      if (error) callback(error);
+      else callback(null, results);
+    });
+  }
+
   static delete(userId, callback) {
     const sql = 'DELETE FROM user WHERE user_id = ?';
     database.query(sql, userId, (error, results) => {
