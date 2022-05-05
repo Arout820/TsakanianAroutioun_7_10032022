@@ -70,16 +70,16 @@ exports.getOneUser = (req, res) => {
 // ----------------------- Mettre à jour un utilisateur ----------------------- //
 exports.modifyUser = (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.file && !req.body.oldImage) {
       User.updateInfos(req.body, req.params.userId, (error, results) => {
         if (error) {
           return res.status(400).json({ error });
         }
         res.status(200).json(results);
       });
-    } else if (req.file) {
-      const userPhoto = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    } else if (req.file || req.body.oldImage) {
       const oldImageName = req.body.oldImage.split('/images/')[1];
+      const userPhoto = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : undefined;
       fs.unlink(`images/${oldImageName}`, () => {
         User.updatePhoto(userPhoto, req.params.userId, (error, results) => {
           if (error) {

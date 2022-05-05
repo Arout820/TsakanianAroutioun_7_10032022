@@ -12,22 +12,20 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   const imagePostRef = useRef();
 
   // changement de photo de profil
-  const HandleSubmit = (event) => {
+  const HandleChangeImage = (event) => {
     event.preventDefault();
 
     const formData = new FormData();
     formData.append('oldImage', userInfos[0].user_photo);
     formData.append('image', user_photo);
 
-    const send = fetch(`http://localhost:5000/api/user/${id}`, {
+    fetch(`http://localhost:5000/api/user/${id}`, {
       method: 'PUT',
       body: formData,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-
-    send.then(async (res) => {
+    }).then((res) => {
       try {
         setTrigger(false);
         setModification((e) => !e);
@@ -38,21 +36,21 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   };
 
   // suppression photo de profil
-  const HandleDelete = (event) => {
+  const HandleDeleteImage = (event) => {
     event.preventDefault();
 
+    const formData = new FormData();
+    formData.append('oldImage', userInfos[0].user_photo);
+    formData.append('image', user_photo);
+
     if (!user_photo) {
-      const sendDelete = fetch(`http://localhost:5000/api/user/${id}`, {
+      fetch(`http://localhost:5000/api/user/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ user_photo }),
+        body: formData,
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      });
-
-      sendDelete.then(async (res) => {
+      }).then((res) => {
         try {
           setTrigger(false);
           setModification((e) => !e);
@@ -83,7 +81,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
 
   return (
     <>
-      <form onSubmit={HandleSubmit} className="form-image" encType="multipart/form-data">
+      <form onSubmit={HandleChangeImage} className="form-image" encType="multipart/form-data">
         <div className="form-image__change">
           <input type="hidden" name="oldImage" value={userInfos[0].user_photo} />
           {!user_photo ? (
@@ -93,16 +91,13 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
                   className="form-image__photo__img"
                   src={userInfos[0].user_photo ? userInfos[0].user_photo : emptyPhoto}
                   alt={
-                    userInfos[0].user_photo &&
-                    `Photo de profil de ${userInfos[0].firstname} ${userInfos[0].lastname}`
+                    userInfos[0].user_photo && `Photo de profil de ${userInfos[0].firstname} ${userInfos[0].lastname}`
                   }
                 />
               </div>
               <label className="form-image__change__label" htmlFor="imageProfil">
                 Changer la photo de profil
-                <i className="form-image__change__label__icon material-icons">
-                  add_photo_alternate
-                </i>
+                <i className="form-image__change__label__icon material-icons">add_photo_alternate</i>
               </label>
             </>
           ) : (
@@ -117,10 +112,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
                   }
                 />
                 <div className="form-image__photo__delete">
-                  <i
-                    onClick={HandleDeletePreview}
-                    className="form-image__photo__delete__icon material-icons"
-                  >
+                  <i onClick={HandleDeletePreview} className="form-image__photo__delete__icon material-icons">
                     delete
                   </i>
                 </div>
@@ -141,7 +133,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
           />
         </div>
       </form>
-      <form onSubmit={HandleDelete} className="form-image">
+      <form onSubmit={HandleDeleteImage} className="form-image">
         {!user_photo && (
           <button type="submit" className="form-image__send">
             Supprimer la photo de profil active
