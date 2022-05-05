@@ -75,13 +75,6 @@ const WallPage = () => {
     return () => abortCtrl.abort();
   }, [id, token, modification]);
 
-  useEffect(() => {
-    if (postInfos && postInfos[0]) {
-      console.log('_______postinfos________');
-      console.log(postInfos);
-    }
-  }, [postInfos]);
-
   return (
     <>
       {error && <div>Une erreur vient de se produire - {error}</div>}
