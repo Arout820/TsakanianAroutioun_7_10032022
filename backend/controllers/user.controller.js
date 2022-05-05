@@ -104,7 +104,7 @@ exports.deleteUser = (req, res) => {
       if (results == false) {
         return res.status(400).json({ error: `ID ${req.params.userId} inconnu` });
       }
-      const oldImageName = results[0].user_photo.split('/images/')[1];
+      const oldImageName = results[0].userPhoto && results[0].user_photo.split('/images/')[1];
       fs.unlink(`images/${oldImageName}`, () => {
         User.delete(req.params.userId, (error, results) => {
           if (error) {
