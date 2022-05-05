@@ -12,7 +12,7 @@ exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const user = new User(firstname, lastname, email, hash);
     user.save(user, (error, results) => {
-      if (error.code === 'ER_DUP_ENTRY') {
+      if (error && error.code === 'ER_DUP_ENTRY') {
         return res.status(409).json({ error: { duplicate: 'Utilisateur déjà présent dans la BDD !' } });
       }
       res.status(201).json({ Inscription: user });
@@ -99,7 +99,6 @@ exports.deleteUser = (req, res) => {
   try {
     User.delete(req.params.userId, (error, results) => {
       if (error) {
-        console.log(error);
         return res.status(400).json({ error });
       }
       res.status(200).json({ message: 'Utilisateur supprimé' });
