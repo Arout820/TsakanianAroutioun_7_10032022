@@ -1,4 +1,3 @@
-const database = require('../config/db');
 const Likes = require('../models/Likes');
 require('dotenv').config();
 
@@ -10,7 +9,6 @@ exports.createLikes = (req, res) => {
       const likes = new Likes(post_id, user_id, isLiked);
       likes.save(likes, (error, results) => {
         if (error) {
-          console.log(error);
           return res.status(400).json({ error });
         }
         res.status(201).json({ message: 'Like crée !' });

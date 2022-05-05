@@ -79,10 +79,8 @@ exports.modifyPost = (req, res) => {
         return res.status(400).json({ message: "Impossible de modifier le post de quelqu'un d'autre !" });
       }
       if (error) {
-        console.log(error);
         return res.status(400).json({ error });
       }
-      console.log(results);
       res.status(200).json({ message: 'Post modifié !' });
     });
   } catch (error) {
@@ -120,7 +118,6 @@ exports.deletePost = (req, res) => {
               return res.status(401).json({ error: "Impossible de supprimer le post de quelqu'un d'autre !" });
             }
             if (error) {
-              console.log(error);
               return res.status(400).json({ error });
             }
             res.status(200).json({ message: 'Post supprimé !' });
