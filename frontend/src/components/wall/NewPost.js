@@ -21,6 +21,8 @@ const NewPost = ({ setModification, userInfos }) => {
   const HandleCreatePost = async (event) => {
     event.preventDefault();
 
+    setErrorType(false);
+
     const formData = new FormData();
     formData.append('user_id', user_id);
     formData.append('content', content);

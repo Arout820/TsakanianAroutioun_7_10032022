@@ -8,6 +8,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
 
   const [user_photo, setUserPhoto] = useState('');
   const [isImage, setIsImage] = useState('');
+  const [errorType, setErrorType] = useState(false);
 
   const imagePostRef = useRef();
 
@@ -62,14 +63,23 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   };
 
   const HandleImage = (event) => {
+    setErrorType(false);
     setUserPhoto(event.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setIsImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(event.target.files[0]);
+    const test = event.target.files[0];
+    console.log(test);
+    if (test.type === 'image/png' || test.type === 'image/jpg' || test.type === 'image/jpeg') {
+      console.log('comment ça quoi');
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setIsImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
+      HandleDeletePreview();
+      setErrorType(true);
+    }
   };
 
   const HandleDeletePreview = () => {
@@ -95,6 +105,12 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
                   }
                 />
               </div>
+              {errorType && (
+                <div className="form-image__error-type">
+                  Fichier non autorisé! <br />
+                  Choissisez un jpg, jpeg ou png!
+                </div>
+              )}
               <label className="form-image__change__label" htmlFor="imageProfil">
                 {userInfos[0].user_photo ? 'Changez la photo de profil' : 'Ajoutez une photo de profil'}
                 <i className="form-image__change__label__icon material-icons">add_photo_alternate</i>
@@ -128,13 +144,14 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
             type="file"
             name="imagePost"
             id="imageProfil"
+            accept=".png, .jpg, .jpeg"
             onChange={HandleImage}
             ref={imagePostRef}
           />
         </div>
       </form>
       <form onSubmit={HandleDeleteImage} className="form-image">
-        {(!user_photo && userInfos[0].user_photo) && (
+        {!user_photo && userInfos[0].user_photo && (
           <button type="submit" className="form-image__send">
             Supprimer la photo de profil active
             <i className="form-image__change__label__icon material-icons">delete</i>
