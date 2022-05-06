@@ -58,6 +58,7 @@ const NewPost = ({ setModification, userInfos }) => {
   const HandleImage = (event) => {
     setErrorType(false);
     setAttachment(event.target.files[0]);
+    const test = event.target.files[0];
     if (test.type === 'image/png' || test.type === 'image/jpg' || test.type === 'image/jpeg') {
       const reader = new FileReader();
       reader.onload = () => {
@@ -182,7 +183,10 @@ const NewPost = ({ setModification, userInfos }) => {
           </div>
         )}
         {errorType && (
-          <div className="create-post__error-type">Fichier non autorisé! <br/>Choissisez un jpg, jpeg ou png !</div>
+          <div className="create-post__error-type">
+            Fichier non autorisé! <br />
+            Choissisez un jpg, jpeg ou png !
+          </div>
         )}
         {video && (
           <>
