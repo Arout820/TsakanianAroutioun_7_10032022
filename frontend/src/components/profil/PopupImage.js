@@ -96,7 +96,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
                 />
               </div>
               <label className="form-image__change__label" htmlFor="imageProfil">
-                Changer la photo de profil
+                {userInfos[0].user_photo ? 'Changez la photo de profil' : 'Ajoutez une photo de profil'}
                 <i className="form-image__change__label__icon material-icons">add_photo_alternate</i>
               </label>
             </>
@@ -134,7 +134,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
         </div>
       </form>
       <form onSubmit={HandleDeleteImage} className="form-image">
-        {!user_photo && (
+        {(!user_photo && userInfos[0].user_photo) && (
           <button type="submit" className="form-image__send">
             Supprimer la photo de profil active
             <i className="form-image__change__label__icon material-icons">delete</i>
