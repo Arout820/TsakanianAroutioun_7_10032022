@@ -37,9 +37,11 @@ Pour pouvoir utiliser la base de données il faudra la créer avec le fichier en
 
 Dans mon projet j'ai utilsé les variables d'environnements.
 
-Un fichier .env.example se trouve dans le projet dans le dossier backend/config.
+Un fichier .env.sample se trouve dans le projet dans le dossier backend/config.
 
 Dans ce fichier se trouve les variables, il faut mettre les valeurs personnels.
+
+Il faudra également renommer le fichier en .env
 
 ```bash
 # Port api
