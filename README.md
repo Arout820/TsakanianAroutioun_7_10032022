@@ -64,6 +64,19 @@ Il faudra les laisser ouvert pour que le site puisse etre ouvert à l'adresse ht
 
 Dans le terminal du backend du projet faire **npm start**, et pareil pour le backend.
 
+# Compte administrateur
+
+Pour rendre un compte en mode administrateur il faut créer un compte normal puis dans la base de donnée modifier la table user pour que la valeur de isAdmin qui par defaut est égale à 0 soit égale à 1.
+Vous pouvez le faire soit dans le terminal en vous connectant à votre base de donnée soit dans l'application phpMyAdmin si vous l'utilisez dans l'onglet SQL avec la requête suivante. 
+
+Par exemple pour un utilisateur qui a 1 comme user_id : 
+
+```bash
+  UPDATE `user` SET `isAdmin` = '1' WHERE `user_id` = '1';
+```
+
+La page wall d'un administrateur  a une couleure différente de celle des autres utilisateurs.
+
 # Routes
 
 Fonctionneront lorsque le serveur sera lancé avec node server ou nodemon server, pouvant être mis dans un script npm start dans le fichier package.json.
