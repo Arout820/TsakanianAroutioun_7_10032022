@@ -104,7 +104,9 @@ exports.deleteUser = (req, res) => {
         return res.status(400).json({ error });
       }
       for (let image in results) {
-        imagesToDeleteFromFolder.push(results[image].attachment.split('/images/')[1]);
+        if (results[image].attachment != null) {
+          imagesToDeleteFromFolder.push(results[image].attachment.split('/images/')[1]);
+        }
       }
       User.getUserPhoto(userId, (error, results) => {
         if (error) {
