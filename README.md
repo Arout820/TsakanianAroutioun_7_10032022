@@ -75,7 +75,7 @@ Par exemple pour un utilisateur qui a 1 comme user_id :
   UPDATE `user` SET `isAdmin` = '1' WHERE `user_id` = '1';
 ```
 
-La page wall d'un administrateur  a une couleure différente de celle des autres utilisateurs.
+La page wall d'un administrateur a une couleure différente de celle des autres utilisateurs.
 
 # Routes
 
