@@ -7,7 +7,7 @@ exports.createComment = (req, res) => {
   try {
     const { content, user_id, post_id } = req.body;
     const comment = new Comment(content, user_id, post_id);
-    comment.save(comment, (error, results) => {
+    comment.save(comment, (error, _results) => {
       if (error) {
         return res.status(400).json({ error });
       }
@@ -19,7 +19,7 @@ exports.createComment = (req, res) => {
 };
 
 // ------------------ Récuperer tous les commentaires ------------------ //
-exports.getAllComment = (req, res) => {
+exports.getAllComment = (_req, res) => {
   try {
     Comment.getAll((error, results) => {
       if (error) {

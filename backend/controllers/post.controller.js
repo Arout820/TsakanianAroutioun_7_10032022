@@ -5,10 +5,10 @@ require('dotenv').config();
 // ----------------------- Créer un post ----------------------- //
 exports.createPost = (req, res) => {
   try {
-    const { content, user_id, video, attachment } = req.body;
+    const { content, user_id, video } = req.body;
     if (!req.file) {
       const post = new Post(content, user_id, video, undefined);
-      post.save(post, (error, results) => {
+      post.save(post, (error, _results) => {
         if (error) {
           return res.status(400).json({ error });
         }
@@ -17,7 +17,7 @@ exports.createPost = (req, res) => {
     } else if (req.file) {
       const attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
       const post = new Post(content, user_id, undefined, attachment);
-      post.save(post, (error, results) => {
+      post.save(post, (error, _results) => {
         if (error) {
           return res.status(400).json({ error });
         }
@@ -44,7 +44,7 @@ exports.getCommentsFromPost = (req, res) => {
 };
 
 // ------------------ Récuperer tous les posts ------------------ //
-exports.getAllPost = (req, res) => {
+exports.getAllPost = (_req, res) => {
   try {
     Post.getAll((error, results) => {
       if (error) {

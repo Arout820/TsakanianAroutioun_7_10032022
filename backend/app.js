@@ -15,7 +15,7 @@ const app = express();
 console.log('Connecté au serveur');
 
 // permet de débloquer le fait que le front et le back proviennent de sources différentes
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Headers',

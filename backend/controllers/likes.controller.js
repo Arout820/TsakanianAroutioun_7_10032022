@@ -7,7 +7,7 @@ exports.createLikes = (req, res) => {
     const { post_id, user_id, isLiked } = req.body;
     if (isLiked === 1) {
       const likes = new Likes(post_id, user_id, isLiked);
-      likes.save(likes, (error, results) => {
+      likes.save(likes, (error, _results) => {
         if (error) {
           return res.status(400).json({ error });
         }

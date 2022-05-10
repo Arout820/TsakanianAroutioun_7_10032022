@@ -11,7 +11,7 @@ exports.signup = async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
     const user = new User(firstname, lastname, email, hash);
-    user.save(user, (error, results) => {
+    user.save(user, (error, _results) => {
       if (error && error.code === 'ER_DUP_ENTRY') {
         return res.status(409).json({ error: { duplicate: 'Utilisateur déjà présent dans la BDD !' } });
       }
@@ -30,7 +30,7 @@ exports.login = (req, res) => {
       if (error) {
         return res.status(400).json({ error });
       }
-      if (results == false) {
+      if (!results[0]) {
         return res.status(401).json({ error: { email: 'Utilisateur non présent !' } });
       }
       const validPassword = await bcrypt.compare(password, results[0].password);
@@ -57,7 +57,7 @@ exports.getOneUser = (req, res) => {
       if (error) {
         return res.status(400).json({ error });
       }
-      if (results == false) {
+      if (!results[0]) {
         return res.status(400).json({ error: `ID ${req.params.userId} inconnu` });
       }
       res.status(200).json(results);
@@ -116,10 +116,12 @@ exports.deleteUser = (req, res) => {
         imagesToDeleteFromFolder.push(results[0].user_photo && oldImageName);
         if (imagesToDeleteFromFolder) {
           for (let image of imagesToDeleteFromFolder) {
-            fs.unlink(`images/${image}`, () => {});
+            fs.unlink(`images/${image}`, () => {
+              // C'est intentionel, pour la suppression des images du dossier backend/images
+            });
           }
         }
-        User.delete(userId, (error, results) => {
+        User.delete(userId, (error, _results) => {
           if (error) {
             return res.status(400).json({ error });
           }
