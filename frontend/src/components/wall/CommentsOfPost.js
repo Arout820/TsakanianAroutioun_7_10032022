@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const CommentsOfPost = ({ post, updateComment }) => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const token = userConnectionInfos.token;
 

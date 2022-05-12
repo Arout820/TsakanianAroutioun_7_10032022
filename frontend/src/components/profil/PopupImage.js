@@ -2,8 +2,9 @@ import { useState, useRef } from 'react';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const PopupImage = ({ setTrigger, setModification, userInfos }) => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const [user_photo, setUserPhoto] = useState('');
@@ -20,13 +21,13 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
     formData.append('oldImage', userInfos[0].user_photo);
     formData.append('image', user_photo);
 
-    fetch(`http://localhost:5000/api/user/${id}`, {
+    fetch(`http://localhost:5000/api/user/${userId}`, {
       method: 'PUT',
       body: formData,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((res) => {
+    }).then(() => {
       try {
         setTrigger(false);
         setModification((e) => !e);
@@ -45,13 +46,13 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
     formData.append('image', user_photo);
 
     if (!user_photo) {
-      fetch(`http://localhost:5000/api/user/${id}`, {
+      fetch(`http://localhost:5000/api/user/${userId}`, {
         method: 'PUT',
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }).then((res) => {
+      }).then(() => {
         try {
           setTrigger(false);
           setModification((e) => !e);

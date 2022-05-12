@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import DeleteAccount from './DeleteAccount';
 
 const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const [firstname, setFirstName] = useState(userInfos[0].firstname);
@@ -30,11 +31,12 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
 
   const newInfos = { firstname, lastname, bio };
 
+  // fonction modification d'infos de profil
   const HandleSubmit = (event) => {
     event.preventDefault();
 
     if (firstname && lastname) {
-      fetch(`http://localhost:5000/api/user/${id}`, {
+      fetch(`http://localhost:5000/api/user/${userId}`, {
         method: 'PUT',
         body: JSON.stringify(newInfos),
         headers: {
@@ -42,7 +44,7 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      }).then(async (res) => {
+      }).then(() => {
         try {
           off(false);
           on(true);

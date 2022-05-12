@@ -2,12 +2,13 @@ import { useState } from 'react';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const NewComment = ({ setUpdateComment, post, userInfos }) => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const [content, setContent] = useState('');
-  const user_id = id;
+  const user_id = userId;
   const post_id = post.post_id;
 
   const HandleSubmit = (event) => {
@@ -23,7 +24,7 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      }).then(async (res) => {
+      }).then(() => {
         try {
           setUpdateComment((e) => !e);
           setContent('');

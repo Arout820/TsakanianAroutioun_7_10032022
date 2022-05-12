@@ -5,7 +5,7 @@ const HeaderConnected = () => {
   const navigate = useNavigate();
 
   // Bouton se déconnecter
-  const HandleButton = (event) => {
+  const HandleButton = () => {
     localStorage.removeItem('token');
     navigate('/');
   };

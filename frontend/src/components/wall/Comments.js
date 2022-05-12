@@ -2,22 +2,21 @@ import { dateCorrection } from '../../utils/Utils';
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) => {
-  // infos Local Storage
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
-  // fonction pour la logique du bouton supprimer
-  const HandleDelete = (id) => {
-    // // supprimer un post
-    fetch(`http://localhost:5000/api/comment/${id}`, {
+  // fonction poour supprimer un commentaire
+  const HandleDelete = (commentId) => {
+    fetch(`http://localhost:5000/api/comment/${commentId}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }).then(async (res) => {
+    }).then(() => {
       try {
         setUpdateComment((e) => !e);
       } catch (err) {
@@ -46,17 +45,12 @@ const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) =>
                     <p className="card-comment__infos__profil__username">
                       {comment.firstname} {comment.lastname}
                     </p>
-                    <p className="card-comment__infos__profil__time">
-                      {dateCorrection(comment.comment_create_time)}
-                    </p>
+                    <p className="card-comment__infos__profil__time">{dateCorrection(comment.comment_create_time)}</p>
                   </div>
                   <p className="card-comment__infos__content">{comment.content}</p>
-                  {(comment.user_id === id || userInfos[0].isAdmin === 1) && (
+                  {(comment.user_id === userId || userInfos[0].isAdmin === 1) && (
                     <div className="card-comment__infos__delete">
-                      <i
-                        onClick={() => HandleDelete(comment.comment_id)}
-                        className="fa-1x fa-solid fa-trash-can"
-                      ></i>
+                      <i onClick={() => HandleDelete(comment.comment_id)} className="fa-1x fa-solid fa-trash-can"></i>
                     </div>
                   )}
                 </div>

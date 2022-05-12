@@ -4,9 +4,9 @@ import HeaderConnected from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
 
 const ProfilPage = () => {
-  // infos Local Storage
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   // variables selon état du fetch
@@ -19,7 +19,7 @@ const ProfilPage = () => {
   // récupération des éléments de la base de données avec l'api
   useEffect(() => {
     const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/user/${id}`, {
+    fetch(`http://localhost:5000/api/user/${userId}`, {
       signal: abortCtrl.signal,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -31,7 +31,6 @@ const ProfilPage = () => {
         } else {
           const contenu = await res.json();
           setUserInfos(contenu);
-          console.log(contenu);
           setError(null);
         }
       } catch (err) {
@@ -44,7 +43,7 @@ const ProfilPage = () => {
     });
 
     return () => abortCtrl.abort();
-  }, [id, token, modification]);
+  }, [userId, token, modification]);
   return (
     <>
       <HeaderConnected />

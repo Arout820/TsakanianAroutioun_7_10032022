@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Popup from '../../utils/Popup';
 
 const DeleteAccount = () => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const navigate = useNavigate();
@@ -16,12 +17,12 @@ const DeleteAccount = () => {
   const HandleDelete = (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/api/user/${id}`, {
+    fetch(`http://localhost:5000/api/user/${userId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then(async (res) => {
+    }).then(() => {
       try {
         navigate('/');
       } catch (err) {

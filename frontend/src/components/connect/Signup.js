@@ -41,10 +41,9 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   // validation fonction pour prénom, nom, mail
   const validation = (regex, string, validity) => {
     if (!regex.test(string)) {
-      validity(false);
-    } else {
-      validity(true);
+      return validity(false);
     }
+    validity(true);
   };
 
   const validationPassword = (string) => {
@@ -107,12 +106,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       setEmailError("L'email n'est pas valide !");
     }
 
-    if (
-      !passwordDigitsValid ||
-      !passwordLowercaseValid ||
-      !passwordMinMaxValid ||
-      !passwordUppercaseValid
-    ) {
+    if (!passwordDigitsValid || !passwordLowercaseValid || !passwordMinMaxValid || !passwordUppercaseValid) {
       setPasswordError("Le mot de passe n'est pas valide");
     }
 
@@ -229,10 +223,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
           id="password"
           className={
             passwordError &&
-            (!passwordDigitsValid ||
-              !passwordLowercaseValid ||
-              !passwordMinMaxValid ||
-              !passwordUppercaseValid)
+            (!passwordDigitsValid || !passwordLowercaseValid || !passwordMinMaxValid || !passwordUppercaseValid)
               ? 'error-border'
               : undefined
           }
@@ -245,10 +236,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
           deux chiffres."
         />
         {passwordError &&
-          (!passwordDigitsValid ||
-            !passwordLowercaseValid ||
-            !passwordMinMaxValid ||
-            !passwordUppercaseValid) && (
+          (!passwordDigitsValid || !passwordLowercaseValid || !passwordMinMaxValid || !passwordUppercaseValid) && (
             <div className="error">
               <div className="error__image">
                 <img src={nonValideImage} alt="" />
@@ -262,9 +250,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
         <input
           type="password"
           id="password-reapeat"
-          className={
-            passwordRepeatError && passwordRepeat !== password ? 'error-border' : undefined
-          }
+          className={passwordRepeatError && passwordRepeat !== password ? 'error-border' : undefined}
           autoComplete="on"
           placeholder="Répétez le mot de passe"
           onChange={(event) => setPasswordReapeat(event.target.value)}
@@ -283,15 +269,9 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       {(password || passwordError) && (
         <div className="form-auth__password-check">
           <p className={passwordMinMaxValid ? 'checked-regex' : undefined}>5 caractères minimum </p>
-          <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>
-            1 caractère majuscule
-          </p>
-          <p className={passwordLowercaseValid ? 'checked-regex' : undefined}>
-            1 caractère minuscule
-          </p>
-          <p className={passwordDigitsValid ? 'checked-regex' : undefined}>
-            2 caractères numériques
-          </p>
+          <p className={passwordUppercaseValid ? 'checked-regex' : undefined}>1 caractère majuscule</p>
+          <p className={passwordLowercaseValid ? 'checked-regex' : undefined}>1 caractère minuscule</p>
+          <p className={passwordDigitsValid ? 'checked-regex' : undefined}>2 caractères numériques</p>
         </div>
       )}
       <button type="submit" id="signup" className="form-auth__button">

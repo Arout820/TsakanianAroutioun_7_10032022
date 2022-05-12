@@ -3,17 +3,16 @@ const DeletePostCard = ({ setModification, post }) => {
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
   const token = userConnectionInfos.token;
 
-  // fonction pour la logique du bouton supprimer
-  const HandleDelete = (id) => {
-    // // supprimer un post
-    fetch(`http://localhost:5000/api/post/${id}`, {
+  // fonction pour supprimer un post
+  const HandleDelete = (postId) => {
+    fetch(`http://localhost:5000/api/post/${postId}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }).then(async (res) => {
+    }).then(() => {
       try {
         setModification((e) => !e);
       } catch (err) {
@@ -22,10 +21,7 @@ const DeletePostCard = ({ setModification, post }) => {
     });
   };
   return (
-    <i
-      onClick={() => HandleDelete(post.post_id)}
-      className="card-post__infos__delete fa-2x fa-solid fa-trash-can"
-    ></i>
+    <i onClick={() => HandleDelete(post.post_id)} className="card-post__infos__delete fa-2x fa-solid fa-trash-can"></i>
   );
 };
 

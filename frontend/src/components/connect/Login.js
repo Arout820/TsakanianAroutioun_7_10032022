@@ -31,37 +31,37 @@ const Login = ({ setIsConnected }) => {
 
     if (email === '') {
       emailRef.current.focus();
-      setEmailError('Veuillez inscrire votre email de connexion !');
-    } else {
-      // fetch pour travailler sur les données de la base de données
-      fetch('http://localhost:5000/api/user/login', {
-        method: 'POST',
-        body: JSON.stringify(loginInfos),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).then(async (res) => {
-        const contenu = await res.json();
-        try {
-          if (contenu.error && contenu.error.email) {
-            emailRef.current.focus();
-            setEmailError(contenu.error.email);
-            throw new Error(contenu.error.email);
-          }
-          if (contenu.error && contenu.error.password) {
-            passwordRef.current.focus();
-            setPasswordError(contenu.error.password);
-            throw new Error(contenu.error.password);
-          }
-          localStorage.setItem('token', JSON.stringify(contenu));
-          setIsConnected((e) => !e);
-          navigate('/wall');
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      return setEmailError('Veuillez inscrire votre email de connexion !');
     }
+
+    // fetch pour travailler sur les données de la base de données
+    fetch('http://localhost:5000/api/user/login', {
+      method: 'POST',
+      body: JSON.stringify(loginInfos),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then(async (res) => {
+      const contenu = await res.json();
+      try {
+        if (contenu.error && contenu.error.email) {
+          emailRef.current.focus();
+          setEmailError(contenu.error.email);
+          throw new Error(contenu.error.email);
+        }
+        if (contenu.error && contenu.error.password) {
+          passwordRef.current.focus();
+          setPasswordError(contenu.error.password);
+          throw new Error(contenu.error.password);
+        }
+        localStorage.setItem('token', JSON.stringify(contenu));
+        setIsConnected((e) => !e);
+        navigate('/wall');
+      } catch (err) {
+        console.log(err);
+      }
+    });
   };
   return (
     <form onSubmit={handleLogin} className="form-auth" id="form-auth">

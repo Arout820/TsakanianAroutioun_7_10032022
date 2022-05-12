@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
 import HeaderConnected from '../components/header/HeaderConnected';
-import WallCardPost from '../components/wall/PostCard';
-import WallNewPost from '../components/wall/NewPost';
+import PostCard from '../components/wall/PostCard';
+import NewPost from '../components/wall/NewPost';
 import FooterConnected from '../components/footer/FooterConnected';
 
 const WallPage = () => {
-  // infos Local Storage
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   // variables selon état du fetch
@@ -45,12 +45,12 @@ const WallPage = () => {
       }
     });
     return () => abortCtrl.abort();
-  }, [id, token, modification]);
+  }, [userId, token, modification]);
 
   // récupération des éléments de l'utilisateur connecté de la base de données avec l'api
   useEffect(() => {
     const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/user/${id}`, {
+    fetch(`http://localhost:5000/api/user/${userId}`, {
       signal: abortCtrl.signal,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const WallPage = () => {
       }
     });
     return () => abortCtrl.abort();
-  }, [id, token, modification]);
+  }, [userId, token, modification]);
 
   return (
     <>
@@ -82,9 +82,9 @@ const WallPage = () => {
         <>
           <HeaderConnected />
           <main className={userInfos[0].isAdmin ? 'wall-container admin' : 'wall-container'}>
-            <WallNewPost setModification={setModification} userInfos={userInfos} />
+            <NewPost setModification={setModification} userInfos={userInfos} />
             {!postInfos[0] && <div className="no-card">Soyez le premier à poster!</div>}
-            <WallCardPost postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
+            <PostCard postInfos={postInfos} userInfos={userInfos} setModification={setModification} />
           </main>
           <FooterConnected />
         </>

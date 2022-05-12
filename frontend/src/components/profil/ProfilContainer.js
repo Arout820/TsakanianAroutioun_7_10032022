@@ -9,14 +9,14 @@ import ProfilModifyModal from './ProfilModifyModal';
 import FooterConnected from '../../components/footer/FooterConnected';
 
 const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
-  // toogle entre modals use state
+  // variables toogle modals
   const [profilDataModal, setProfilDataModal] = useState(true);
   const [profilModifyModal, setProfilModifyModal] = useState(false);
 
   // popup changement de photo de profil
   const [buttonPopup, setButtonPopup] = useState(false);
 
-  // Toogle entre modals fonction
+  // fonction toogle modals
   const HandleModals = () => {
     if (profilDataModal === true) {
       setProfilDataModal(false);

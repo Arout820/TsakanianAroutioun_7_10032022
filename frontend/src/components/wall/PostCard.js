@@ -8,9 +8,10 @@ import CommentsOfPost from './CommentsOfPost';
 import Comments from './Comments';
 import NewComment from './NewComment';
 
-const WallCardPost = ({ postInfos, setModification, userInfos }) => {
+const PostCard = ({ postInfos, setModification, userInfos }) => {
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
   const isAdmin = userConnectionInfos.isAdmin;
 
@@ -34,10 +35,9 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
         setError(null);
       } catch (err) {
         if (err.name === 'AbortError') {
-          setError("Le chargement des éléments n'a pas abouti");
-        } else {
-          setError(err.message);
+          return setError("Le chargement des éléments n'a pas abouti");
         }
+        setError(err.message);
       }
     });
     return () => abortCtrl.abort();
@@ -57,9 +57,7 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
           </p>
           <p className="card-post__infos__profil__time">{dateCorrection(post.post_create_time)}</p>
         </div>
-        {(post.user_id === id || isAdmin === 1) && (
-          <DeletePostCard setModification={setModification} post={post} />
-        )}
+        {(post.user_id === userId || isAdmin === 1) && <DeletePostCard setModification={setModification} post={post} />}
       </div>
       {post.content && <p className="card-post__content">{post.content}</p>}
       {post.video && (
@@ -94,4 +92,4 @@ const WallCardPost = ({ postInfos, setModification, userInfos }) => {
   ));
 };
 
-export default WallCardPost;
+export default PostCard;

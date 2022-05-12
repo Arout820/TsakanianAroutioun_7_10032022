@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 const NewPost = ({ setModification, userInfos }) => {
-  // infos Local Storage
+  // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const id = userConnectionInfos.userId;
+  const userId = userConnectionInfos.userId;
   const token = userConnectionInfos.token;
 
   const [content, setContent] = useState('');
@@ -14,11 +14,11 @@ const NewPost = ({ setModification, userInfos }) => {
 
   const [isImage, setIsImage] = useState('');
 
-  const user_id = id;
+  const user_id = userId;
   const imagePreviewRef = useRef();
 
   // fonction pour la logique du bouton inscription
-  const HandleCreatePost = async (event) => {
+  const HandleCreatePost = (event) => {
     event.preventDefault();
 
     setErrorType(false);
@@ -29,31 +29,29 @@ const NewPost = ({ setModification, userInfos }) => {
     formData.append('image', attachment);
     formData.append('video', video);
 
-    // créer un post
     if (!content) {
-      setErrorContent(true);
-    } else {
-      setErrorContent(false);
-
-      fetch('http://localhost:5000/api/post', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(async (res) => {
-        try {
-          setModification((e) => !e);
-          setIsImage('');
-          setAttachment('');
-          setContent('');
-          setVideo('');
-          imagePreviewRef.current.value = '';
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      return setErrorContent(true);
     }
+    setErrorContent(false);
+
+    fetch('http://localhost:5000/api/post', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(() => {
+      try {
+        setModification((e) => !e);
+        setIsImage('');
+        setAttachment('');
+        setContent('');
+        setVideo('');
+        imagePreviewRef.current.value = '';
+      } catch (err) {
+        console.log(err);
+      }
+    });
   };
 
   // images preview handling
@@ -61,6 +59,7 @@ const NewPost = ({ setModification, userInfos }) => {
     setErrorType(false);
     setAttachment(event.target.files[0]);
     const test = event.target.files[0];
+    if (test === undefined) return;
     if (test.type === 'image/png' || test.type === 'image/jpg' || test.type === 'image/jpeg') {
       const reader = new FileReader();
       reader.onload = () => {
@@ -70,14 +69,14 @@ const NewPost = ({ setModification, userInfos }) => {
       };
       reader.readAsDataURL(event.target.files[0]);
       setVideo('');
-    } else {
-      HandleDeleteImage();
-      setErrorType(true);
+      return;
     }
+    HandleDeleteImage();
+    setErrorType(true);
   };
 
   // image preview deleting
-  const HandleDeleteImage = (event) => {
+  const HandleDeleteImage = () => {
     imagePreviewRef.current.value = '';
     setIsImage('');
     setAttachment('');
