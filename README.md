@@ -1,4 +1,4 @@
-# Groupomania
+# Groupomania - Créer un réseau social d'entreprise
 
 Un énorme projet de création de réseau social d'entreprise pour la fin de ma formation diplômante de développeur web bac +2 avec l'utilisation de **React.js** côté client, de **Node.js avec Express** côté serveur, et de **mySql** pour la base de donnée.
 
@@ -67,9 +67,9 @@ Dans le terminal du backend du projet faire **npm start**, et pareil pour le bac
 # Compte administrateur
 
 Pour rendre un compte en mode administrateur il faut créer un compte normal puis dans la base de donnée modifier la table user pour que la valeur de isAdmin qui par defaut est égale à 0 soit égale à 1.
-Vous pouvez le faire soit dans le terminal en vous connectant à votre base de donnée soit dans l'application phpMyAdmin si vous l'utilisez dans l'onglet SQL avec la requête suivante. 
+Vous pouvez le faire soit dans le terminal en vous connectant à votre base de donnée soit dans l'application phpMyAdmin si vous l'utilisez dans l'onglet SQL avec la requête suivante.
 
-Par exemple pour un utilisateur qui a 1 comme user_id : 
+Par exemple pour un utilisateur qui a 1 comme user_id :
 
 ```bash
   UPDATE `user` SET `isAdmin` = '1' WHERE `user_id` = '1';
@@ -122,3 +122,18 @@ http://localhost:5000/api/likes/:userId/:postId/:isLiked
 
 Pour récupérer les likes d'un utilisateurs (routes GET) :
 http://localhost:5000/api/likes/:userId/:postId
+
+## 🛠 Skills
+
+Je suis un développeur **Full Stack spécialisé React**.
+
+J'utilise l'outil de versioning Git et GitHub, je mets en place les bonnes pratiques pour
+le référencement naturel, pour les normes d'accessibilité ainsi que pour le respect des performances.
+
+**Front** : React, Vanilla Javascript, HTML, CSS, Sass, Autoformation Next.js💪
+
+**Back** : Node.js avec Express, MongoDB, mySQL
+
+## Mon profil Linkedin
+
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aroutiountsakanian/)
