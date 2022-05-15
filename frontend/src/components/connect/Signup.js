@@ -29,14 +29,14 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   const [passwordLowercaseValid, setPasswordLowercaseValid] = useState(false);
   const [passwordDigitsValid, setPasswordDigitsValid] = useState(false);
 
-  const regexFirstname = /^[a-zA-Zà-œÀ-Ÿ]{0,200}[a-zA-Zà-œÀ-Ÿ]$/g;
-  const regexLastname = /^[a-zA-Zà-œÀ-Ÿ]{0,200}[a-zA-Zà-œÀ-Ÿ]$/g;
-  const regexEmail = /^[a-zA-z][a-zA-z0-9.-]{2,85}@[a-zA-z0-9]{2,84}\.[a-zA-z]{2,84}$/g;
+  const regexFirstname = /^[a-zA-ZÀ-Ÿ]{0,200}[a-zA-ZÀ-Ÿ]$/g;
+  const regexLastname = /^[a-zA-ZÀ-Ÿ]{0,200}[a-zA-ZÀ-Ÿ]$/g;
+  const regexEmail = /^[a-zA-Z][a-zA-Z0-9.-]{2,85}@[a-zA-Z0-9]{2,84}\.[a-zA-Z]{2,84}$/g;
 
   const regexPasswordMinMax = /[a-zA-Z0-9]{5,50}/g;
   const regexPasswordUppercase = /[A-Z]/g;
   const regexPasswordLowercase = /[a-z]/g;
-  const regexPasswordDigits = /[0-9]{2,}/g;
+  const regexPasswordDigits = /[\d]{2,}/g;
 
   // validation fonction pour prénom, nom, mail
   const validation = (regex, string, validity) => {
