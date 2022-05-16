@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { getDataForUser } from '../api/getDataForUserAction';
+
 import HeaderConnected from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
 
@@ -18,31 +20,7 @@ const ProfilPage = () => {
 
   // récupération des éléments de la base de données avec l'api
   useEffect(() => {
-    const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/user/${userId}`, {
-      signal: abortCtrl.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      try {
-        if (!res.ok) {
-          throw Error('Erreur survenue');
-        } else {
-          const contenu = await res.json();
-          setUserInfos(contenu);
-          setError(null);
-        }
-      } catch (err) {
-        if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
-        } else {
-          setError(err.message);
-        }
-      }
-    });
-
-    return () => abortCtrl.abort();
+    getDataForUser();
   }, [userId, token, modification]);
   return (
     <>
@@ -53,3 +31,4 @@ const ProfilPage = () => {
 };
 
 export default ProfilPage;
+
