@@ -1,53 +1,36 @@
 import { useEffect, useState } from 'react';
 
+import getUser from '../api/apiCalls/user/getUser';
+
 import HeaderConnected from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
 
 const ProfilPage = () => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   // variables selon état du fetch
   const [userInfos, setUserInfos] = useState(null);
-  const [error, setError] = useState(null);
+  const [errorUser, setErrorUser] = useState(null);
 
   // toogle pour relancer récupération de données
   const [modification, setModification] = useState(false);
 
-  // récupération des éléments de la base de données avec l'api
+  // récupération des éléments de l'utilisateur connecté de la base de données avec l'api
   useEffect(() => {
-    const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/user/${userId}`, {
-      signal: abortCtrl.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      try {
-        if (!res.ok) {
-          throw Error('Erreur survenue');
-        } else {
-          const contenu = await res.json();
-          setUserInfos(contenu);
-          setError(null);
-        }
-      } catch (err) {
-        if (err.name === 'AbortError') {
-          setError('Fetch a été stoppé');
-        } else {
-          setError(err.message);
-        }
-      }
-    });
-
-    return () => abortCtrl.abort();
+    const getUserData = async () => {
+      setErrorUser(null);
+      const user = await getUser(userId, token, setErrorUser);
+      setUserInfos(user);
+    };
+    getUserData();
   }, [userId, token, modification]);
   return (
     <>
       <HeaderConnected />
-      <ProfilContainer userInfos={userInfos} error={error} setModification={setModification} />
+      <ProfilContainer userInfos={userInfos} error={errorUser} setModification={setModification} />
     </>
   );
 };

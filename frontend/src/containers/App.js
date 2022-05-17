@@ -8,15 +8,15 @@ import ErrorPage from '../pages/ErrorPage';
 
 function App() {
   const [isConnected, setIsConnected] = useState(false);
-  const authInfos = JSON.parse(localStorage.getItem('token'));
+  const auth = JSON.parse(localStorage.getItem('auth'));
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<ConnectionPage setIsConnected={setIsConnected} />} />
-        <Route path="/profil" element={authInfos ? <ProfilPage /> : <Navigate replace to="/" />} />
-        <Route path="/wall" element={authInfos ? <WallPage /> : <Navigate replace to="/" />} />
-        <Route path="*" element={authInfos ? <ErrorPage /> : <Navigate replace to="/" />} />
+        <Route path="/profil" element={auth ? <ProfilPage /> : <Navigate replace to="/" />} />
+        <Route path="/wall" element={auth ? <WallPage /> : <Navigate replace to="/" />} />
+        <Route path="*" element={auth ? <ErrorPage /> : <Navigate replace to="/" />} />
       </Routes>
     </Router>
   );
