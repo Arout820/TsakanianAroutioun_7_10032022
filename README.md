@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arout820_TsakanianAroutioun_7_10032022&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arout820_TsakanianAroutioun_7_10032022)
+
 # Groupomania - Créer un réseau social d'entreprise
 
 Un énorme projet de création de réseau social d'entreprise pour la fin de ma formation diplômante de développeur web bac +2 avec l'utilisation de **React.js** côté client, de **Node.js avec Express** côté serveur, et de **mySql** pour la base de donnée.
