@@ -1,13 +1,15 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+
 import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
 const HeaderConnected = () => {
+  const navigate = useNavigate();
+
   // Bouton se déconnecter
   const HandleButton = () => {
-    localStorage.removeItem('token');
-    window.location = '/';
+    localStorage.removeItem('auth');
+    navigate('/');
   };
-  
   return (
     <header className="header-connected">
       <NavLink to="/wall" className="presentation__logo__link">

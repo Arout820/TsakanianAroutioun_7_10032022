@@ -1,37 +1,31 @@
 import { useState } from 'react';
+
+import addComment from '../../api/apiCalls/comment/addComment';
+
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
 const NewComment = ({ setUpdateComment, post, userInfos }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
+  // contenu input commentaire
   const [content, setContent] = useState('');
+
+  // Infos à envoyer lors de la création d'un commentaire
   const user_id = userId;
   const post_id = post.post_id;
 
+  // fonction poour ajouter un commentaire avec l'api
   const HandleSubmit = (event) => {
     event.preventDefault();
-    const createCommentInfos = { content, user_id, post_id };
+    const sendCommentInfos = { content, user_id, post_id };
 
     if (content) {
-      fetch(`http://localhost:5000/api/comment`, {
-        method: 'POST',
-        body: JSON.stringify(createCommentInfos),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(() => {
-        try {
-          setUpdateComment((e) => !e);
-          setContent('');
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      addComment(sendCommentInfos, token);
+      setUpdateComment((e) => !e);
+      setContent('');
     }
   };
   return (

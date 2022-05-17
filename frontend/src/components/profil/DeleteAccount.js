@@ -3,32 +3,25 @@ import { useState } from 'react';
 
 import Popup from '../../utils/Popup';
 
+import deleteUser from '../../api/apiCalls/user/deleteUser';
+
 const DeleteAccount = () => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   const navigate = useNavigate();
 
-  // popup changement de photo de profil
+  // popup pour confirmation de suppression
   const [buttonPopup, setButtonPopup] = useState(false);
 
+  // suppression du compte
   const HandleDelete = (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:5000/api/user/${userId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() => {
-      try {
-        navigate('/');
-      } catch (err) {
-        console.log(err);
-      }
-    });
+    deleteUser(userId, token);
+    navigate('/');
   };
   return (
     <div className="delete-account">

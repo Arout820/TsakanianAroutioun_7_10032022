@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
+
+import modifyUserInfos from '../../api/apiCalls/user/modifyUserInfos';
+
 import DeleteAccount from './DeleteAccount';
 
 const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   const [firstname, setFirstName] = useState(userInfos[0].firstname);
   const [lastname, setLastname] = useState(userInfos[0].lastname);
@@ -36,23 +39,10 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
     event.preventDefault();
 
     if (firstname && lastname) {
-      fetch(`http://localhost:5000/api/user/${userId}`, {
-        method: 'PUT',
-        body: JSON.stringify(newInfos),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(() => {
-        try {
-          off(false);
-          on(true);
-          setModification((e) => !e);
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      modifyUserInfos(newInfos, userId, token);
+      off(false);
+      on(true);
+      setModification((e) => !e);
     }
   };
 

@@ -1,11 +1,14 @@
 import { useState, useRef } from 'react';
+
 import emptyPhoto from '../../assets/profil_vide.jpg';
+
+import modifyUserPhoto from '../../api/apiCalls/user/modifyUserPhoto';
 
 const PopupImage = ({ setTrigger, setModification, userInfos }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   const [user_photo, setUserPhoto] = useState('');
   const [isImage, setIsImage] = useState('');
@@ -21,55 +24,17 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
     formData.append('oldImage', userInfos[0].user_photo);
     formData.append('image', user_photo);
 
-    fetch(`http://localhost:5000/api/user/${userId}`, {
-      method: 'PUT',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() => {
-      try {
-        setTrigger(false);
-        setModification((e) => !e);
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  };
-
-  // suppression photo de profil
-  const HandleDeleteImage = (event) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    formData.append('oldImage', userInfos[0].user_photo);
-    formData.append('image', user_photo);
-
-    if (!user_photo) {
-      fetch(`http://localhost:5000/api/user/${userId}`, {
-        method: 'PUT',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(() => {
-        try {
-          setTrigger(false);
-          setModification((e) => !e);
-        } catch (err) {
-          console.log(err);
-        }
-      });
-    }
+    modifyUserPhoto(formData, userId, token);
+    setTrigger(false);
+    setModification((e) => !e);
   };
 
   const HandleImage = (event) => {
     setErrorType(false);
     setUserPhoto(event.target.files[0]);
     const test = event.target.files[0];
-    console.log(test);
+
     if (test.type === 'image/png' || test.type === 'image/jpg' || test.type === 'image/jpeg') {
-      console.log('comment ça quoi');
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.readyState === 2) {
@@ -77,10 +42,10 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
         }
       };
       reader.readAsDataURL(event.target.files[0]);
-    } else {
-      HandleDeletePreview();
-      setErrorType(true);
+      return;
     }
+    HandleDeletePreview();
+    setErrorType(true);
   };
 
   const HandleDeletePreview = () => {
@@ -94,7 +59,6 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
     <>
       <form onSubmit={HandleChangeImage} className="form-image" encType="multipart/form-data">
         <div className="form-image__change">
-          <input type="hidden" name="oldImage" value={userInfos[0].user_photo} />
           {!user_photo ? (
             <>
               <div htmlFor="imageProfil" className="form-image__photo">
@@ -151,7 +115,7 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
           />
         </div>
       </form>
-      <form onSubmit={HandleDeleteImage} className="form-image">
+      <form onSubmit={HandleChangeImage} className="form-image">
         {!user_photo && userInfos[0].user_photo && (
           <button type="submit" className="form-image__send">
             Supprimer la photo de profil active

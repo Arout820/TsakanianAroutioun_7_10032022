@@ -11,7 +11,7 @@ const ConnectionPage = ({ setIsConnected }) => {
   const [loginModal, setLoginModal] = useState(true);
 
   useEffect(() => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth');
   }, []);
 
   const handleModals = (event) => {

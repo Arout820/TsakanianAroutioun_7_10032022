@@ -8,7 +8,7 @@ import ProfilDataModal from './ProfilDataModal';
 import ProfilModifyModal from './ProfilModifyModal';
 import FooterConnected from '../../components/footer/FooterConnected';
 
-const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
+const ProfilContainer = ({ userInfos, isLoading, errorUser, setModification }) => {
   // variables toogle modals
   const [profilDataModal, setProfilDataModal] = useState(true);
   const [profilModifyModal, setProfilModifyModal] = useState(false);
@@ -30,7 +30,14 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
   return (
     <>
       {isLoading && <div>En cours de traitement...</div>}
-      {error && <div>Une erreur vient de se produire - {error}</div>}
+
+      {errorUser && (
+        <div className="error-popup">
+          <div className="error-popup__container">
+            Une erreur s'est produite dans la page de votre profil - {errorUser}
+          </div>
+        </div>
+      )}
       {userInfos && (
         <>
           <main className="main-profil">
@@ -44,11 +51,7 @@ const ProfilContainer = ({ userInfos, isLoading, error, setModification }) => {
                 />
               </div>
               <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-                <PopupImage
-                  setTrigger={setButtonPopup}
-                  setModification={setModification}
-                  userInfos={userInfos}
-                />
+                <PopupImage setTrigger={setButtonPopup} setModification={setModification} userInfos={userInfos} />
               </Popup>
               <div className="container-infos">
                 <button onClick={HandleModals} className="container-infos__modify-account">

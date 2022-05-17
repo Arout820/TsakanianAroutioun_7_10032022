@@ -95,33 +95,38 @@ exports.deletePost = (req, res) => {
       if (error) {
         return res.status(400).json({ error });
       }
-      let attachmentFilename;
-      if (results[0]) {
-        attachmentFilename = results[0].attachment ? results[0].attachment.split('/images/')[1] : null;
-      } else if (!results[0]) {
+      if (!results[0]) {
         return res.status(401).json({ error: 'Accès interdit !' });
       }
+      let attachmentFilename = results[0].attachment ? results[0].attachment.split('/images/')[1] : null;
       fs.unlink(`images/${attachmentFilename}`, () => {
-        if (req.token.isAdmin === 1) {
-          Post.deleteAdmin(req.params.postId, (error, results) => {
-            if (results.affectedRows === 0) {
-              return res.status(404).json({ error: 'Aucun post correspondant a ce numéro de post !' });
-            }
-            if (error) {
-              return res.status(400).json({ error });
-            }
-            res.status(200).json({ message: 'Post supprimé !' });
-          });
-        } else if (req.token.isAdmin === 0) {
-          Post.delete(req.params.postId, req.token.userId, (error, results) => {
-            if (results.affectedRows === 0) {
-              return res.status(401).json({ error: "Impossible de supprimer le post de quelqu'un d'autre !" });
-            }
-            if (error) {
-              return res.status(400).json({ error });
-            }
-            res.status(200).json({ message: 'Post supprimé !' });
-          });
+        switch (req.token.isAdmin) {
+          case 0:
+            Post.delete(req.params.postId, req.token.userId, (error, results) => {
+              if (error) {
+                return res.status(400).json({ error });
+              }
+              if (results.affectedRows === 0) {
+                return res.status(401).json({ error: "Impossible de supprimer le post de quelqu'un d'autre !" });
+              }
+              res.status(200).json({ message: 'Post supprimé !' });
+            });
+            break;
+
+          case 1:
+            Post.deleteAdmin(req.params.postId, (error, results) => {
+              if (error) {
+                return res.status(400).json({ error });
+              }
+              if (results.affectedRows === 0) {
+                return res.status(404).json({ error: 'Aucun post correspondant a ce numéro de post !' });
+              }
+              res.status(200).json({ message: 'Post supprimé !' });
+            });
+            break;
+
+          default:
+            break;
         }
       });
     });

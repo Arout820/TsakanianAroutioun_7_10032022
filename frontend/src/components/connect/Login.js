@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { getDataForUser } from '../../api/getDataForUserAction';
-import login from '../../api/login';
+import login from '../../api/apiCalls/auth/login';
 
 import errorImage from '../../assets/non_valide.png';
 
@@ -35,22 +34,20 @@ const Login = ({ setIsConnected }) => {
         throw new Error('Le champ email ne doit pas être vide !');
       }
       const loginInfos = { email, password };
-      login(loginInfos, navigate);
-      getDataForUser();
+      const auth = await login(loginInfos);
+      if (auth.error && auth.error.email) {
+        emailRef.current.focus();
+        setEmailError(auth.error.email);
+        throw new Error(auth.error.email);
+      }
+      if (auth.error && auth.error.password) {
+        passwordRef.current.focus();
+        setPasswordError(auth.error.password);
+        throw new Error(auth.error.password);
+      }
+      localStorage.setItem('auth', JSON.stringify(auth));
+      setIsConnected((e) => !e);
       navigate('/wall');
-      // console.log({ contenu });
-      // if (contenu.error && contenu.error.email) {
-      //   emailRef.current.focus();
-      //   setEmailError(contenu.error.email);
-      //   throw new Error(contenu.error.email);
-      // }
-      // if (contenu.error && contenu.error.password) {
-      //   passwordRef.current.focus();
-      //   setPasswordError(contenu.error.password);
-      //   throw new Error(contenu.error.password);
-      // }
-      // setIsConnected((e) => !e);
-      // getDataForUser();
     } catch (error) {
       console.log(error);
     }

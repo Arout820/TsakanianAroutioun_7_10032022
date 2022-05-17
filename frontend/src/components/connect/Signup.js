@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import signup from '../../api/signup';
+
+import signup from '../../api/apiCalls/auth/signup';
+
 import nonValideImage from '../../assets/non_valide.png';
 
 const Signup = ({ setLoginModal, setSignupModal }) => {
@@ -125,21 +127,15 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       passwordUppercaseValid &&
       password === passwordRepeat
     ) {
-      try {
-        const signupInfos = { firstname, lastname, email, password };
-        const contenu = await signup(signupInfos);
-        console.log(contenu);
-        if (contenu.error) {
-          setDuplicateEmail(
-            'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci !'
-          );
-        } else {
-          setSignupModal(false);
-          setLoginModal(true);
-        }
-      } catch (error) {
-        console.log(error);
+      const signupInfos = { firstname, lastname, email, password };
+      const account = await signup(signupInfos);
+      if (account.error) {
+        return setDuplicateEmail(
+          'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci !'
+        );
       }
+      setSignupModal(false);
+      setLoginModal(true);
     }
   };
 

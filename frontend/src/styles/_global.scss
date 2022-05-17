@@ -5,8 +5,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 li {
@@ -19,7 +18,7 @@ a {
 }
 
 body {
-  background-color: #F0F2F5;
+  background-color: #f0f2f5;
 }
 
 :root {
@@ -30,19 +29,20 @@ body {
   box-sizing: inherit;
 }
 
-h1, h2, h3{
+h1,
+h2,
+h3 {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 600;
 }
 
-.admin{
+.admin {
   background-color: #202934;
 }
 
 // --------------------------- MEDIA QUERIES IPAD--------------------------------------//
-@media all AND (max-width: 920px){
-  h1{
+@media all AND (max-width: 920px) {
+  h1 {
     font-size: 25px;
   }
 }
-
