@@ -1,14 +1,15 @@
 const http = require('http');
 const app = require('./app');
+const cors = require('cors');
 
 const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+  const portNormalize = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(portNormalize)) {
     return val;
   }
-  if (port >= 0) {
-    return port;
+  if (portNormalize >= 0) {
+    return portNormalize;
   }
   return false;
 };
@@ -43,5 +44,13 @@ server.on('listening', () => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind);
 });
+
+const corsOptions = {
+  origin: '*',
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions)); // Use this after the variable declaration
 
 server.listen(port);
