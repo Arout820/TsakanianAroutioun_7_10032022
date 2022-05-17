@@ -36,6 +36,8 @@ const Login = ({ setIsConnected }) => {
       }
       const loginInfos = { email, password };
       login(loginInfos, navigate);
+      getDataForUser();
+      navigate('/wall');
       // console.log({ contenu });
       // if (contenu.error && contenu.error.email) {
       //   emailRef.current.focus();

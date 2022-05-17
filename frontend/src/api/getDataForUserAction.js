@@ -4,7 +4,17 @@ import { store } from '../providers/Store';
 async function getDataForUser() {
   // récupération infos de connexion du local storage
   const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
+
+  const test = store.get.login;
+
+  let userId;
+  // if (userConnectionInfos) {
+  //   userId = userConnectionInfos.userId;
+  // }
+
+  if (test) {
+    userId = await test.userId;
+  }
 
   let res;
   try {

@@ -23,8 +23,6 @@ async function fetcher(url, body, method = 'GET') {
   try {
     const headers = headersCreate();
     const res = await fetch(server + url, { body, method, headers });
-    console.log('RES FETCHER');
-    console.log(res);
     return await res.json();
   } catch (err) {
     console.error('error:', err);

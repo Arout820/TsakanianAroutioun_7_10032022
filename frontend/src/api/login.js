@@ -25,8 +25,6 @@ async function login(loginInfos, navigate) {
       console.log(res.error);
     }
     if (res) {
-      console.log('LOGIN');
-      console.log(res);
       store.set({
         login: {
           ...res,
@@ -34,8 +32,13 @@ async function login(loginInfos, navigate) {
       });
     }
     localStorage.setItem('token', JSON.stringify(res));
+    const test = JSON.parse(localStorage.getItem('token'));
+    console.log('---test---');
+    console.log(test);
 
-    navigate('/wall');
+    if (test) {
+      navigate('/wall');
+    }
   } catch (err) {
     console.log(err);
   }

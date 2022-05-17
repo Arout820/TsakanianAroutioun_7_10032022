@@ -10,20 +10,21 @@ import { StoreContext } from '../providers/Store';
 
 function App() {
   const [isConnected, setIsConnected] = useState(false);
-  const authInfos = JSON.parse(localStorage.getItem('token'));
+  // const authInfos = JSON.parse(localStorage.getItem('token'));
 
   const value = useContext(StoreContext);
   useEffect(() => {
-    console.log({ value });
+    console.log('value');
+    console.log(value[0]);
   }, [value]);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<ConnectionPage setIsConnected={setIsConnected} />} />
-        <Route path="/profil" element={authInfos ? <ProfilPage /> : <Navigate replace to="/" />} />
-        <Route path="/wall" element={<WallPage />} />
-        <Route path="*" element={authInfos ? <ErrorPage /> : <Navigate replace to="/" />} />
+        <Route path="/profil" element={value.login ? <ProfilPage /> : <Navigate replace to="/" />} />
+        <Route path="/wall" element={value.login ? <WallPage /> : <Navigate replace to="/" />} />
+        <Route path="*" element={value.login ? <ErrorPage /> : <Navigate replace to="/" />} />
       </Routes>
     </Router>
   );
