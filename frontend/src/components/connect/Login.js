@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import login from '../../api/apiCalls/auth/login';
+
 import errorImage from '../../assets/non_valide.png';
 
 const Login = ({ setIsConnected }) => {
@@ -19,50 +21,38 @@ const Login = ({ setIsConnected }) => {
     emailRef.current.focus();
   }, []);
 
-  // fonction pour la logique du bouton connexion
-  const handleLogin = (event) => {
-    event.preventDefault();
+  // ---------------- fonction pour la logique du bouton connexion ------------------
+  const handleLogin = async (event) => {
+    try {
+      event.preventDefault();
+      setEmailError('');
+      setPasswordError('');
 
-    const loginInfos = { email, password };
-
-    // mise à jour des erreurs
-    setEmailError('');
-    setPasswordError('');
-
-    if (email === '') {
-      emailRef.current.focus();
-      return setEmailError('Veuillez inscrire votre email de connexion !');
-    }
-
-    // fetch pour travailler sur les données de la base de données
-    fetch('http://localhost:5000/api/user/login', {
-      method: 'POST',
-      body: JSON.stringify(loginInfos),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then(async (res) => {
-      const contenu = await res.json();
-      try {
-        if (contenu.error && contenu.error.email) {
-          emailRef.current.focus();
-          setEmailError(contenu.error.email);
-          throw new Error(contenu.error.email);
-        }
-        if (contenu.error && contenu.error.password) {
-          passwordRef.current.focus();
-          setPasswordError(contenu.error.password);
-          throw new Error(contenu.error.password);
-        }
-        localStorage.setItem('token', JSON.stringify(contenu));
-        setIsConnected((e) => !e);
-        navigate('/wall');
-      } catch (err) {
-        console.log(err);
+      if (email === '') {
+        emailRef.current.focus();
+        setEmailError('Veuillez inscrire votre email de connexion !');
+        throw new Error('Le champ email ne doit pas être vide !');
       }
-    });
+      const loginInfos = { email, password };
+      const auth = await login(loginInfos);
+      if (auth.error && auth.error.email) {
+        emailRef.current.focus();
+        setEmailError(auth.error.email);
+        throw new Error(auth.error.email);
+      }
+      if (auth.error && auth.error.password) {
+        passwordRef.current.focus();
+        setPasswordError(auth.error.password);
+        throw new Error(auth.error.password);
+      }
+      localStorage.setItem('auth', JSON.stringify(auth));
+      setIsConnected((e) => !e);
+      navigate('/wall');
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <form onSubmit={handleLogin} className="form-auth" id="form-auth">
       <h1 className="form-auth__name">Connexion</h1>

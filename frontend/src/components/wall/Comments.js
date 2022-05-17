@@ -1,35 +1,32 @@
 import { dateCorrection } from '../../utils/Utils';
+
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
-const Comments = ({ post, commentInfos, error, setUpdateComment, userInfos }) => {
-  // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+import deleteComment from '../../api/apiCalls/comment/deleteComment';
 
-  // fonction poour supprimer un commentaire
+const Comments = ({ post, commentInfos, errorComments, setUpdateComment, userInfos }) => {
+  // récupération infos de connexion du local storage
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
+
+  // fonction pour supprimer un commentaire avec l'api
   const HandleDelete = (commentId) => {
-    fetch(`http://localhost:5000/api/comment/${commentId}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() => {
-      try {
-        setUpdateComment((e) => !e);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+    deleteComment(commentId, token);
+    setUpdateComment((e) => !e);
   };
 
   return (
     <div className="comments">
       <h2 className="comments__title">Commentaires</h2>
 
-      {error && <div>Une erreur vient de se produire - {error}</div>}
+      {errorComments && (
+        <div className="error-popup">
+          <div className="error-popup__container">
+            Une erreur s'est produite dans le chargement des commentaires - {errorComments}
+          </div>
+        </div>
+      )}
       {commentInfos &&
         commentInfos.map(
           (comment) =>

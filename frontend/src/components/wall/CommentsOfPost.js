@@ -1,38 +1,29 @@
 import { useEffect, useState } from 'react';
 
+import getCommentNumberForPost from '../../api/apiCalls/comment/getCommentNumberForPost';
+
 const CommentsOfPost = ({ post, updateComment }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const token = auth.token;
 
+  // variables selon état du fetch
   const [numberComments, setNumberComments] = useState('');
 
+  // récupération du nombre de commentaires par posts de la base de données avec l'api
   useEffect(() => {
-    const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/post/comments/${post.post_id}`, {
-      signal: abortCtrl.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      try {
-        const contenu = await res.json();
-        setNumberComments(contenu);
-      } catch (err) {
-        console.log(err);
-      }
-    });
-    return () => abortCtrl.abort();
+    const getNumberComment = async () => {
+      const numberComment = await getCommentNumberForPost(post.post_id, token);
+      setNumberComments(numberComment);
+    };
+    getNumberComment();
   }, [token, updateComment, post.post_id]);
 
   return (
     <div className="card-post__reputation__element">
       <i className="fa-2x fa-solid fa-comment"></i>
       <p className="card-post__reputation__element__number">
-        {numberComments &&
-          numberComments[0].post_id === post.post_id &&
-          numberComments[0].post_comments}{' '}
-        commentaires
+        {numberComments && numberComments[0].post_id === post.post_id && numberComments[0].post_comments} commentaires
       </p>
     </div>
   );

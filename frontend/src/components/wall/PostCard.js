@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { dateCorrection } from '../../utils/Utils';
-import emptyPhoto from '../../assets/profil_vide.jpg';
+
+import getComments from '../../api/apiCalls/comment/getComments';
 
 import DeletePostCard from './DeletePostCard';
 import LikePostCard from './LikePostCard';
@@ -8,39 +9,29 @@ import CommentsOfPost from './CommentsOfPost';
 import Comments from './Comments';
 import NewComment from './NewComment';
 
+import emptyPhoto from '../../assets/profil_vide.jpg';
+
 const PostCard = ({ postInfos, setModification, userInfos }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
-  const isAdmin = userConnectionInfos.isAdmin;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
+  const isAdmin = auth.isAdmin;
 
   // variables selon état du fetch
   const [commentInfos, setCommentInfos] = useState(null);
-  const [error, setError] = useState(null);
+  const [errorComments, setErrorComments] = useState(null);
 
   const [updateComment, setUpdateComment] = useState(false);
 
+  // récupération des commentaires de la base de données avec l'api
   useEffect(() => {
-    const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/comment`, {
-      signal: abortCtrl.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      try {
-        const contenu = await res.json();
-        setCommentInfos(contenu);
-        setError(null);
-      } catch (err) {
-        if (err.name === 'AbortError') {
-          return setError("Le chargement des éléments n'a pas abouti");
-        }
-        setError(err.message);
-      }
-    });
-    return () => abortCtrl.abort();
+    const getCommentData = async () => {
+      setErrorComments(null);
+      const commentData = await getComments(token, setErrorComments);
+      setCommentInfos(commentData);
+    };
+    getCommentData();
   }, [token, updateComment]);
 
   return postInfos.map((post) => (
@@ -84,7 +75,7 @@ const PostCard = ({ postInfos, setModification, userInfos }) => {
         post={post}
         userInfos={userInfos}
         commentInfos={commentInfos}
-        error={error}
+        error={errorComments}
         setUpdateComment={setUpdateComment}
       />
       <NewComment setUpdateComment={setUpdateComment} post={post} userInfos={userInfos} />

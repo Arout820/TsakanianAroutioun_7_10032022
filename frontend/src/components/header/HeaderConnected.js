@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+
 import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
 const HeaderConnected = () => {
@@ -6,7 +7,7 @@ const HeaderConnected = () => {
 
   // Bouton se déconnecter
   const HandleButton = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth');
     navigate('/');
   };
   return (

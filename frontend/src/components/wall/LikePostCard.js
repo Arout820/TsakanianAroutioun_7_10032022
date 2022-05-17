@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 
+import addLike from '../../api/apiCalls/likes/addLike';
+import deleteLike from '../../api/apiCalls/likes/deleteLike';
+import getLikesNumberForPost from '../../api/apiCalls/likes/getLikesNumberForPost';
+
 const LikePostCard = ({ post, setModification }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   // variables selon état du fetch
   const [userLikesInfos, setUserLikesInfos] = useState('');
@@ -17,69 +21,31 @@ const LikePostCard = ({ post, setModification }) => {
   const user_id = userId;
   const post_id = post.post_id;
   const isLiked = 1;
-  const sendlikesInfos = { user_id, post_id, isLiked };
 
-  // -------------- récupération des éléments de posts de la base de données avec l'api -----------------------------
+  // ------------ récupération du nombre de likes d'un post de la base de données avec l'api ------------ //
   useEffect(() => {
-    const abortCtrl = new AbortController();
-    fetch(`http://localhost:5000/api/likes/${userId}/${post.post_id}`, {
-      signal: abortCtrl.signal,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(async (res) => {
-      try {
-        if (!res.ok) {
-          throw Error(`${res.status} ${res.statusText}`);
-        }
-        const contenu = await res.json();
-        setUserLikesInfos(contenu);
-        setError(null);
-      } catch (err) {
-        if (err.name === 'AbortError') {
-          return setError("Le chargement des éléments n'a pas abouti");
-        }
-        setError(err.message);
-      }
-    });
-    return () => abortCtrl.abort();
+    const getLikesNumber = async () => {
+      setError(null);
+      const likesNumber = await getLikesNumberForPost(userId, post.post_id, token, setError);
+      setUserLikesInfos(likesNumber);
+    };
+    getLikesNumber();
   }, [userId, token, error, updateLike, post.post_id]);
 
-  // --------------- fonction Handlelike pour ajouter ou enlever un like ------------------------ //
+  // ------------ fonction Handlelike pour ajouter ou enlever un like ------------ //
   const HandleLike = (event) => {
     event.preventDefault();
-
+    const sendLikesInfos = { user_id, post_id, isLiked };
     if (userLikesInfos[0] === undefined) {
-      return fetch(`http://localhost:5000/api/likes/`, {
-        method: 'POST',
-        body: JSON.stringify(sendlikesInfos),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }).then(() => {
-        try {
-          setModification((e) => !e);
-          setUpdateLike((e) => !e);
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      addLike(sendLikesInfos, token);
+      setModification((e) => !e);
+      setUpdateLike((e) => !e);
+      return;
     }
-    fetch(`http://localhost:5000/api/likes/${userId}/${post.post_id}/0`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() => {
-      try {
-        setModification((e) => !e);
-        setUpdateLike((e) => !e);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+
+    deleteLike(userId, post.post_id, token);
+    setModification((e) => !e);
+    setUpdateLike((e) => !e);
   };
 
   return (

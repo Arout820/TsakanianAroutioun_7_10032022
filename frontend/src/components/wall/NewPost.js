@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
+import addPost from '../../api/apiCalls/post/addPost';
+
 const NewPost = ({ setModification, userInfos }) => {
   // récupération infos de connexion du local storage
-  const userConnectionInfos = JSON.parse(localStorage.getItem('token'));
-  const userId = userConnectionInfos.userId;
-  const token = userConnectionInfos.token;
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  const userId = auth.userId;
+  const token = auth.token;
 
   const [content, setContent] = useState('');
   const [attachment, setAttachment] = useState('');
@@ -17,7 +19,7 @@ const NewPost = ({ setModification, userInfos }) => {
   const user_id = userId;
   const imagePreviewRef = useRef();
 
-  // fonction pour la logique du bouton inscription
+  // fonction pour crée un post
   const HandleCreatePost = (event) => {
     event.preventDefault();
 
@@ -34,24 +36,14 @@ const NewPost = ({ setModification, userInfos }) => {
     }
     setErrorContent(false);
 
-    fetch('http://localhost:5000/api/post', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() => {
-      try {
-        setModification((e) => !e);
-        setIsImage('');
-        setAttachment('');
-        setContent('');
-        setVideo('');
-        imagePreviewRef.current.value = '';
-      } catch (err) {
-        console.log(err);
-      }
-    });
+    addPost(formData, token);
+
+    setModification((e) => !e);
+    setIsImage('');
+    setAttachment('');
+    setContent('');
+    setVideo('');
+    imagePreviewRef.current.value = '';
   };
 
   // images preview handling

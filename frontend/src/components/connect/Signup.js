@@ -1,4 +1,7 @@
 import { useState } from 'react';
+
+import signup from '../../api/apiCalls/auth/signup';
+
 import nonValideImage from '../../assets/non_valide.png';
 
 const Signup = ({ setLoginModal, setSignupModal }) => {
@@ -90,7 +93,7 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
   };
 
   // ------------------------- INSCRIPTION --------------------------- //
-  const HandleSignup = (event) => {
+  const HandleSignup = async (event) => {
     event.preventDefault();
 
     // test regex et si tout ok on envoie l'inscription
@@ -125,29 +128,14 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       password === passwordRepeat
     ) {
       const signupInfos = { firstname, lastname, email, password };
-
-      fetch('http://localhost:5000/api/user/signup', {
-        method: 'POST',
-        body: JSON.stringify(signupInfos),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }).then(async (res) => {
-        try {
-          const contenu = await res.json();
-          if (contenu.error) {
-            setDuplicateEmail(
-              'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci !'
-            );
-          } else {
-            setSignupModal(false);
-            setLoginModal(true);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      });
+      const account = await signup(signupInfos);
+      if (account.error) {
+        return setDuplicateEmail(
+          'Une personne avec ce mail est déjà inscrit sur le site, veuillez utiliser un autre mail merci !'
+        );
+      }
+      setSignupModal(false);
+      setLoginModal(true);
     }
   };
 
