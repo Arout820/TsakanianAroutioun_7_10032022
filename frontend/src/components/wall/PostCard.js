@@ -11,7 +11,17 @@ import NewComment from './NewComment';
 
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
-const PostCard = ({ postInfos, setModification, userInfos }) => {
+/**
+ * Carte contenant toutes les informations d'un post
+ *
+ * @param {Object}     props
+ * @param {Array}      props.postInfos         - informations des posts disponibles
+ * @param {Function}   props.setModification   - useState pour déclancher le réaffichage
+ * @param {Array}      props.userInfos         - informations de la personne connectée
+ *
+ * @component
+ */
+function PostCard({ postInfos, setModification, userInfos }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -40,8 +50,7 @@ const PostCard = ({ postInfos, setModification, userInfos }) => {
         <img
           className="card-post__infos__photo"
           src={post.user_photo ? post.user_photo : emptyPhoto}
-          alt={`Logo de ${post.firstname} ${post.lastname}`}
-        />
+          alt={`Logo de ${post.firstname} ${post.lastname}`} />
         <div className="card-post__infos__profil">
           <p className="card-post__infos__profil__username">
             {post.firstname} {post.lastname}
@@ -76,11 +85,10 @@ const PostCard = ({ postInfos, setModification, userInfos }) => {
         userInfos={userInfos}
         commentInfos={commentInfos}
         error={errorComments}
-        setUpdateComment={setUpdateComment}
-      />
+        setUpdateComment={setUpdateComment} />
       <NewComment setUpdateComment={setUpdateComment} post={post} userInfos={userInfos} />
     </div>
   ));
-};
+}
 
 export default PostCard;

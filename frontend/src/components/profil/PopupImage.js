@@ -4,7 +4,17 @@ import emptyPhoto from '../../assets/profil_vide.jpg';
 
 import modifyUserPhoto from '../../api/apiCalls/user/modifyUserPhoto';
 
-const PopupImage = ({ setTrigger, setModification, userInfos }) => {
+/**
+ * Composant popup permettant de changer ou supprimer la photo de profil
+ *
+ * @param {Object}    props
+ * @param {Boolean}   props.setTrigger        - boolean permmettant d'afficher ou enlever un popup
+ * @param {Array}     props.setModification   - useState pour déclancher le réaffichage
+ * @param {Array}     props.userInfos         - informations de la personne connectée
+ *
+ * @component
+ */
+function PopupImage({ setTrigger, setModification, userInfos }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -125,6 +135,6 @@ const PopupImage = ({ setTrigger, setModification, userInfos }) => {
       </form>
     </>
   );
-};
+}
 
 export default PopupImage;

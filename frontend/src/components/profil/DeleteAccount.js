@@ -5,7 +5,12 @@ import Popup from '../../utils/Popup';
 
 import deleteUser from '../../api/apiCalls/user/deleteUser';
 
-const DeleteAccount = () => {
+/**
+ * Composant permettant de supprimer un compte
+ *
+ * @component
+ */
+function DeleteAccount() {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -36,6 +41,6 @@ const DeleteAccount = () => {
       </Popup>
     </div>
   );
-};
+}
 
 export default DeleteAccount;

@@ -4,7 +4,19 @@ import emptyPhoto from '../../assets/profil_vide.jpg';
 
 import deleteComment from '../../api/apiCalls/comment/deleteComment';
 
-const Comments = ({ post, commentInfos, errorComments, setUpdateComment, userInfos }) => {
+/**
+ * Carte affichant les commentaires et permettant de les supprimer si connecté ou admin
+ *
+ * @param {Object}     props
+ * @param {Object}     props.post               - informations du post
+ * @param {Array}      props.commentInfos       - informations de tous les commentaires
+ * @param {Boolean}    props.errorComments      - pour savoir si une erreur a eu lieu au fetching des données des commentaires
+ * @param {Function}   props.setUpdateComment   - useState pour déclencher le réaffichage des commentaires
+ * @param {Array}      props.userInfos          - informations de la personne connectée
+ *
+ * @component
+ */
+function Comments({ post, commentInfos, errorComments, setUpdateComment, userInfos }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -56,6 +68,6 @@ const Comments = ({ post, commentInfos, errorComments, setUpdateComment, userInf
         )}
     </div>
   );
-};
+}
 
 export default Comments;

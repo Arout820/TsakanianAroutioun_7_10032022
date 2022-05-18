@@ -5,7 +5,12 @@ import getUser from '../api/apiCalls/user/getUser';
 import HeaderConnected from '../components/header/HeaderConnected';
 import ProfilContainer from '../components/profil/ProfilContainer';
 
-const ProfilPage = () => {
+/**
+ * Page correspondant à la page de profil
+ *
+ * @component
+ */
+function ProfilPage() {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -33,6 +38,6 @@ const ProfilPage = () => {
       <ProfilContainer userInfos={userInfos} error={errorUser} setModification={setModification} />
     </>
   );
-};
+}
 
 export default ProfilPage;

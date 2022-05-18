@@ -2,7 +2,12 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
-const HeaderConnected = () => {
+/**
+ * Composant correspondat au header lorsqu'on est connecté
+ *
+ * @component
+ */
+function HeaderConnected() {
   const navigate = useNavigate();
 
   // Bouton se déconnecter
@@ -28,6 +33,6 @@ const HeaderConnected = () => {
       </nav>
     </header>
   );
-};
+}
 
 export default HeaderConnected;

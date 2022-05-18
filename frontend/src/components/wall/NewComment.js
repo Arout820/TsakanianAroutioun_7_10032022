@@ -4,7 +4,17 @@ import addComment from '../../api/apiCalls/comment/addComment';
 
 import emptyPhoto from '../../assets/profil_vide.jpg';
 
-const NewComment = ({ setUpdateComment, post, userInfos }) => {
+/**
+ * Composant permettant de créer un nouveau commentaire
+ *
+ * @param {Object}    props
+ * @param {Function}  props.setUpdateComment   - useState pour déclencher le réaffichage des commentaires
+ * @param {Object}    props.post               - informations du post
+ * @param {Array}     props.userInfos          - informations de la personne connectée
+ *
+ * @component
+ */
+function NewComment({ setUpdateComment, post, userInfos }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -46,6 +56,6 @@ const NewComment = ({ setUpdateComment, post, userInfos }) => {
       />
     </form>
   );
-};
+}
 
 export default NewComment;

@@ -8,8 +8,12 @@ import PostCard from '../components/wall/PostCard';
 import NewPost from '../components/wall/NewPost';
 import FooterConnected from '../components/footer/FooterConnected';
 
-
-const WallPage = () => {
+/**
+ * Page correspondant à la page de de mur
+ *
+ * @component
+ */
+function WallPage() {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -39,7 +43,7 @@ const WallPage = () => {
     const getUserData = async () => {
       setErrorUser(null);
       const user = await getUser(userId, token, setErrorUser);
-        setUserInfos(user);
+      setUserInfos(user);
     };
     getUserData();
   }, [userId, token, modification]);
@@ -74,6 +78,6 @@ const WallPage = () => {
       )}
     </>
   );
-};
+}
 
 export default WallPage;

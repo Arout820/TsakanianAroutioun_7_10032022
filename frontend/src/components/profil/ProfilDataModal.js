@@ -1,6 +1,14 @@
 import { dateCorrection } from '../../utils/Utils';
 
-const ProfilDataModal = ({ userInfos }) => {
+/**
+ * Carte affichant le profil de l'utilisateur
+ *
+ * @param {Object}   props
+ * @param {Array}    props.userInfos   - informations de la personne connectée
+ *
+ * @component
+ */
+function ProfilDataModal({ userInfos }) {
   return (
     <div>
       <div className="container-infos__description">
@@ -18,6 +26,6 @@ const ProfilDataModal = ({ userInfos }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ProfilDataModal;

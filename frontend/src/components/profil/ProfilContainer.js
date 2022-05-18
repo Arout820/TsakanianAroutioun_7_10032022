@@ -8,7 +8,18 @@ import ProfilDataModal from './ProfilDataModal';
 import ProfilModifyModal from './ProfilModifyModal';
 import FooterConnected from '../../components/footer/FooterConnected';
 
-const ProfilContainer = ({ userInfos, isLoading, errorUser, setModification }) => {
+/**
+ * Composant popup permettant de changer ou supprimer la photo de profil
+ *
+ * @param {Object}    props
+ * @param {Array}     props.userInfos         - informations de la personne connectée
+ * @param {Boolean}   props.isLoading         - pour afficher un contenu peandant le chargement des données
+ * @param {Boolean}   props.errorUser         - pour savoir si une erreur a eu lieu au fetching des données de l'utilisateur
+ * @param {Function}  props.setModification   - useState pour déclancher le réaffichage
+ *
+ * @component
+ */
+function ProfilContainer({ userInfos, isLoading, errorUser, setModification }) {
   // variables toogle modals
   const [profilDataModal, setProfilDataModal] = useState(true);
   const [profilModifyModal, setProfilModifyModal] = useState(false);
@@ -75,6 +86,6 @@ const ProfilContainer = ({ userInfos, isLoading, errorUser, setModification }) =
       )}
     </>
   );
-};
+}
 
 export default ProfilContainer;

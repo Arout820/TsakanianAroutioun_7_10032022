@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
 
-const FooterConnected = () => {
+/**
+ * Composant correspondat au footer lorsqu'on est déconnecté
+ *
+ * @component
+ */
+function FooterConnected() {
   return (
     <footer className="footer-connected">
       <div className="container-footer__description">
@@ -8,9 +13,9 @@ const FooterConnected = () => {
           <div className="">
             <h2>A propos</h2>
             <p className="">
-              Notre entreprise, spécialisée dans la grande distribution, est en pleine expansion.
-              Nous avons actuellement plus de 600 collaborateurs et avons beaucoup recruté depuis
-              quelques années. Nous étions uniquement 300 il y a 3 ans.
+              Notre entreprise, spécialisée dans la grande distribution, est en pleine expansion. Nous avons
+              actuellement plus de 600 collaborateurs et avons beaucoup recruté depuis quelques années. Nous étions
+              uniquement 300 il y a 3 ans.
             </p>
           </div>
         </div>
@@ -54,6 +59,6 @@ const FooterConnected = () => {
       </div>
     </footer>
   );
-};
+}
 
 export default FooterConnected;

@@ -4,7 +4,16 @@ import addLike from '../../api/apiCalls/likes/addLike';
 import deleteLike from '../../api/apiCalls/likes/deleteLike';
 import getLikesNumberForPost from '../../api/apiCalls/likes/getLikesNumberForPost';
 
-const LikePostCard = ({ post, setModification }) => {
+/**
+ * Composant permettant de liker ou d'enlever un like
+ *
+ * @param {Object}     props
+ * @param {Object}     props.post              - informations du post
+ * @param {Function}   props.setModification   - useState pour déclancher le réaffichage
+ *
+ * @component
+ */
+function LikePostCard({ post, setModification }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -54,6 +63,6 @@ const LikePostCard = ({ post, setModification }) => {
       <p className="card-post__reputation__element__number">{post.post_likes_number} j'aime</p>
     </div>
   );
-};
+}
 
 export default LikePostCard;

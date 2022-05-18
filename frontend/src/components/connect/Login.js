@@ -5,7 +5,15 @@ import login from '../../api/apiCalls/auth/login';
 
 import errorImage from '../../assets/non_valide.png';
 
-const Login = ({ setIsConnected }) => {
+/**
+ * Composant permettant de se connecter
+ *
+ * @param {Object}    props
+ * @param {Function}  props.setIsConnected   - useState pour déclencher la connection
+ *
+ * @component
+ */
+function Login({ setIsConnected }) {
   // Création des variables modifiables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -106,6 +114,6 @@ const Login = ({ setIsConnected }) => {
       </div>
     </form>
   );
-};
+}
 
 export default Login;

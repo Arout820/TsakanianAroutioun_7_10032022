@@ -2,7 +2,12 @@ import { Link } from 'react-router-dom';
 
 import logo from '../../assets/icon-left-font-monochrome-black.svg';
 
-const HeaderDisconnected = () => {
+/**
+ * Composant correspondat au header lorsqu'on est déconnecté
+ *
+ * @component
+ */
+function HeaderDisconnected() {
   return (
     <header className="header-disconnected" id="header-connected">
       <div className="header-disconnected__logo">
@@ -15,6 +20,6 @@ const HeaderDisconnected = () => {
       </div>
     </header>
   );
-};
+}
 
 export default HeaderDisconnected;

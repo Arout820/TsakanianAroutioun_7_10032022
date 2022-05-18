@@ -4,7 +4,16 @@ import signup from '../../api/apiCalls/auth/signup';
 
 import nonValideImage from '../../assets/non_valide.png';
 
-const Signup = ({ setLoginModal, setSignupModal }) => {
+/**
+ * Composant permettant de s'enregistrer
+ *
+ * @param {Object}    props
+ * @param {Boolean}   props.setLoginModal    - permet d'afficher ou d'enlever le composant login
+ * @param {Boolean}   props.setSignupModal   - permet d'afficher ou d'enlever le composant signup
+ *
+ * @component
+ */
+function Signup({ setLoginModal, setSignupModal }) {
   // Création des variables affichés modifiables
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -268,6 +277,6 @@ const Signup = ({ setLoginModal, setSignupModal }) => {
       <div className="form-auth__duplicate">{duplicateEmail}</div>
     </form>
   );
-};
+}
 
 export default Signup;

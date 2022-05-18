@@ -2,7 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 
 import addPost from '../../api/apiCalls/post/addPost';
 
-const NewPost = ({ setModification, userInfos }) => {
+/**
+ * Carte permettant de créer un nouveau post
+ *
+ * @param {Object}   props
+ * @param {Function} props.setModification   - useState pour déclancher le réaffichage
+ * @param {Array}    props.userInfos         - informations de la personne connectée
+ *
+ * @component
+ */
+function NewPost({ setModification, userInfos }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -220,6 +229,6 @@ const NewPost = ({ setModification, userInfos }) => {
       </div>
     </form>
   );
-};
+}
 
 export default NewPost;

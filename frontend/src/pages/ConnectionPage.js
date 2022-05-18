@@ -6,7 +6,15 @@ import Login from '../components/connect/Login';
 
 import entreprise from '../assets/entreprise.jpg';
 
-const ConnectionPage = ({ setIsConnected }) => {
+/**
+ * Composant permettant de récupérer le nombre de commentaire d'un post
+ *
+ * @param {Object}    props
+ * @param {Boolean}   props.setIsConnected   - useState pour déclencher la connection
+ *
+ * @component
+ */
+function ConnectionPage({ setIsConnected }) {
   const [signupModal, setSignupModal] = useState(false);
   const [loginModal, setLoginModal] = useState(true);
 
@@ -37,9 +45,7 @@ const ConnectionPage = ({ setIsConnected }) => {
                 Connexion
               </li>
             </ul>
-            {signupModal && (
-              <Signup setLoginModal={setLoginModal} setSignupModal={setSignupModal} />
-            )}
+            {signupModal && <Signup setLoginModal={setLoginModal} setSignupModal={setSignupModal} />}
             {loginModal && <Login setIsConnected={setIsConnected} />}
           </div>
           <div className="entreprise">
@@ -49,6 +55,6 @@ const ConnectionPage = ({ setIsConnected }) => {
       </main>
     </>
   );
-};
+}
 
 export default ConnectionPage;

@@ -2,7 +2,16 @@ import { useEffect, useState } from 'react';
 
 import getCommentNumberForPost from '../../api/apiCalls/comment/getCommentNumberForPost';
 
-const CommentsOfPost = ({ post, updateComment }) => {
+/**
+ * Composant permettant de récupérer le nombre de commentaire d'un post
+ *
+ * @param {Object}    props
+ * @param {Object}    props.post            - informations du post
+ * @param {Boolean}   props.updateComment   - pour le réaffichage des commentaires
+ *
+ * @component
+ */
+function CommentsOfPost({ post, updateComment }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const token = auth.token;
@@ -27,6 +36,6 @@ const CommentsOfPost = ({ post, updateComment }) => {
       </p>
     </div>
   );
-};
+}
 
 export default CommentsOfPost;

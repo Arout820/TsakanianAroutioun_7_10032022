@@ -4,7 +4,18 @@ import modifyUserInfos from '../../api/apiCalls/user/modifyUserInfos';
 
 import DeleteAccount from './DeleteAccount';
 
-const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
+/**
+ * Carte affichant un formulaire permettant de modifier le prénom, le nom et la biographie de l'utilisateur
+ *
+ * @param {Object}     props
+ * @param {Boolean}    props.on               - correspond au composant parent, ici utilisé pour l'afficher
+ * @param {Boolean}    props.off              - correspond au composant actuel, ici utilisé pour ne plus l'afficher
+ * @param {Array}      props.userInfos        - informations de la personne connectée
+ * @param {Function}   props.setModification  - useState pour déclencher le réaffichage
+ *
+ * @component
+ */
+function ProfilModifyModal({ on, off, userInfos, setModification }) {
   // récupération infos de connexion du local storage
   const auth = JSON.parse(localStorage.getItem('auth'));
   const userId = auth.userId;
@@ -101,6 +112,6 @@ const ProfilModifyModal = ({ on, off, userInfos, setModification }) => {
       <DeleteAccount />
     </div>
   );
-};
+}
 
 export default ProfilModifyModal;
